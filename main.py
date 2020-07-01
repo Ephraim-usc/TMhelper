@@ -1,89 +1,102 @@
-from tkinter import *
-from tkinter import ttk
+import tkinter as tk
+import tkinter.ttk as ttk
 
-def login_event():
-  return 0
+### root
 
-def buyer_event():
-  return 0
+root = tk.Tk()
+root.geometry("800x500")
 
-def order_event():
-  return 0
+menuframe = ttk.Frame(root, width = 800, height = 30)
+menuframe.place(x = 0, y = 0)
 
-def review_event():
-  return 0
+ttk.Button(menuframe, text="Login").place(x = 0, y = 0, height = 30, width = 95)
+ttk.Button(menuframe, text="Admin").place(x = 100, y = 0, height = 30, width = 95)
 
-def feed_event(var, indx, mode):
-  if feed.get() == "Import Data":
-    inputbox.grid_remove()
-    inputbutton.grid_remove()
-  else:
-    inputbox.grid(row=1, column = 0, columnspan = 5)
-    inputbutton.grid(row=1, column = 5, sticky = (S,E))
+buyer_button = ttk.Button(menuframe, text="Buyer")
+buyer_button.place(x = 200, y = 0, height = 30, width = 95)
 
-def submit_event():
-  print(inputbox.get("1.0","end-1c"))
-  inputbox.delete('1.0', END)
+ttk.Button(menuframe, text="Order").place(x = 300, y = 0, height = 30, width = 95)
+ttk.Button(menuframe, text="Review").place(x = 400, y = 0, height = 30, width = 95)
+
+mainframe = ttk.Frame(root, width = 800, height = 470)
+mainframe.place(x = 0, y = 30)
+
+
+### feed
+
+feed = tk.StringVar()
+feed_combobox = ttk.Combobox(menuframe, textvariable = feed)
+feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews']
+feed_combobox.current(0)
+feed_combobox.place(x = 500, y = 2, height = 40, width = 145)
+
+feedframe = ttk.Frame(root, width = 800, height = 470)
+feed_text = tk.Text(feedframe)
+feed_text.place(x = 30, y = 30, width = 600, height = 400)
+
+def feed_submit_event():
+  str = feed_text.get("1.0","end-1c")
+  feed_text.delete('1.0', tk.END)
+  if feed.get() == "Gmails":
+    feed_gmails(str)
+  elif feed.get() == "Addresses":
+    feed_addresses(str)
+  elif feed.get() == "BankCards":
+    feed_bankcards(str)
+
+def feed_clear_event():
+  feed_text.delete('1.0', tk.END)
+
+def feed_quit_event():
   feed.set("Import Data")
 
-root = Tk()
-root.title("TMhelper")
+feedframe.place(x = 0, y = 30)
 
-mainframe = ttk.Frame(root, width=800, height=600)
-mainframe.grid_propagate(0)
-mainframe.grid(column=0, row=0)
+ttk.Button(feedframe, text="Submit", command=feed_submit_event).place(x = 650, y = 250, height = 30, width = 95)
+ttk.Button(feedframe, text="Clear", command=feed_clear_event).place(x = 650, y = 290, height = 30, width = 95)
+ttk.Button(feedframe, text="Quit", command=feed_quit_event).place(x = 650, y = 330, height = 30, width = 95)
 
-ttk.Button(mainframe, text="Login", command=login_event).grid(column=0, row=0)
-ttk.Button(mainframe, text="Buyer", command=buyer_event).grid(column=1, row=0)
-ttk.Button(mainframe, text="Order", command=order_event).grid(column=2, row=0)
-ttk.Button(mainframe, text="Review", command=review_event).grid(column=3, row=0)
+def feed_event(var, indx, mode):
+  buyerframe.place_forget()
+  
+  if feed.get() == "Import Data":
+    feedframe.place_forget()
+  else:
+    feedframe.place(x = 0, y = 30)
 
-inputbox = Text(mainframe)
-inputbutton = ttk.Button(mainframe, text="Submit", command=submit_event)
-
-feed = StringVar()
 feed.trace("w", feed_event)
-drop1 = ttk.Combobox(mainframe, textvariable = feed)
-drop1['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews']
-drop1.current(0)
-drop1.grid(column=4, row=0)
 
-phone = StringVar()
-drop2 = ttk.Combobox(mainframe, textvariable = phone)
-drop2['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
-drop2.current(0)
-drop2.grid(column=5, row=0)
+### phone
 
-root.mainloop()
+phone = tk.StringVar()
+phone_combobox = ttk.Combobox(menuframe, textvariable = phone)
+phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
+phone_combobox.current(0)
+phone_combobox.place(x = 650, y = 2, height = 40, width = 145)
+
+### buyer
+
+buyerframe = ttk.Frame(root, width = 800, height = 470)
+buyerframe.place(x = 0, y = 30)
+
+gmail_text = tk.Text(buyerframe); gmail_text.place(x = 10, y = 10, width = 500, height = 120)
+address_text = tk.Text(buyerframe); address_text.place(x = 10, y = 140, width = 500, height = 150)
+bankcard_text = tk.Text(buyerframe); bankcard_text.place(x = 10, y = 300, width = 500, height = 120)
+
+def buyer_event(event):
+  buyerframe.place(x = 0, y = 30)
+  gmail, address, bankcard = new_buyer()
+  gmail_text.delete(1.0,"end"); gmail_text.insert(1.0, str(gmail[2:])); 
+  address_text.delete(1.0,"end"); address_text.insert(1.0, str(address[2:]))
+  bankcard_text.delete(1.0,"end"); bankcard_text.insert(1.0, str(bankcard[2:]))
+
+  #address_label.configure(text = address)
+  #bankcard_label.configure(text = bankcard)
+
+buyer_button.bind('<Button-1>', buyer_event)
 
 
+91104-4618
 
+#root.mainloop()
 
-
-
-
-
-
-def calculate(*args):
-  value = float(feet.get())
-  meters.set((0.3048 * value * 10000.0 + 0.5)/10000.0)
-
-feet = StringVar()
-meters = StringVar()
-
-feet_entry = ttk.Entry(mainframe, width=7, textvariable=feet)
-feet_entry.grid(column=2, row=1)
-
-ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
-ttk.Button(mainframe, text="Calculate", command=calculate).grid(column=3, row=3, sticky=W)
-
-ttk.Label(mainframe, text="feet").grid(column=3, row=1, sticky=W)
-ttk.Label(mainframe, text="is equivalent to").grid(column=1, row=2, sticky=E)
-ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
-
-for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
-
-feet_entry.focus()
-root.bind('<Return>', calculate)
-
-root.mainloop()

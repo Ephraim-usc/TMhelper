@@ -12,7 +12,9 @@ menuframe = ttk.Frame(root, width = 800, height = 30)
 menuframe.place(x = 0, y = 0)
 
 ttk.Button(menuframe, text="Login").place(x = 0, y = 0, height = 30, width = 95)
-ttk.Button(menuframe, text="Admin").place(x = 100, y = 0, height = 30, width = 95)
+
+admin_button = ttk.Button(menuframe, text="Admin")
+admin_button.place(x = 100, y = 0, height = 30, width = 95)
 
 buyer_button = ttk.Button(menuframe, text="Buyer")
 buyer_button.place(x = 200, y = 0, height = 30, width = 95)
@@ -37,10 +39,10 @@ feed_text = tk.Text(feedframe)
 feed_text.place(x = 30, y = 30, width = 600, height = 400)
 
 def feed_submit_event():
-  str = feed_text.get("1.0","end-1c")
+  string = feed_text.get("1.0","end-1c")
   feed_text.delete('1.0', tk.END)
   datatype = {"Gmails":"gmail", "Addresses":"address", "BankCards":"bankcard"}[feed.get()]
-  op.feed(datatype, str)
+  op.feed(datatype, string)
 
 def feed_clear_event():
   feed_text.delete('1.0', tk.END)
@@ -53,7 +55,8 @@ ttk.Button(feedframe, text="Clear", command=feed_clear_event).place(x = 650, y =
 ttk.Button(feedframe, text="Quit", command=feed_quit_event).place(x = 650, y = 330, height = 30, width = 95)
 
 def feed_event(var, indx, mode):
-  buyerframe.place_forget()
+  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
+  for w in other_frames: w.place_forget()
   
   if feed.get() == "Import Data":
     feedframe.place_forget()
@@ -93,15 +96,26 @@ buyer_button.bind('<Button-1>', buyer_event)
 ### admin
 
 adminframe = ttk.Frame(root, width = 800, height = 470)
-adminframe.place(x = 0, y = 30)
+
+def admin_event(event):
+  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
+  for w in other_frames: w.place_forget()
+  adminframe.place(x = 0, y = 30)
+
+admin_button.bind('<Button-1>', admin_event)
+
 search_text = tk.Text(adminframe); search_text.place(x = 50, y = 50, width = 400, height = 25)
 search_combobox = ttk.Combobox(adminframe); search_combobox.place(x = 460, y = 50, width = 100, height = 30)
 search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards']
 search_combobox.current(0)
-search_button = ttk.Button(adminframe, text = "Search"); search_button.place(x = 570, y = 50, width = 100, height = 30)
+search_button = ttk.Button(adminframe, text = "Search"); search_button.place(x = 570, y = 48, width = 100, height = 30)
 search_listbox = tk.Listbox(adminframe); search_listbox.place(x = 50, y = 100, width = 600, height = 300)
 
-
+def search_event(event):
+  string = search_text.get("1.0","end-1c")
+  datatype = {"Gmails":"gmail", "Addresses":"address", "BankCards":"bankcard"}[search_combobox.get()]
+  for w in other_frames: w.place_forget()
+  adminframe.place(x = 0, y = 30)
 
 #root.mainloop()
 

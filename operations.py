@@ -165,13 +165,9 @@ class entryList():
 ### special functionalities
 
 def feed(datatype, string):
-  current = datatype.all()
-  new, remaining = entryList.from_string(datatype, string)
-  maximum = len(current.values) + len(new.values)
-  uids = np.sort(list(set(range(maximum)) - set(current.get("uid"))))[: len(new.values)]
-  new.set("uid", uids)
-  merged = entryList.merge(current, new)
-  merged.write(datatype.filename)
+  entrylist, remaining = entryList.from_string(datatype, string)
+  for e in entrylist:
+    e.submit()
   return remaining
 
 def search(entrylist, string):

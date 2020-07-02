@@ -22,12 +22,16 @@ class TMhelper(tk.Tk):
     self.adminframe = Admin(self)
     self.buyerframe = Buyer(self)
     self.orderframe = Order(self)
+    self.checkframe = Check(self)
   
   def refresh(self):
     other_frames = [w for w in self.winfo_children() if w.winfo_y() > 0]
     for w in other_frames: w.place_forget()
 
 class Menu(tk.Frame):
+  feed = None
+  phone = None
+  
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
@@ -122,9 +126,11 @@ class Feed(tk.Frame):
   
   def quit(self):
     self.place_forget()
-    
 
 class Admin(tk.Frame):
+  results = []
+  selected = None
+  
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
@@ -136,7 +142,7 @@ class Admin(tk.Frame):
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
-    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards']
+    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers']
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
@@ -145,11 +151,26 @@ class Admin(tk.Frame):
     self.search_listbox = tk.Listbox(self)
     self.search_listbox.place(x = 50, y = 100, width = 600, height = 300)
     
+    self.check_button = ttk.Button(self, text="Check", command = self.check)
+    self.check_button.place(x = 650, y = 290, height = 30, width = 95)
+    
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def search(self):
-    pass
+    string = self.search_text.get("1.0","end-1c")
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Buyers":op.buyer}[self.search_combobox.get()]
+    entrylist = datatype.all()
+    self.results = op.search(entrylist, string)
+    self.search_listbox.delete(0, "end")
+    for e, key in self.results:
+      self.search_listbox.insert("end", e.symbol() + "\t\t[" + str(key) + "] " + str(e.get(key)))
+  
+  def check(self):
+    self.selected = self.results[self.search_listbox.curselection()[0]][0]
+    self.parent.checkframe.entry = self.selected
+    self.parent.checkframe.refresh()
+    self.parent.checkframe.place(x = 0, y = 30)
   
   def quit(self):
     self.place_forget()
@@ -236,6 +257,29 @@ class Order(tk.Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def quit(self):
+    self.place_forget()
+
+class Check(tk.Frame):
+  entry = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.info_text = tk.Text(self); 
+    self.info_text.place(x = 50, y = 50, width = 500, height = 300)
+    self.info_text.configure(tabs = "5c")
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def refresh(self):
+    self.info_text.delete("1.0", "end")
+    self.info_text.insert("1.0", self.entry.str())
   
   def quit(self):
     self.place_forget()

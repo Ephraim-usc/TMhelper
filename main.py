@@ -1,161 +1,288 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import datetime as dt
+
+import requests
+r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
+with open("operations.py", "w", encoding="utf-8") as f:
+  f.write(r.text)
 
 import operations as op
 
-### root
-
-root = tk.Tk()
-root.title('TMhelper')
-root.geometry("800x500")
-
-menuframe = ttk.Frame(root, width = 800, height = 30)
-menuframe.place(x = 0, y = 0)
-
-ttk.Button(menuframe, text="Login").place(x = 0, y = 0, height = 30, width = 95)
-
-admin_button = ttk.Button(menuframe, text="Admin")
-admin_button.place(x = 100, y = 0, height = 30, width = 95)
-
-buyer_button = ttk.Button(menuframe, text="Buyer")
-buyer_button.place(x = 200, y = 0, height = 30, width = 95)
-
-ttk.Button(menuframe, text="Order").place(x = 300, y = 0, height = 30, width = 95)
-ttk.Button(menuframe, text="Review").place(x = 400, y = 0, height = 30, width = 95)
-
-mainframe = ttk.Frame(root, width = 800, height = 470)
-mainframe.place(x = 0, y = 30)
 
 
-### feed
-
-feed = tk.StringVar()
-feed_combobox = ttk.Combobox(menuframe, textvariable = feed)
-feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews']
-feed_combobox.current(0)
-feed_combobox.place(x = 500, y = 2, height = 40, width = 145)
-
-feedframe = ttk.Frame(root, width = 800, height = 470)
-feed_text = tk.Text(feedframe)
-feed_text.place(x = 30, y = 30, width = 600, height = 400)
-
-def feed_submit_event():
-  string = feed_text.get("1.0","end-1c")
-  feed_text.delete('1.0', tk.END)
-  datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[feed.get()]
-  op.feed(datatype, string)
-
-def feed_clear_event():
-  feed_text.delete('1.0', tk.END)
-
-def feed_quit_event():
-  feed.set("Import Data")
-
-ttk.Button(feedframe, text="Submit", command=feed_submit_event).place(x = 650, y = 250, height = 30, width = 95)
-ttk.Button(feedframe, text="Clear", command=feed_clear_event).place(x = 650, y = 290, height = 30, width = 95)
-ttk.Button(feedframe, text="Quit", command=feed_quit_event).place(x = 650, y = 330, height = 30, width = 95)
-
-def feed_event(var, indx, mode):
-  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
-  for w in other_frames: w.place_forget()
+class TMhelper(tk.Tk):
+  def __init__(self, *args, **kwargs):
+    tk.Tk.__init__(self, *args, **kwargs)
+    self.title('TMhelper')
+    self.geometry("800x500")
+    
+    self.menuframe = Menu(self)
+    self.feedframe = Feed(self)
+    self.adminframe = Admin(self)
+    self.buyerframe = Buyer(self)
+    self.orderframe = Order(self)
+    self.checkframe = Check(self)
   
-  if feed.get() == "Import Data":
-    feedframe.place_forget()
-  else:
-    feedframe.place(x = 0, y = 30)
+  def refresh(self):
+    other_frames = [w for w in self.winfo_children() if w.winfo_y() > 0]
+    for w in other_frames: w.place_forget()
 
-feed.trace("w", feed_event)
-
-### phone
-
-phone = tk.StringVar()
-phone_combobox = ttk.Combobox(menuframe, textvariable = phone)
-phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
-phone_combobox.current(0)
-phone_combobox.place(x = 650, y = 2, height = 40, width = 145)
-
-### buyer
-
-buyerframe = ttk.Frame(root, width = 800, height = 470)
-
-gmail_text = tk.Text(buyerframe); gmail_text.place(x = 10, y = 10, width = 500, height = 120)
-address_text = tk.Text(buyerframe); address_text.place(x = 10, y = 140, width = 500, height = 150)
-bankcard_text = tk.Text(buyerframe); bankcard_text.place(x = 10, y = 300, width = 500, height = 120)
-
-def buyer_event(event):
-  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
-  for w in other_frames: w.place_forget()
-  buyerframe.place(x = 0, y = 30)
+class Menu(tk.Frame):
+  feed = None
+  phone = None
   
-  #gmail, address, bankcard = op.new_buyer()
-  gmail_text.delete(1.0,"end"); gmail_text.insert(1.0, str(gmail[2:])); 
-  address_text.delete(1.0,"end"); address_text.insert(1.0, str(address[2:]))
-  bankcard_text.delete(1.0,"end"); bankcard_text.insert(1.0, str(bankcard[2:]))
-
-  address_label.configure(text = address)
-  bankcard_label.configure(text = bankcard)
-
-buyer_button.bind('<Button-1>', buyer_event)
-
-def buyer_submit_event():
-  pass
-
-ttk.Button(buyerframe, text="Submit", command=feed_submit_event).place(x = 660, y = 330, width = 100, height = 30)
-
-### admin
-
-adminframe = ttk.Frame(root, width = 800, height = 470)
-
-def admin_event(event):
-  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
-  for w in other_frames: w.place_forget()
-  adminframe.place(x = 0, y = 30)
-
-admin_button.bind('<Button-1>', admin_event)
-
-search_text = tk.Text(adminframe); search_text.place(x = 50, y = 50, width = 400, height = 25)
-search_combobox = ttk.Combobox(adminframe); search_combobox.place(x = 460, y = 50, width = 100, height = 30)
-search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards']
-search_combobox.current(0)
-search_button = ttk.Button(adminframe, text = "Search"); search_button.place(x = 570, y = 48, width = 100, height = 30)
-search_listbox = tk.Listbox(adminframe); search_listbox.place(x = 50, y = 100, width = 600, height = 300)
-
-objects = []
-def search_event(event):
-  global objects
-  string = search_text.get("1.0","end-1c")
-  datatype = {"Gmails":"gmail", "Addresses":"address", "BankCards":"bankcard"}[search_combobox.get()]
-  #displays, objects = op.search(datatype, string)
-  search_listbox.delete(0, tk.END)
-  for display in displays:
-    search_listbox.insert("end", display)
-
-search_button.bind('<Button-1>', search_event)
-
-### check
-checkframe = ttk.Frame(root, width = 800, height = 470)
-check_text = tk.Text(checkframe); check_text.place(x = 50, y = 100, width = 600, height = 300)
-check_text.configure(state='disabled')
-
-def check_event():
-  o = objects[search_listbox.curselection()[0]]
-  check_text.configure(state='normal')
-  check_text.delete('1.0', tk.END)
-  check_text.insert("end", str(o))
-  check_text.configure(state='disabled')
-  checkframe.place(x = 0, y = 30)
-
-check_button = ttk.Button(adminframe, text = "Check", command = check_event); check_button.place(x = 660, y = 330, width = 100, height = 30)
-
-def quit_check_event():
-  checkframe.place_forget()
-
-quit_check_button = ttk.Button(checkframe, text = "Quit", command = quit_check_event); quit_check_button.place(x = 660, y = 330, width = 100, height = 30)
-
-### 
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 30)
+    self.place(x= 0, y = 0)
+    self['bg'] = 'grey'
+    
+    self.feed = tk.StringVar()
+    self.phone = tk.StringVar()
+    
+    self.login_button = ttk.Button(self, text="Login")
+    self.login_button.place(x = 0, y = 0, height = 30, width = 95)
+    
+    self.admin_button = ttk.Button(self, text="Admin", command = self.admin_event)
+    self.admin_button.place(x = 100, y = 0, height = 30, width = 95)
+    
+    self.buyer_button = ttk.Button(self, text="Buyer", command = self.buyer_event)
+    self.buyer_button.place(x = 200, y = 0, height = 30, width = 95)
+    
+    self.order_button = ttk.Button(self, text="Order", command = self.order_event)
+    self.order_button.place(x = 300, y = 0, height = 30, width = 95)
+    
+    self.review_button = ttk.Button(self, text="Review")
+    self.review_button.place(x = 400, y = 0, height = 30, width = 95)
+    
+    self.feed_combobox = ttk.Combobox(self, textvariable = self.feed)
+    self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews']
+    self.feed_combobox.current(0)
+    self.feed_combobox.place(x = 500, y = 2, height = 40, width = 145)
+    
+    self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
+    self.phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
+    self.phone_combobox.current(0)
+    self.phone_combobox.place(x = 650, y = 2, height = 40, width = 145)
+    
+    self.feed.trace("w", self.feed_write_event)
+  
+  def login_event(self):
+    self.parent.refresh()
+    self.parent.loginframe.place(x = 0, y = 30)
+  
+  def admin_event(self):
+    self.parent.refresh()
+    self.parent.adminframe.place(x = 0, y = 30)
+  
+  def buyer_event(self):
+    self.parent.refresh()
+    self.parent.buyerframe.place(x = 0, y = 30)
+  
+  def order_event(self):
+    self.parent.refresh()
+    self.parent.orderframe.place(x = 0, y = 30)
+  
+  def review_event(self):
+    self.parent.refresh()
+    self.parent.reviewframe.place(x = 0, y = 30)
+    
+  def feed_write_event(self, var, indx, mode):
+    self.parent.refresh()
+    if self.feed.get() != "Import Data":
+      self.parent.feedframe.place(x = 0, y = 30)
 
 
+class Feed(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.input_text = tk.Text(self)
+    self.input_text.place(x = 30, y = 30, width = 600, height = 400)
+    
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.clear_button = ttk.Button(self, text="Clear", command = self.clear)
+    self.clear_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def submit(self):
+    string = self.input_text.get("1.0","end-1c")
+    self.input_text.delete('1.0', tk.END)
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[self.parent.menuframe.feed.get()]
+    remaining = op.feed(datatype, string)
+    self.input_text.insert('1.0', remaining)
+  
+  def clear(self):
+    self.input_text.delete('1.0', tk.END)
+  
+  def quit(self):
+    self.place_forget()
+
+class Admin(tk.Frame):
+  results = []
+  selected = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.search_text = tk.Text(self); 
+    self.search_text.place(x = 50, y = 50, width = 400, height = 25)
+    
+    self.search_combobox = ttk.Combobox(self)
+    self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
+    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers']
+    self.search_combobox.current(0)
+    
+    self.search_button = ttk.Button(self, text = "Search", command = self.search)
+    self.search_button.place(x = 570, y = 48, width = 100, height = 30)
+    
+    self.search_listbox = tk.Listbox(self)
+    self.search_listbox.place(x = 50, y = 100, width = 600, height = 300)
+    
+    self.check_button = ttk.Button(self, text="Check", command = self.check)
+    self.check_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def search(self):
+    string = self.search_text.get("1.0","end-1c")
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Buyers":op.buyer}[self.search_combobox.get()]
+    entrylist = datatype.all()
+    self.results = op.search(entrylist, string)
+    self.search_listbox.delete(0, "end")
+    for e, key in self.results:
+      self.search_listbox.insert("end", e.symbol() + "\t\t[" + str(key) + "] " + str(e.get(key)))
+  
+  def check(self):
+    self.selected = self.results[self.search_listbox.curselection()[0]][0]
+    self.parent.checkframe.entry = self.selected
+    self.parent.checkframe.refresh()
+    self.parent.checkframe.place(x = 0, y = 30)
+  
+  def quit(self):
+    self.place_forget()
+
+class Buyer(tk.Frame):
+  gm = None
+  ad = None
+  bc = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 50, y = 50, width = 300, height = 120)
+    
+    self.address_text = tk.Text(self); 
+    self.address_text.place(x = 50, y = 190, width = 300, height = 120)
+    
+    self.bankcard_text = tk.Text(self); 
+    self.bankcard_text.place(x = 50, y = 330, width = 300, height = 120)
+    
+    self.submit_button = ttk.Button(self, text="New", command = self.new)
+    self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
+    
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def refresh(self):
+    self.gmail_text.delete("1.0", "end")
+    self.address_text.delete("1.0", "end")
+    self.bankcard_text.delete("1.0", "end")
+  
+  def new(self):
+    self.refresh()
+    self.gm, self.ad, self.bc = op.open_buyer()
+    self.gmail_text.insert("1.0", self.gm.str())
+    self.address_text.insert("1.0", self.ad.str())
+    self.bankcard_text.insert("1.0", self.bc.str())
+  
+  def submit(self):
+    buyer = op.buyer([self.gm, self.ad, self.bc])
+    op.open_buyer_confirm(buyer)
+    self.refresh()
+  
+  def quit(self):
+    self.place_forget()
 
 
-#root.mainloop()
+class Order(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.attributes_text = tk.Text(self); 
+    self.attributes_text.place(x = 50, y = 50, width = 150, height = 300)
+    self.attributes_text.configure(state = "disabled")
+    
+    self.values_text = tk.Text(self); 
+    self.values_text.place(x = 210, y = 50, width = 150, height = 300)
+    self.values_text.configure(state = "disabled")
+    
+    self.image_label = tk.Label(self);
+    self.image_label.place(x = 400, y = 50, width = 150, height = 150)
+    
+    self.ordernumber_text = tk.Text(self); 
+    self.ordernumber_text.place(x = 210, y = 200, width = 150, height = 30)
+    
+    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def quit(self):
+    self.place_forget()
 
+class Check(tk.Frame):
+  entry = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.info_text = tk.Text(self); 
+    self.info_text.place(x = 50, y = 50, width = 500, height = 300)
+    self.info_text.configure(tabs = "5c")
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def refresh(self):
+    self.info_text.delete("1.0", "end")
+    self.info_text.insert("1.0", self.entry.str())
+  
+  def quit(self):
+    self.place_forget()
+
+tmhelper = TMhelper()
+#tmhelper.mainloop()

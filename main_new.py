@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import datetime as dt
 
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -103,7 +104,7 @@ class Feed(tk.Frame):
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
-    self.clear_button = ttk.Button(self, text="Clear")
+    self.clear_button = ttk.Button(self, text="Clear", command = self.clear)
     self.clear_button.place(x = 650, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
@@ -114,7 +115,10 @@ class Feed(tk.Frame):
     self.input_text.delete('1.0', tk.END)
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[self.parent.menuframe.feed.get()]
     remaining = op.feed(datatype, string)
-    # insert
+    self.input_text.insert('1.0', remaining)
+  
+  def clear(self):
+    self.input_text.delete('1.0', tk.END)
   
   def quit(self):
     self.place_forget()
@@ -154,13 +158,16 @@ class Buyer(tk.Frame):
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    self.attributes_text = tk.Text(self); 
-    self.attributes_text.place(x = 50, y = 50, width = 150, height = 300)
-    self.attributes_text.configure(state = "disabled")
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 50, y = 50, width = 150, height = 300)
+    self.gmail_text.configure(state = "disabled")
     
-    self.values_text = tk.Text(self); 
-    self.values_text.place(x = 210, y = 50, width = 150, height = 300)
-    self.values_text.configure(state = "disabled")
+    self.address_text = tk.Text(self); 
+    self.address_text.place(x = 210, y = 50, width = 150, height = 300)
+    self.address_text.configure(state = "disabled")
+    
+    self.submit_button = ttk.Button(self, text="New", command = self.new)
+    self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
     
     self.submit_button = ttk.Button(self, text="Submit")
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
@@ -170,6 +177,10 @@ class Buyer(tk.Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def new(self):
+    gm, ad, bc = op.new_buyer()
+    
   
   def quit(self):
     self.place_forget()

@@ -46,7 +46,7 @@ class entry():
     all = self.all()
     if self.get("uid") == None:
       maximum = len(all.values) + 1
-      uids = np.sort(list(set(range(maximum)) - set(all.get("uid"))))[0]
+      uid = np.sort(list(set(range(maximum)) - set(all.get("uid"))))[0]
       self.set("uid", uid)
     else:
       pass

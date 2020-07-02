@@ -100,7 +100,7 @@ class buyer(entry):
       data[2].get("buyers").append(self)
   
   def symbol(self):
-    buffer = "<" + self.get("BankCard") + ">"
+    buffer = "<" + self.get("address").get("RecipientName") + ">"
     return buffer
 
 class entryList():

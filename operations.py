@@ -102,6 +102,7 @@ class entryList():
   
   @staticmethod
   def from_string(datatype, string):
+    string.replace("\r\n", "\n")
     stringll = [tmp.split('\t') for tmp in string.split('\n')]
     buffer = []
     remaining = []
@@ -112,6 +113,7 @@ class entryList():
       else:
         remaining.append('\t'.join(stringl))
     buffer = entryList(buffer)
+    remaining = '\n'.join(remaining)
     return buffer, remaining
   
   @staticmethod

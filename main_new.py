@@ -152,6 +152,10 @@ class Admin(tk.Frame):
     self.place_forget()
 
 class Buyer(tk.Frame):
+  gm = None
+  ad = None
+  bc = None
+  
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
@@ -159,17 +163,18 @@ class Buyer(tk.Frame):
     self['bg'] = 'grey'
     
     self.gmail_text = tk.Text(self); 
-    self.gmail_text.place(x = 50, y = 50, width = 150, height = 300)
-    self.gmail_text.configure(state = "disabled")
+    self.gmail_text.place(x = 50, y = 50, width = 300, height = 120)
     
     self.address_text = tk.Text(self); 
-    self.address_text.place(x = 210, y = 50, width = 150, height = 300)
-    self.address_text.configure(state = "disabled")
+    self.address_text.place(x = 50, y = 190, width = 300, height = 120)
+    
+    self.bankcard_text = tk.Text(self); 
+    self.bankcard_text.place(x = 50, y = 330, width = 300, height = 120)
     
     self.submit_button = ttk.Button(self, text="New", command = self.new)
     self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
     
-    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip")
@@ -178,9 +183,22 @@ class Buyer(tk.Frame):
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
+  def refresh(self):
+    self.gmail_text.delete("1.0", "end")
+    self.address_text.delete("1.0", "end")
+    self.bankcard_text.delete("1.0", "end")
+  
   def new(self):
-    gm, ad, bc = op.new_buyer()
-    
+    self.refresh()
+    self.gm, self.ad, self.bc = op.open_buyer()
+    self.gmail_text.insert("1.0", self.gm.str())
+    self.address_text.insert("1.0", self.ad.str())
+    self.bankcard_text.insert("1.0", self.bc.str())
+  
+  def submit(self):
+    buyer = op.buyer([self.gm, self.ad, self.bc])
+    buyer.submit()
+    self.refresh()
   
   def quit(self):
     self.place_forget()

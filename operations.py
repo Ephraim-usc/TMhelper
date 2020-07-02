@@ -133,7 +133,7 @@ def feed(datatype, string):
   maximum = len(current.values) + len(new.values)
   uids = np.sort(list(set(range(maximum)) - set(current.get("uid"))))[: len(new.values)]
   new.set("uid", uids)
-  merged = entryList_merge(current, new)
+  merged = entryList.merge(current, new)
   merged.write(datatype.filename)
   return remaining
 

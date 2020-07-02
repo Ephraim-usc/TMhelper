@@ -13,6 +13,11 @@ class TMhelper(tk.Tk):
     self.feedframe = Feed(self)
     self.adminframe = Admin(self)
     self.buyerframe = Buyer(self)
+    self.orderframe = Order(self)
+  
+  def refresh(self):
+    other_frames = [w for w in self.winfo_children() if w.winfo_y() > 0]
+    for w in other_frames: w.place_forget()
 
 class Menu(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
@@ -28,13 +33,13 @@ class Menu(tk.Frame):
     self.login_button = ttk.Button(self, text="Login")
     self.login_button.place(x = 0, y = 0, height = 30, width = 95)
     
-    self.admin_button = ttk.Button(self, text="Admin")
+    self.admin_button = ttk.Button(self, text="Admin", command = self.admin_event)
     self.admin_button.place(x = 100, y = 0, height = 30, width = 95)
     
-    self.buyer_button = ttk.Button(self, text="Buyer")
+    self.buyer_button = ttk.Button(self, text="Buyer", command = self.buyer_event)
     self.buyer_button.place(x = 200, y = 0, height = 30, width = 95)
     
-    self.order_button = ttk.Button(self, text="Order")
+    self.order_button = ttk.Button(self, text="Order", command = self.order_event)
     self.order_button.place(x = 300, y = 0, height = 30, width = 95)
     
     self.review_button = ttk.Button(self, text="Review")
@@ -51,16 +56,31 @@ class Menu(tk.Frame):
     self.phone_combobox.place(x = 650, y = 2, height = 40, width = 145)
     
     self.feed.trace("w", self.feed_write_event)
+  
+  def login_event(self):
+    self.parent.refresh()
+    self.parent.loginframe.place(x = 0, y = 30)
+  
+  def admin_event(self):
+    self.parent.refresh()
+    self.parent.adminframe.place(x = 0, y = 30)
+  
+  def buyer_event(self):
+    self.parent.refresh()
+    self.parent.buyerframe.place(x = 0, y = 30)
+  
+  def order_event(self):
+    self.parent.refresh()
+    self.parent.orderframe.place(x = 0, y = 30)
+  
+  def review_event(self):
+    self.parent.refresh()
+    self.parent.reviewframe.place(x = 0, y = 30)
     
   def feed_write_event(self, var, indx, mode):
-    parent = self.parent
-    other_frames = [w for w in parent.winfo_children() if w.winfo_y() > 0]
-    for w in other_frames: w.place_forget()
-    
-    if self.feed.get() == "Import Data":
-      parent.feedframe.place_forget()
-    else:
-      parent.feedframe.place(x = 0, y = 30)
+    self.parent.refresh()
+    if self.feed.get() != "Import Data":
+      self.parent.feedframe.place(x = 0, y = 30)
 
 
 class Feed(tk.Frame):
@@ -68,12 +88,12 @@ class Feed(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.configure(width = 800, height = 470)
-    self['bg'] = 'light blue'
+    self['bg'] = 'grey'
     
     self.input_text = tk.Text(self)
     self.input_text.place(x = 30, y = 30, width = 600, height = 400)
     
-    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
     self.clear_button = ttk.Button(self, text="Clear")
@@ -81,6 +101,12 @@ class Feed(tk.Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def submit(self):
+    string = self.input_text.get("1.0","end-1c")
+    self.input_text.delete('1.0', tk.END)
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[feed.get()]
+    string = op.feed(datatype, string)
   
   def quit(self):
     self.place_forget()
@@ -91,7 +117,7 @@ class Admin(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.configure(width = 800, height = 470)
-    self['bg'] = 'light green'
+    self['bg'] = 'grey'
     
     self.search_text = tk.Text(self); 
     self.search_text.place(x = 50, y = 50, width = 400, height = 25)
@@ -118,7 +144,7 @@ class Buyer(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.configure(width = 800, height = 470)
-    self['bg'] = 'light yellow'
+    self['bg'] = 'grey'
     
     self.attributes_text = tk.Text(self); 
     self.attributes_text.place(x = 50, y = 50, width = 150, height = 300)
@@ -128,6 +154,12 @@ class Buyer(tk.Frame):
     self.values_text.place(x = 210, y = 50, width = 150, height = 300)
     self.values_text.configure(state = "disabled")
     
+    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
@@ -135,4 +167,38 @@ class Buyer(tk.Frame):
     self.place_forget()
 
 
+class Order(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.attributes_text = tk.Text(self); 
+    self.attributes_text.place(x = 50, y = 50, width = 150, height = 300)
+    self.attributes_text.configure(state = "disabled")
+    
+    self.values_text = tk.Text(self); 
+    self.values_text.place(x = 210, y = 50, width = 150, height = 300)
+    self.values_text.configure(state = "disabled")
+    
+    self.image_label = tk.Label(self);
+    self.image_label.place(x = 400, y = 50, width = 150, height = 150)
+    
+    self.ordernumber_text = tk.Text(self); 
+    self.ordernumber_text.place(x = 210, y = 200, width = 150, height = 30)
+    
+    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def quit(self):
+    self.place_forget()
+
 tmhelper = TMhelper()
+#tmhelper.mainloop()

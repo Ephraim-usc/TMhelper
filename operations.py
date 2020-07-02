@@ -198,7 +198,7 @@ def open_buyer():
   
   return gm, ad, bc
 
-def open_buyer_confirm(newbuyer)
+def open_buyer_confirm(newbuyer):
   gm = newbuyer.get("gmail")
   ad = newbuyer.get("address")
   bc = newbuyer.get("bankcard")

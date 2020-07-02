@@ -172,6 +172,15 @@ def search(entrylist, string):
   return buffer
 
 def open_buyer():
-  pass
+  available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==None ]
+  gm = np.random.choice(available_gmails); gm.set("working", True)
+  
+  addresses_bankcards = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==None ]
+  ad = np.random.choice(available_addresses); ad.set("working", True)
+  
+  available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==None ]
+  bc = np.random.choice(available_bankcards); bc.set("working", True)
+  
+  return gm, ad, bc
 
 

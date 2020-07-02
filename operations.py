@@ -91,11 +91,13 @@ class entryList():
     self.values = self.values + [e]
   
   def write(self, filename):
-    pickle.dump(self, open(filename, "wb"))
+    with open(filename, "wb") as f:
+      pickle.dump(self, f)
   
   @staticmethod
   def load(filename):
-    buffer = pickle.load(open(filename, "rb"))
+    with open(filename, "rb") as f:
+      buffer = pickle.load(f)
     return buffer
   
   @staticmethod

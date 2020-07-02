@@ -2,22 +2,26 @@ import pandas as pd
 import numpy as np
 import os
 import pickle
+import datetime as dt
 
 class entry():
-  attributes = ["uid", "working", "note"]
-  _initials = [] # values that do not need to be provided
-  alive = False # if the initiation successes
+  attributes = ["uid", "alive", "working", "note"]
+  required = []
+  _initials = {"uid":None, "alive":False, "working":False, "note":None}
   
   def __init__(self, data): # to initialize an entry, input a list of its attributes
-    data = self._initials + data
-    if len(data) != len(self.attributes): # 需要具体看每一个元素
+    self.dict = self._initials
+    if len(data) != len(self.required): # 需要具体看每一个元素
       return
-    self.values = data
-    self.dict = dict(zip(self.attributes, self.values))
-    self.alive = True
+    received = dict(zip(self.required, data))
+    self.dict = {**self.dict, **received}
+    self.dict["alive"] = True
+  
+  def values(self):
+    return list(self.dict.values())
   
   def str(self):
-    zipped = zip(self.attributes, self.values)
+    zipped = zip(self.attributes, self.values())
     buffer = '\n'.join([attribute+"\t"+str(value) for attribute, value in zipped])
     return buffer
   
@@ -27,7 +31,6 @@ class entry():
   
   def set(self, attribute, new):
     self.dict[attribute] = new
-    self.values = list(self.dict.values())
   
   @classmethod
   def all(cls):
@@ -42,7 +45,8 @@ class entry():
 class gmail(entry):
   filename = "gmails.p"
   attributes = entry.attributes + ['buyers', 'Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
-  _initials = [None, None, None]
+  required = ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
+  _initials = {**entry._initials, 'buyers':None}
   
   def symbol(self):
     buffer = "<" + self.get("Gmail") + ">"
@@ -52,7 +56,8 @@ class gmail(entry):
 class address(entry):
   filename = "address.p"
   attributes = entry.attributes + ['buyers', 'RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
-  _initials = [None, False, None, None]
+  required = ['RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
+  _initials = {**entry._initials, 'buyers':None}
   
   def symbol(self):
     buffer = "<" + self.get("RecipientName") + ">"
@@ -62,7 +67,8 @@ class address(entry):
 class bankcard(entry):
   filename = "bankcards.p"
   attributes = entry.attributes + ['buyers', 'BankNumber', 'BankCard', 'BankCardExpirationDate']
-  _initials = [None, False, None, None]
+  required = ['BankNumber', 'BankCard', 'BankCardExpirationDate']
+  _initials = {**entry._initials, 'buyers':None}
   
   def symbol(self):
     buffer = "<" + self.get("BankCard") + ">"
@@ -71,11 +77,12 @@ class bankcard(entry):
 class buyer(entry):
   filename = "buyers.p"
   attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'bankcard', 'address']
-  _initials = [None, False, None, None]
+  required = ['gmail', 'bankcard', 'address']
+  _initials = {**entry._initials, 'orders':None, "creation_time":None}
   
   def __init__(self, data):
-    time = dt.datetime.now()
-    data = 
+    super().__init__(data)
+    self.set("creation_time", dt.datetime.now())
   
   def symbol(self):
     buffer = "<" + self.get("BankCard") + ">"
@@ -163,5 +170,8 @@ def search(entrylist, string):
     if match == True:
       buffer.append((e, key))
   return buffer
+
+def open_buyer():
+  pass
 
 

@@ -112,8 +112,9 @@ class Feed(tk.Frame):
   def submit(self):
     string = self.input_text.get("1.0","end-1c")
     self.input_text.delete('1.0', tk.END)
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[feed.get()]
-    string = op.feed(datatype, string)
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[self.parent.menuframe.feed.get()]
+    remaining = op.feed(datatype, string)
+    # insert
   
   def quit(self):
     self.place_forget()

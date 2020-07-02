@@ -197,7 +197,7 @@ class Buyer(tk.Frame):
   
   def submit(self):
     buyer = op.buyer([self.gm, self.ad, self.bc])
-    buyer.submit()
+    op.open_buyer_confirm(buyer)
     self.refresh()
   
   def quit(self):

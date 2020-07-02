@@ -1,7 +1,14 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
+import requests
+r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
+with open("operations.py", "w", encoding="utf-8") as f:
+  f.write(r.text)
+
 import operations as op
+
+
 
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):

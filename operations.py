@@ -5,13 +5,25 @@ import pickle
 
 class entry():
   attributes = ["uid", "note"]
-  values = [None, None]
-  _initials = []
+  _initials = [] # values that do not need to be provided
+  alive = False # if the initiation successes
+  
+  '''
+  def __new__(cls, data): # pickle不支持带参数的__new__
+    data = cls._initials + data
+    if len(data) != len(cls.attributes):
+      return None
+    else:
+      return object.__new__(cls)
+   '''
   
   def __init__(self, data): # to initialize an entry, input a list of its attributes
     data = self._initials + data
+    if len(data) != len(self.attributes):
+      return
     self.values = data
     self.dict = dict(zip(self.attributes, self.values))
+    self.alive = True
   
   def str(self):
     zipped = zip(self.attributes, self.values)
@@ -24,7 +36,17 @@ class entry():
   
   def set(self, attribute, new):
     self.dict[attribute] = new
-    self.values = self.dict.values()
+    self.values = list(self.dict.values())
+  
+  @classmethod
+  def get_entryList(cls):
+    filename = cls.filename
+    if os.path.isfile(filename):
+      entrylist = entryList_load(filename)
+    else:
+      entrylist = entryList([])
+      entrylist.datatype = cls
+    return entrylist
 
 class gmail(entry):
   filename = "gmails.p"
@@ -82,14 +104,22 @@ def entryList_load(filename):
   buffer = pickle.load(open(filename, "rb"))
   return buffer
 
-def entryList_Write(x, filename):
+def entryList_write(x, filename):
   pickle.dump(x, open(filename, "wb"))
 
 def entryList_from_string(datatype, string): # string is \t separated and \n carriage returned  # 需要检验格式
   stringll = [tmp.split('\t') for tmp in string.split('\n')]
-  el = [datatype(x) for x in stringll]
-  buffer = entryList(el)
-  return buffer
+  buffer = []
+  remaining = []
+  for stringl in stringll:
+    e = datatype(stringl)
+    if e.alive:
+      buffer.append(e)
+    else:
+      remaining.append('\t'.join(stringl))
+  buffer = entryList(buffer)
+  return buffer, remaining
+  
 
 def entryList_merge(x, y):
   buffer = entryList([]); buffer.datatype = x.datatype
@@ -102,20 +132,14 @@ def entryList_merge(x, y):
 ### special functionalities
 
 def feed(datatype, string):
-  filename = datatype.filename
-  if os.path.isfile(filename):
-    current = entryList_Load(filename)
-  else:
-    current = entryList([])
-    current.datatype = datatype
-  
-  new = entryList_from_string(datatype, string)
+  current = datatype.get_entryList()
+  new, remaining = entryList_from_string(datatype, string)
   maximum = len(current.values) + len(new.values)
   uids = np.sort(list(set(range(maximum)) - set(current.get("uid"))))[: len(new.values)]
   new.set("uid", uids)
-  
   merged = entryList_merge(current, new)
-  entryList_Write(merged, filename)
+  entryList_write(merged, datatype.filename)
+  return remaining
 
 def search(entrylist, string):
   buffer = []

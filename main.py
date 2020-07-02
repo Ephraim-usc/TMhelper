@@ -6,6 +6,7 @@ import operations as op
 ### root
 
 root = tk.Tk()
+root.title('TMhelper')
 root.geometry("800x500")
 
 menuframe = ttk.Frame(root, width = 800, height = 30)
@@ -41,7 +42,7 @@ feed_text.place(x = 30, y = 30, width = 600, height = 400)
 def feed_submit_event():
   string = feed_text.get("1.0","end-1c")
   feed_text.delete('1.0', tk.END)
-  datatype = {"Gmails":"gmail", "Addresses":"address", "BankCards":"bankcard"}[feed.get()]
+  datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[feed.get()]
   op.feed(datatype, string)
 
 def feed_clear_event():
@@ -82,16 +83,24 @@ address_text = tk.Text(buyerframe); address_text.place(x = 10, y = 140, width = 
 bankcard_text = tk.Text(buyerframe); bankcard_text.place(x = 10, y = 300, width = 500, height = 120)
 
 def buyer_event(event):
+  other_frames = [w for w in root.winfo_children() if w.winfo_y() > 0]
+  for w in other_frames: w.place_forget()
   buyerframe.place(x = 0, y = 30)
-  gmail, address, bankcard = op.new_buyer()
+  
+  #gmail, address, bankcard = op.new_buyer()
   gmail_text.delete(1.0,"end"); gmail_text.insert(1.0, str(gmail[2:])); 
   address_text.delete(1.0,"end"); address_text.insert(1.0, str(address[2:]))
   bankcard_text.delete(1.0,"end"); bankcard_text.insert(1.0, str(bankcard[2:]))
 
-  #address_label.configure(text = address)
-  #bankcard_label.configure(text = bankcard)
+  address_label.configure(text = address)
+  bankcard_label.configure(text = bankcard)
 
 buyer_button.bind('<Button-1>', buyer_event)
+
+def buyer_submit_event():
+  pass
+
+ttk.Button(buyerframe, text="Submit", command=feed_submit_event).place(x = 660, y = 330, width = 100, height = 30)
 
 ### admin
 
@@ -111,11 +120,42 @@ search_combobox.current(0)
 search_button = ttk.Button(adminframe, text = "Search"); search_button.place(x = 570, y = 48, width = 100, height = 30)
 search_listbox = tk.Listbox(adminframe); search_listbox.place(x = 50, y = 100, width = 600, height = 300)
 
+objects = []
 def search_event(event):
+  global objects
   string = search_text.get("1.0","end-1c")
   datatype = {"Gmails":"gmail", "Addresses":"address", "BankCards":"bankcard"}[search_combobox.get()]
-  for w in other_frames: w.place_forget()
-  adminframe.place(x = 0, y = 30)
+  #displays, objects = op.search(datatype, string)
+  search_listbox.delete(0, tk.END)
+  for display in displays:
+    search_listbox.insert("end", display)
+
+search_button.bind('<Button-1>', search_event)
+
+### check
+checkframe = ttk.Frame(root, width = 800, height = 470)
+check_text = tk.Text(checkframe); check_text.place(x = 50, y = 100, width = 600, height = 300)
+check_text.configure(state='disabled')
+
+def check_event():
+  o = objects[search_listbox.curselection()[0]]
+  check_text.configure(state='normal')
+  check_text.delete('1.0', tk.END)
+  check_text.insert("end", str(o))
+  check_text.configure(state='disabled')
+  checkframe.place(x = 0, y = 30)
+
+check_button = ttk.Button(adminframe, text = "Check", command = check_event); check_button.place(x = 660, y = 330, width = 100, height = 30)
+
+def quit_check_event():
+  checkframe.place_forget()
+
+quit_check_button = ttk.Button(checkframe, text = "Quit", command = quit_check_event); quit_check_button.place(x = 660, y = 330, width = 100, height = 30)
+
+### 
+
+
+
 
 #root.mainloop()
 

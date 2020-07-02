@@ -41,6 +41,17 @@ class entry():
       entrylist = entryList([])
       entrylist.datatype = cls
     return entrylist
+  
+  def submit(self):
+    all = self.all()
+    if self.get("uid") == None:
+      maximum = len(all.values) + 1
+      uids = np.sort(list(set(range(maximum)) - set(all.get("uid"))))[0]
+      self.set("uid", uid)
+    else:
+      pass
+    all.append(self)
+    all.write(self.filename)
 
 class gmail(entry):
   filename = "gmails.p"

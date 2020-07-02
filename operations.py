@@ -87,8 +87,8 @@ class bankcard(entry):
 
 class buyer(entry):
   filename = "buyers.p"
-  attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'bankcard', 'address']
-  required = ['gmail', 'bankcard', 'address']
+  attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'address', 'bankcard']
+  required = ['gmail', 'address', 'bankcard']
   _initials = {**entry._initials, 'orders':[], "creation_time":None}
   
   def __init__(self, data):

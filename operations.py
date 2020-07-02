@@ -50,6 +50,7 @@ class entry():
       self.set("uid", uid)
     else:
       pass
+    all.delete(self.get("uid"))
     all.append(self)
     all.write(self.filename)
 
@@ -124,6 +125,14 @@ class entryList():
   
   def append(self, e):
     self.values = self.values + [e]
+  
+  def _delete(self, index):
+    del self.values[index]
+  
+  def delete(self, uid):
+    for i in range(len(self.values)):
+      if self.values[i].get("uid") == uid:
+        self._delete(i)
   
   def write(self, filename):
     with open(filename, "wb") as f:

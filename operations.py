@@ -57,7 +57,7 @@ class gmail(entry):
   filename = "gmails.p"
   attributes = entry.attributes + ['buyers', 'Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
   required = ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
-  _initials = {**entry._initials, 'buyers':None}
+  _initials = {**entry._initials, 'buyers':[]}
   
   def symbol(self):
     buffer = "<" + self.get("Gmail") + ">"
@@ -68,7 +68,7 @@ class address(entry):
   filename = "address.p"
   attributes = entry.attributes + ['buyers', 'RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
   required = ['RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
-  _initials = {**entry._initials, 'buyers':None}
+  _initials = {**entry._initials, 'buyers':[]}
   
   def symbol(self):
     buffer = "<" + self.get("RecipientName") + ">"
@@ -79,7 +79,7 @@ class bankcard(entry):
   filename = "bankcards.p"
   attributes = entry.attributes + ['buyers', 'BankNumber', 'BankCard', 'BankCardExpirationDate']
   required = ['BankNumber', 'BankCard', 'BankCardExpirationDate']
-  _initials = {**entry._initials, 'buyers':None}
+  _initials = {**entry._initials, 'buyers':[]}
   
   def symbol(self):
     buffer = "<" + self.get("BankCard") + ">"
@@ -89,11 +89,15 @@ class buyer(entry):
   filename = "buyers.p"
   attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'bankcard', 'address']
   required = ['gmail', 'bankcard', 'address']
-  _initials = {**entry._initials, 'orders':None, "creation_time":None}
+  _initials = {**entry._initials, 'orders':[], "creation_time":None}
   
   def __init__(self, data):
     super().__init__(data)
     self.set("creation_time", dt.datetime.now())
+    if self.get("alive"):
+      data[0].get("buyers").append(self)
+      data[1].get("buyers").append(self)
+      data[2].get("buyers").append(self)
   
   def symbol(self):
     buffer = "<" + self.get("BankCard") + ">"
@@ -194,4 +198,12 @@ def open_buyer():
   
   return gm, ad, bc
 
+def open_buyer_confirm(newbuyer)
+  gm = newbuyer.get("gmail")
+  ad = newbuyer.get("address")
+  bc = newbuyer.get("bankcard")
+  gm.set("working", False); gm.submit()
+  ad.set("working", False); ad.submit()
+  bc.set("working", False); bc.submit()
+  newbuyer.submit()
 

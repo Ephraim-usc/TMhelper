@@ -139,7 +139,7 @@ class Admin(tk.Frame):
     self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards']
     self.search_combobox.current(0)
     
-    self.search_button = ttk.Button(self, text = "Search")
+    self.search_button = ttk.Button(self, text = "Search", command = self.search)
     self.search_button.place(x = 570, y = 48, width = 100, height = 30)
     
     self.search_listbox = tk.Listbox(self)
@@ -147,6 +147,9 @@ class Admin(tk.Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def search(self):
+    pass
   
   def quit(self):
     self.place_forget()

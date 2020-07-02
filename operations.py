@@ -114,19 +114,16 @@ class entryList():
     buffer = entryList(buffer)
     return buffer, remaining
   
-  
+  @staticmethod
+  def merge(x, y):
+    buffer = entryList([])
+    buffer.datatype = x.datatype
+    for e in x.values:
+      buffer.append(e)
+    for e in y.values:
+      buffer.append(e)
+    return buffer
 
-
-  
-'''
-def entryList_merge(x, y):
-  buffer = entryList([]); buffer.datatype = x.datatype
-  for e in x.values:
-    buffer.append(e)
-  for e in y.values:
-    buffer.append(e)
-  return buffer
-'''
 
 ### special functionalities
 

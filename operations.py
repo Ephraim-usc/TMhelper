@@ -128,7 +128,7 @@ class entryList():
     remaining = []
     for stringl in stringll:
       e = datatype(stringl)
-      if e.alive:
+      if e.get("alive"):
         buffer.append(e)
       else:
         remaining.append('\t'.join(stringl))

@@ -175,7 +175,7 @@ class entryList():
 
 def feed(datatype, string):
   entrylist, remaining = entryList.from_string(datatype, string)
-  for e in entrylist:
+  for e in entrylist.values:
     e.submit()
   return remaining
 

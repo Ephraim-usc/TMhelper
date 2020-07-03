@@ -5,24 +5,27 @@ import pickle
 import datetime as dt
 
 class entry():
-  attributes = ["uid", "alive", "working", "note"]
-  required = []
-  _initials = {"uid":None, "alive":False, "working":False, "note":None}
+  uid = None
+  filename = None
   
-  def __init__(self, data): # to initialize an entry, input a list of its attributes
+  attributes = ['alive', 'working', 'note']
+  required = []
+  _initials = {"alive":False, "working":False, "note":None}
+  
+  def __init__(self, data):
     self.dict = self._initials
-    if len(data) != len(self.required): # 需要具体看每一个元素
+    if len(data) != len(self.required):
       return
     received = dict(zip(self.required, data))
     self.dict = {**self.dict, **received}
-    self.dict["alive"] = True
+    self.dict['alive'] = True
   
   def values(self):
     return list(self.dict.values())
   
   def str(self):
-    zipped = zip(self.attributes, self.values())
-    buffer = '\n'.join([attribute+"\t"+str(value) for attribute, value in zipped])
+    buffer = 'uid\t' + str(self.uid) + '\n'
+    buffer += '\n'.join([key+"\t"+str(value) for key, value in self.dict.items()])
     return buffer
   
   def get(self, attribute):
@@ -36,114 +39,41 @@ class entry():
   def all(cls):
     filename = cls.filename
     if os.path.isfile(filename):
-      entrylist = entryList.load(filename)
+      el = entryList.load(filename)
     else:
-      entrylist = entryList([])
-      entrylist.datatype = cls
-    return entrylist
+      el = entryList([])
+      el.datatype = cls
+    return el
   
   def submit(self):
     all = self.all()
-    if self.get("uid") == None:
+    if self.uid == None:
       maximum = len(all.values) + 1
-      uid = np.sort(list(set(range(maximum)) - set(all.get("uid"))))[0]
-      self.set("uid", uid)
-    else:
-      pass
-    all.delete(self.get("uid"))
+      uids = [e.uid for e in all.values]
+      uid = np.sort(list(set(range(maximum)) - set(uids)))[0]
+      self.uid = uid
+    all.delete(self.uid)
     all.append(self)
     all.write(self.filename)
-
-class gmail(entry):
-  filename = "gmails.p"
-  attributes = entry.attributes + ['buyers', 'Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
-  required = ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
-  _initials = {**entry._initials, 'buyers':[]}
-  
-  def symbol(self):
-    buffer = "<" + self.get("Gmail") + ">"
-    return buffer
-
-
-class address(entry):
-  filename = "address.p"
-  attributes = entry.attributes + ['buyers', 'RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
-  required = ['RecipientName', 'Address1', 'Address2', 'City', 'Zip', 'State', 'PhoneNumber']
-  _initials = {**entry._initials, 'buyers':[]}
-  
-  def symbol(self):
-    buffer = "<" + self.get("RecipientName") + ">"
-    return buffer
-
-
-class bankcard(entry):
-  filename = "bankcards.p"
-  attributes = entry.attributes + ['buyers', 'BankNumber', 'BankCard', 'BankCardExpirationDate']
-  required = ['BankNumber', 'BankCard', 'BankCardExpirationDate']
-  _initials = {**entry._initials, 'buyers':[]}
-  
-  def symbol(self):
-    buffer = "<" + self.get("BankCard") + ">"
-    return buffer
-
-class buyer(entry):
-  filename = "buyers.p"
-  attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'address', 'bankcard']
-  required = ['gmail', 'address', 'bankcard']
-  _initials = {**entry._initials, 'orders':[], "creation_time":None, "prime_time":None}
-  
-  def __init__(self, data):
-    super().__init__(data)
-    self.set("creation_time", dt.datetime.now())
-    if self.get("alive"):
-      data[0].get("buyers").append(self)
-      data[1].get("buyers").append(self)
-      data[2].get("buyers").append(self)
-  
-  def symbol(self):
-    buffer = "<" + self.get("address").get("RecipientName") + ">"
-    return buffer
-
-class product(entry): ###
-  filename = "products.p"
-  attributes = entry.attributes + ['ASIN', 'Price', 'Brand', 'Store', 'name', 
-                                   'keyword', 'link', 'image', 'num_order_tasks', 'num_review_tasks']
-  required = ['ASIN', 'Store', 'name']
-  _initials = {**entry._initials, 'Price':0, 'Brand':None, 'keyword':None, 'link':None, 'image':None, 
-               'num_order_tasks':0, 'num_review_tasks':0}
-  
-  def symbol(self):
-    buffer = "<" + self.get("name") + ">"
-    return buffer
 
 class entryList():
   datatype = entry
   values = []
   
-  def __init__(self, el): # el is a list of entries
+  def __init__(self, el):
     if not el == []:
       self.datatype = type(el[0])
     self.values = el
   
-  def get(self, attribute):
-    buffer = [x.get(attribute) for x in self.values]
-    return buffer
-  
-  def set(self, attribute, new):
-    if len(new) != len(self.values):
-      print("error!")
-    for i in range(len(self.values)):
-      self.values[i].set(attribute, new[i])
-  
   def append(self, e):
-    self.values = self.values + [e]
+    self.values.append(e)
   
   def _delete(self, index):
     del self.values[index]
   
   def delete(self, uid):
     for i in range(len(self.values) - 1, -1, -1):
-      if self.values[i].get("uid") == uid:
+      if self.values[i].uid == uid:
         self._delete(i)
   
   def write(self, filename):
@@ -182,46 +112,157 @@ class entryList():
       buffer.append(e)
     return buffer
 
+class gmail(entry):
+  filename = "gmails.p"
+  buyers = set()
+  
+  attributes = entry.attributes + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
+  required = entry.required + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
+  _initials = {**entry._initials, 'Gmail':None, 'Password':None, 
+               'SupportGmail':None, 'SupportGmailPassword':None}
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("Gmail")) + "|" + str(self.uid) + ">"
+    return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\nbuyers\t['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
+    return buffer
 
+class address(entry):
+  filename = "addresses.p"
+  buyers = set()
+  
+  attributes = entry.attributes + ['RecipientName', 'Address1', 'Address2', 
+                                   'City', 'Zip', 'State', 'PhoneNumber']
+  required = entry.required + ['RecipientName', 'Address1', 'Address2', 
+                               'City', 'Zip', 'State', 'PhoneNumber']
+  _initials = {**entry._initials, 'RecipientName':None, 'Address1':None, 'Address2':None, 
+               'City':None, 'Zip':None, 'State':None, 'PhoneNumber':None}
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("RecipientName")) + "|" + str(self.uid) + ">"
+    return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\nbuyers\t['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
+    return buffer
+
+class bankcard(entry):
+  filename = "bankcards.p"
+  buyers = set()
+  
+  attributes = entry.attributes + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
+  required = entry.required + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
+  _initials = {**entry._initials, 'BankNumber':None, 'BankCard':None, 'BankCardExpirationDate':None}
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("BankCard")) + "|" + str(self.uid) + ">"
+    return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\nbuyers\t['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
+    return buffer
+
+class buyer(entry):
+  filename = "buyers.p"
+  gmail = None
+  address = None
+  bankcard = None
+  orders = set()
+  
+  attributes = entry.attributes + ['creation_time', 'prime_time']
+  required = entry.required
+  _initials = {**entry._initials, 'creation_time':None, 'prime_time':None}
+  
+  def __init__(self, gm, ad, bc):
+    entry.__init__(self, [])
+    self.set("creation_time", dt.datetime.now())
+    self.gmail = gm
+    self.address = ad
+    self.bankcard = bc
+    gm.buyers.add(self)
+    ad.buyers.add(self)
+    bc.buyers.add(self)
+    self.orders = set()
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\n' + "gmail\t" + self.gmail.symbol()
+    buffer += '\n' + "address\t" + self.address.symbol()
+    buffer += '\n' + "bankcard\t" + self.bankcard.symbol()
+    return buffer
+  
+  def symbol(self):
+      buffer = "<" + str(self.address.get("RecipientName")) + "|" + str(self.uid) + ">"
+      return buffer
+  
 ### special functionalities
 
 def feed(datatype, string):
-  entrylist, remaining = entryList.from_string(datatype, string)
-  for e in entrylist.values:
+  el, remaining = entryList.from_string(datatype, string)
+  for e in el.values:
     e.submit()
   return remaining
 
-def search(entrylist, string):
+def search(datatype, string):
+  el = datatype.all()
   buffer = []
-  for e in entrylist.values:
+  for e in el.values:
     match = False
-    for key, value in e.dict.items():
-      if string in str(value): 
-        match = True
-        break
+    if string in str(e.uid):
+      match = True
+      key = "uid"
+    else:
+      for key, value in e.dict.items():
+        if string in str(value): 
+          match = True
+          break
     if match == True:
       buffer.append((e, key))
   return buffer
 
 def open_buyer():
-  available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==[] ]
+  available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
   gm = np.random.choice(available_gmails); gm.set("working", True)
   
-  available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==[] ]
+  available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
   ad = np.random.choice(available_addresses); ad.set("working", True)
   
-  available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.get("buyers")==[] ]
+  available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
   bc = np.random.choice(available_bankcards); bc.set("working", True)
   
   return gm, ad, bc
 
 def open_buyer_confirm(newbuyer):
-  gm = newbuyer.get("gmail")
-  ad = newbuyer.get("address")
-  bc = newbuyer.get("bankcard")
+  gm = newbuyer.gmail
+  ad = newbuyer.address
+  bc = newbuyer.bankcard
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()
   newbuyer.submit()
-
-

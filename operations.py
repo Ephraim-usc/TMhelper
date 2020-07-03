@@ -185,7 +185,7 @@ class bankcard(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    buffer += ','.join([str(buyer.query(b).symbol()) for b in self.buyers])
+    buffer += ','.join([str(buyer.query(i).symbol()) for i in self.buyers])
     buffer += ']'
     return buffer
 
@@ -217,12 +217,29 @@ class buyer(entry):
     buffer += '\n' + "gmail\t" + str(gmail.query(self.gmail).symbol())
     buffer += '\n' + "address\t" + str(address.query(self.address).symbol())
     buffer += '\n' + "bankcard\t" + str(bankcard.query(self.bankcard).symbol())
+    buffer += '\n' + "orders\t[" + ','.join([str(order.query(i).symbol()) for i in self.orders]) + ']'
     return buffer
   
   def symbol(self):
     ad = address.query(self.address)
     buffer = "<" + str(ad.get("RecipientName")) + "|" + str(self.uid) + ">"
     return buffer
+  
+  def num_orders(self):
+    buffer = len(self.orders)
+    return buffer
+  
+  def latest_order_time(self):
+    times = [order.query(i).get("OrderTime") for i in self.orders]
+    return max(times)
+  
+  def latest_order(self):
+    latest = self.latest_order_time()
+    for i in self.orders:
+      od = order.query(i)
+      if od.get("OrderTime") == latest:
+        return od
+
 
 class product(entry):
   filename = "products.p"
@@ -249,15 +266,21 @@ class product(entry):
 
 class order(entry):
   filename = "orders.p"
+  buyer = None
   product = None
   
   attributes = entry.attributes + ['OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
   required = entry.required + ['OrderID', 'Cost']
   
-  def __init__(self, data, product):
+  def __init__(self, data):
     entry.__init__(self, data)
     self.set("OrderTime", dt.datetime.now())
-    self.product = product
+  
+  def place(self, br, pdt):
+    self.buyer = br
+    self.product = pdt
+    br.orders.add(self.uid)
+    pdt.orders.add(self.uid)
   
   def symbol(self):
     buffer = "<" + str(self.get("OrderID")) + "|" + str(self.uid) + ">"
@@ -265,7 +288,7 @@ class order(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\nproduct\t' + self.product.symbol()
+    buffer += '\nproduct\t' + product.query(self.product).symbol()
     return buffer
 
     

@@ -131,6 +131,7 @@ class gmail(entry):
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'
+    return buffer
 
 class address(entry):
   filename = "addresses.p"
@@ -153,6 +154,7 @@ class address(entry):
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'
+    return buffer
 
 class bankcard(entry):
   filename = "bankcards.p"
@@ -172,6 +174,7 @@ class bankcard(entry):
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'
+    return buffer
 
 class buyer(entry):
   filename = "buyers.p"

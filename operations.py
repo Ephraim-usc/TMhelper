@@ -45,6 +45,11 @@ class entry():
       el.datatype = cls
     return el
   
+  @classmethod
+  def query(cls, uid):
+    el = cls.all()
+    return el.query(uid)
+  
   def submit(self):
     all = self.all()
     if self.uid == None:
@@ -64,6 +69,11 @@ class entryList():
     if not el == []:
       self.datatype = type(el[0])
     self.values = el
+  
+  def query(self, uid):
+    for e in self.values:
+      if e.uid == uid:
+        return e
   
   def append(self, e):
     self.values.append(e)
@@ -132,8 +142,7 @@ class gmail(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    for b in self.buyers:
-      buffer += b.symbol()
+    buffer += ','.join([str(b) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -159,8 +168,7 @@ class address(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    for b in self.buyers:
-      buffer += b.symbol()
+    buffer += ','.join([str(b) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -183,8 +191,7 @@ class bankcard(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    for b in self.buyers:
-      buffer += b.symbol()
+    buffer += ','.join([str(b) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -199,22 +206,24 @@ class buyer(entry):
   required = entry.required
   _initials = {**entry._initials, 'creation_time':None, 'prime_time':None}
   
-  def __init__(self, gm, ad, bc):
-    entry.__init__(self, [])
+  def __init__(self, data):
+    entry.__init__(self, data)
     self.set("creation_time", dt.datetime.now())
-    self.gmail = gm
-    self.address = ad
-    self.bankcard = bc
-    gm.buyers.add(self)
-    ad.buyers.add(self)
-    bc.buyers.add(self)
     self.orders = set()
+  
+  def bind(self, gm, ad, bc):
+    self.gmail = gm.uid
+    self.address = ad.uid
+    self.bankcard = bc.uid
+    gm.buyers.add(self.uid)
+    ad.buyers.add(self.uid)
+    bc.buyers.add(self.uid)
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\n' + "gmail\t" + self.gmail.symbol()
-    buffer += '\n' + "address\t" + self.address.symbol()
-    buffer += '\n' + "bankcard\t" + self.bankcard.symbol()
+    buffer += '\n' + "gmail\t" + str(self.gmail)
+    buffer += '\n' + "address\t" + str(self.address)
+    buffer += '\n' + "bankcard\t" + str(self.bankcard)
     return buffer
   
   def symbol(self):
@@ -258,10 +267,9 @@ def open_buyer():
   
   return gm, ad, bc
 
-def open_buyer_confirm(newbuyer):
-  gm = newbuyer.gmail
-  ad = newbuyer.address
-  bc = newbuyer.bankcard
+def open_buyer_confirm(gm, ad, bc):
+  newbuyer = buyer([])
+  newbuyer.bind(gm, ad, bc)
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()

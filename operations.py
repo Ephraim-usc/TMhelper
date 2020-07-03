@@ -124,6 +124,13 @@ class gmail(entry):
   def symbol(self):
     buffer = "<" + str(self.get("Gmail")) + "|" + str(self.uid) + ">"
     return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\n['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
 
 class address(entry):
   filename = "addresses.p"
@@ -139,6 +146,13 @@ class address(entry):
   def symbol(self):
     buffer = "<" + str(self.get("RecipientName")) + "|" + str(self.uid) + ">"
     return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\n['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
 
 class bankcard(entry):
   filename = "bankcards.p"
@@ -151,6 +165,13 @@ class bankcard(entry):
   def symbol(self):
     buffer = "<" + str(self.get("BankCard")) + "|" + str(self.uid) + ">"
     return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\n['
+    for b in self.buyers:
+      buffer += b.symbol()
+    buffer += ']'
 
 class buyer(entry):
   filename = "buyers.p"

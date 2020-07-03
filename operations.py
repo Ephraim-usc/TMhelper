@@ -90,7 +90,7 @@ class buyer(entry):
   filename = "buyers.p"
   attributes = entry.attributes + ['orders', 'creation_time', 'prime_time', 'gmail', 'address', 'bankcard']
   required = ['gmail', 'address', 'bankcard']
-  _initials = {**entry._initials, 'orders':[], "creation_time":None}
+  _initials = {**entry._initials, 'orders':[], "creation_time":None, "prime_time":None}
   
   def __init__(self, data):
     super().__init__(data)

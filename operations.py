@@ -121,6 +121,10 @@ class gmail(entry):
   _initials = {**entry._initials, 'Gmail':None, 'Password':None, 
                'SupportGmail':None, 'SupportGmailPassword':None}
   
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
+  
   def symbol(self):
     buffer = "<" + str(self.get("Gmail")) + "|" + str(self.uid) + ">"
     return buffer
@@ -144,6 +148,10 @@ class address(entry):
   _initials = {**entry._initials, 'RecipientName':None, 'Address1':None, 'Address2':None, 
                'City':None, 'Zip':None, 'State':None, 'PhoneNumber':None}
   
+    def __init__(self, data):
+      entry.__init__(self, data)
+      self.buyers = set()
+  
   def symbol(self):
     buffer = "<" + str(self.get("RecipientName")) + "|" + str(self.uid) + ">"
     return buffer
@@ -163,6 +171,10 @@ class bankcard(entry):
   attributes = entry.attributes + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
   required = entry.required + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
   _initials = {**entry._initials, 'BankNumber':None, 'BankCard':None, 'BankCardExpirationDate':None}
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
   
   def symbol(self):
     buffer = "<" + str(self.get("BankCard")) + "|" + str(self.uid) + ">"
@@ -196,6 +208,7 @@ class buyer(entry):
     gm.buyers.add(self)
     ad.buyers.add(self)
     bc.buyers.add(self)
+    self.orders = set()
   
   def str(self):
     buffer = entry.str(self)

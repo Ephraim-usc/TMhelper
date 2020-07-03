@@ -163,7 +163,9 @@ class Admin(tk.Frame):
     self.results = op.search(datatype, string)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:
-      self.search_listbox.insert("end", e.symbol() + "\t\t[" + str(key) + "] " + str(e.get(key)))
+      if key == "uid": value = e.uid
+      else: value = e.get(key)
+      self.search_listbox.insert("end", e.symbol() + "\t\t[" + str(key) + "] " + str(value))
   
   def check(self):
     self.selected = self.results[self.search_listbox.curselection()[0]][0]

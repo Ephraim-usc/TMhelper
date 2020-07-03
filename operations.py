@@ -130,7 +130,7 @@ class entryList():
     del self.values[index]
   
   def delete(self, uid):
-    for i in range(len(self.values)):
+    for i in range(len(self.values) - 1, -1, -1):
       if self.values[i].get("uid") == uid:
         self._delete(i)
   

@@ -58,7 +58,7 @@ class Menu(tk.Frame):
     self.review_button.place(x = 400, y = 0, height = 30, width = 95)
     
     self.feed_combobox = ttk.Combobox(self, textvariable = self.feed)
-    self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews']
+    self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews', 'Products']
     self.feed_combobox.current(0)
     self.feed_combobox.place(x = 500, y = 2, height = 40, width = 145)
     
@@ -117,7 +117,8 @@ class Feed(tk.Frame):
   def submit(self):
     string = self.input_text.get("1.0","end-1c")
     self.input_text.delete('1.0', tk.END)
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard}[self.parent.menuframe.feed.get()]
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, 
+                "BankCards":op.bankcard, "Products":op.product}[self.parent.menuframe.feed.get()]
     remaining = op.feed(datatype, string)
     self.input_text.insert('1.0', remaining)
   
@@ -142,7 +143,7 @@ class Admin(tk.Frame):
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
-    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers']
+    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products']
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
@@ -159,7 +160,8 @@ class Admin(tk.Frame):
   
   def search(self):
     string = self.search_text.get("1.0","end-1c")
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Buyers":op.buyer}[self.search_combobox.get()]
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, 
+                "Buyers":op.buyer, "Products":op.product}[self.search_combobox.get()]
     self.results = op.search(datatype, string)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:

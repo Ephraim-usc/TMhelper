@@ -252,7 +252,7 @@ class product(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\norders\t['
-    buffer += ','.join([str(order.query(b).symbol()) for b in self.buyers])
+    buffer += ','.join([str(order.query(b).symbol()) for b in self.orders])
     buffer += ']'
     return buffer
 

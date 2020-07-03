@@ -251,13 +251,12 @@ class order(entry):
   filename = "orders.p"
   product = None
   
-  attributes = entry.attributes + ['OrderID', 'OrderTime', 'Cost', 'DeliveryTime', 'Delivered']
+  attributes = entry.attributes + ['OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data, product):
     entry.__init__(self, data)
     self.set("OrderTime", dt.datetime.now())
-    self.set("Delivered", False)
     self.product = product
   
   def symbol(self):

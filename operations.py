@@ -219,8 +219,8 @@ def open_buyer():
 
 def open_buyer_confirm(newbuyer):
   gm = newbuyer.gmail
-  ad = newbuyer.address"
-  bc = newbuyer.bankcard"
+  ad = newbuyer.address
+  bc = newbuyer.bankcard
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()

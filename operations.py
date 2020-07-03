@@ -142,7 +142,7 @@ class gmail(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    buffer += ','.join([str(b) for b in self.buyers])
+    buffer += ','.join([str(buyer.query(b).symbol()) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -221,9 +221,9 @@ class buyer(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\n' + "gmail\t" + str(self.gmail)
-    buffer += '\n' + "address\t" + str(self.address)
-    buffer += '\n' + "bankcard\t" + str(self.bankcard)
+    buffer += '\n' + "gmail\t" + str(gmail.query(self.gmail).symbol())
+    buffer += '\n' + "address\t" + str(address.query(self.address).symbol())
+    buffer += '\n' + "bankcard\t" + str(bankcard.query(self.bankcard).symbol())
     return buffer
   
   def symbol(self):

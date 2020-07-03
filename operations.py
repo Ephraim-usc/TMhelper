@@ -227,8 +227,9 @@ class buyer(entry):
     return buffer
   
   def symbol(self):
-      buffer = "<" + str(self.address.get("RecipientName")) + "|" + str(self.uid) + ">"
-      return buffer
+    ad = address.query(self.address)
+    buffer = "<" + str(ad.get("RecipientName")) + "|" + str(self.uid) + ">"
+    return buffer
   
 ### special functionalities
 

@@ -62,11 +62,31 @@ class entryList():
   def _delete(self, index):
     del self.values[index]
   
-  del delete(self, uid):
-    for i in range(len(self.values)) - 1, -1, -1):
+  def delete(self, uid):
+    for i in range(len(self.values) - 1, -1, -1):
       if self.values[i].uid == uid:
         self._delete(i)
-
-
-
   
+  def write(self, filename):
+    with open(filename, "wb") as f:
+      pickle.dump(self, f)
+  
+  @staticmethod
+  def load(filename):
+    with open(filename, "rb") as f:
+      buffer = pickle.load(f)
+    return buffer
+  
+  @staticmethod
+  def merge(x, y):
+    buffer = entryList([])
+    buffer.datatype = x.datatype
+    for e in x.values:
+      buffer.append(e)
+    for e in y.values:
+      buffer.append(e)
+    return buffer
+
+
+
+

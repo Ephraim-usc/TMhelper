@@ -160,8 +160,7 @@ class Admin(tk.Frame):
   def search(self):
     string = self.search_text.get("1.0","end-1c")
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Buyers":op.buyer}[self.search_combobox.get()]
-    entrylist = datatype.all()
-    self.results = op.search(entrylist, string)
+    self.results = op.search(datatype, string)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:
       self.search_listbox.insert("end", e.symbol() + "\t\t[" + str(key) + "] " + str(e.get(key)))

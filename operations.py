@@ -197,10 +197,14 @@ def search(datatype, string):
   buffer = []
   for e in el.values:
     match = False
-    for key, value in e.dict.items():
-      if string in str(value): 
-        match = True
-        break
+    if string in str(e.uid):
+      match = True
+      key = "uid"
+    else:
+      for key, value in e.dict.items():
+        if string in str(value): 
+          match = True
+          break
     if match == True:
       buffer.append((e, key))
   return buffer

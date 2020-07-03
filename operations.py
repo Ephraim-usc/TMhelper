@@ -168,7 +168,7 @@ class address(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    buffer += ','.join([str(b) for b in self.buyers])
+    buffer += ','.join([str(buyer.query(b).symbol()) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -191,7 +191,7 @@ class bankcard(entry):
   def str(self):
     buffer = entry.str(self)
     buffer += '\nbuyers\t['
-    buffer += ','.join([str(b) for b in self.buyers])
+    buffer += ','.join([str(buyer.query(b).symbol()) for b in self.buyers])
     buffer += ']'
     return buffer
 
@@ -230,7 +230,35 @@ class buyer(entry):
     ad = address.query(self.address)
     buffer = "<" + str(ad.get("RecipientName")) + "|" + str(self.uid) + ">"
     return buffer
+
+class product(entry):
+  filename = "products.p"
+  orders = set()
   
+  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image']
+  required = entry.required + ['ASIN', 'name', 'Store']
+  _initials = {**entry._initials, 'ASIN':None, 'name':None, 'Store':None, 'Brand':None, 
+               'keyword':None, 'Price':None, 'link':None, 'image':None}
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.set("creation_time", dt.datetime.now())
+    self.orders = set()
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("name")) + "|" + str(self.uid) + ">"
+    return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\norders\t['
+    buffer += ','.join([str(order.query(b).symbol()) for b in self.buyers])
+    buffer += ']'
+    return buffer
+
+class order(entry):
+  filename = "orders.p"
+    
 ### special functionalities
 
 def feed(datatype, string):

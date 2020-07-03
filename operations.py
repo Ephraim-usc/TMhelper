@@ -148,9 +148,9 @@ class address(entry):
   _initials = {**entry._initials, 'RecipientName':None, 'Address1':None, 'Address2':None, 
                'City':None, 'Zip':None, 'State':None, 'PhoneNumber':None}
   
-    def __init__(self, data):
-      entry.__init__(self, data)
-      self.buyers = set()
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.buyers = set()
   
   def symbol(self):
     buffer = "<" + str(self.get("RecipientName")) + "|" + str(self.uid) + ">"

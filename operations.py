@@ -127,7 +127,7 @@ class gmail(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\n['
+    buffer += '\nbuyers\t['
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'
@@ -150,7 +150,7 @@ class address(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\n['
+    buffer += '\nbuyers\t['
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'
@@ -170,7 +170,7 @@ class bankcard(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\n['
+    buffer += '\nbuyers\t['
     for b in self.buyers:
       buffer += b.symbol()
     buffer += ']'

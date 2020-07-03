@@ -269,6 +269,7 @@ def open_buyer():
 
 def open_buyer_confirm(gm, ad, bc):
   newbuyer = buyer([])
+  newbuyer.submit()
   newbuyer.bind(gm, ad, bc)
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()

@@ -10,10 +10,9 @@ class entry():
   
   attributes = ['alive', 'working', 'note']
   required = []
-  _initials = {"alive":False, "working":False, "note":None}
   
   def __init__(self, data):
-    self.dict = self._initials
+    self.dict = dict.fromkeys(self.attributes, None)
     if len(data) != len(self.required):
       return
     received = dict(zip(self.required, data))
@@ -128,8 +127,6 @@ class gmail(entry):
   
   attributes = entry.attributes + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
   required = entry.required + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
-  _initials = {**entry._initials, 'Gmail':None, 'Password':None, 
-               'SupportGmail':None, 'SupportGmailPassword':None}
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -154,8 +151,6 @@ class address(entry):
                                    'City', 'Zip', 'State', 'PhoneNumber']
   required = entry.required + ['RecipientName', 'Address1', 'Address2', 
                                'City', 'Zip', 'State', 'PhoneNumber']
-  _initials = {**entry._initials, 'RecipientName':None, 'Address1':None, 'Address2':None, 
-               'City':None, 'Zip':None, 'State':None, 'PhoneNumber':None}
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -178,7 +173,6 @@ class bankcard(entry):
   
   attributes = entry.attributes + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
   required = entry.required + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
-  _initials = {**entry._initials, 'BankNumber':None, 'BankCard':None, 'BankCardExpirationDate':None}
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -204,7 +198,6 @@ class buyer(entry):
   
   attributes = entry.attributes + ['creation_time', 'prime_time']
   required = entry.required
-  _initials = {**entry._initials, 'creation_time':None, 'prime_time':None}
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -237,8 +230,6 @@ class product(entry):
   
   attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image']
   required = entry.required + ['ASIN', 'name', 'Store']
-  _initials = {**entry._initials, 'ASIN':None, 'name':None, 'Store':None, 'Brand':None, 
-               'keyword':None, 'Price':None, 'link':None, 'image':None}
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -258,6 +249,26 @@ class product(entry):
 
 class order(entry):
   filename = "orders.p"
+  product = None
+  
+  attributes = entry.attributes + ['OrderID', 'OrderTime', 'Cost', 'DeliveryTime', 'Delivered']
+  required = entry.required + ['OrderID', 'Cost']
+  
+  def __init__(self, data, product):
+    entry.__init__(self, data)
+    self.set("OrderTime", dt.datetime.now())
+    self.set("Delivered", False)
+    self.product = product
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("OrderID")) + "|" + str(self.uid) + ">"
+    return buffer
+  
+  def str(self):
+    buffer = entry.str(self)
+    buffer += '\nproduct\t' + self.product.symbol()
+    return buffer
+
     
 ### special functionalities
 

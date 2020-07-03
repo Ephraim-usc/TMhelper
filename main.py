@@ -219,7 +219,7 @@ class Buyer(tk.Frame):
     self.bankcard_text.insert("1.0", self.bc.str())
   
   def submit(self):
-    buyer = op.buyer([self.gm, self.ad, self.bc])
+    buyer = op.buyer(self.gm, self.ad, self.bc)
     op.open_buyer_confirm(buyer)
     self.refresh()
   

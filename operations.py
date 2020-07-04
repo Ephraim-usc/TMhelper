@@ -239,7 +239,27 @@ class buyer(entry):
       od = order.query(i)
       if od.get("OrderTime") == latest:
         return od
-
+  
+  def able_to_order(self):
+    TIME_INTERVAL_1 = dt.timedelta(seconds = 500)
+    TIME_INTERVAL_2 = dt.timedelta(seconds = 600)
+    num = self.num_orders()
+    current = dt.datetime.now()
+    buffer = False
+    if num == 0:
+      if current > self.get("creation_time") + TIME_INTERVAL_1:
+        buffer = True
+    elif num == 1:
+      od = order.query(self.latest_order())
+      if current > od.get("EstimatedDeliveryTime"):
+        buffer = True
+      if od.get("DeliveryTime") != None:
+        buffer = True
+    elif num in [2,3,4,5]:
+      if current > self.latest_order_time() + TIME_INTERVAL_2:
+        buffer = True
+    return buffer
+      
 
 class product(entry):
   filename = "products.p"

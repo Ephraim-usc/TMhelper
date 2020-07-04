@@ -21,6 +21,7 @@ class TMhelper(tk.Tk):
     self.feedframe = Feed(self)
     self.adminframe = Admin(self)
     self.buyerframe = Buyer(self)
+    self.preorderframe = PreOrder(self)
     self.orderframe = Order(self)
     self.checkframe = Check(self)
   
@@ -51,7 +52,7 @@ class Menu(tk.Frame):
     self.buyer_button = ttk.Button(self, text="Buyer", command = self.buyer_event)
     self.buyer_button.place(x = 200, y = 0, height = 30, width = 95)
     
-    self.order_button = ttk.Button(self, text="Order", command = self.order_event)
+    self.order_button = ttk.Button(self, text="Order", command = self.pre_order_event)
     self.order_button.place(x = 300, y = 0, height = 30, width = 95)
     
     self.review_button = ttk.Button(self, text="Review")
@@ -81,9 +82,9 @@ class Menu(tk.Frame):
     self.parent.refresh()
     self.parent.buyerframe.place(x = 0, y = 30)
   
-  def order_event(self):
+  def pre_order_event(self):
     self.parent.refresh()
-    self.parent.orderframe.place(x = 0, y = 30)
+    self.parent.preorderframe.place(x = 0, y = 30)
   
   def review_event(self):
     self.parent.refresh()
@@ -216,7 +217,7 @@ class Buyer(tk.Frame):
     self.bankcard_text.delete("1.0", "end")
   
   def new(self):
-    self.refresh()
+    self.refresh()         # cancel working for gm, ad, bc
     self.gm, self.ad, self.bc = op.open_buyer()
     self.gmail_text.insert("1.0", self.gm.str())
     self.address_text.insert("1.0", self.ad.str())
@@ -229,6 +230,45 @@ class Buyer(tk.Frame):
   def quit(self):
     self.place_forget()
 
+class PreOrder(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    o1, o2, o3, o4, o5, o6 = op.orderable_buyers()
+    
+    self.scale1 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o1))
+    self.scale1.place(x = 50, y = 50)
+    
+    self.scale2 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o2))
+    self.scale2.place(x = 50, y = 100)
+    
+    self.scale3 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o3))
+    self.scale3.place(x = 50, y = 150)
+    
+    self.scale4 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o4))
+    self.scale4.place(x = 50, y = 200)
+    
+    self.scale5 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o5))
+    self.scale5.place(x = 50, y = 250)
+    
+    self.scale6 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o6))
+    self.scale6.place(x = 50, y = 300)
+    
+    self.start_button = ttk.Button(self, text="Start Working", command = self.start)
+    self.start_button.place(x = 650, y = 280, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def start(self):
+    self.parent.refresh()
+    self.parent.orderframe.place(x = 0, y = 30)
+  
+  def quit(self):
+    self.place_forget()
 
 class Order(tk.Frame):
   def __init__(self, parent, *args, **kwargs):

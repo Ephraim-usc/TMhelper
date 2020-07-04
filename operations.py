@@ -18,6 +18,7 @@ class entry():
     received = dict(zip(self.required, data))
     self.dict = {**self.dict, **received}
     self.dict['alive'] = True
+    self.dict['working'] = False
   
   def values(self):
     return list(self.dict.values())

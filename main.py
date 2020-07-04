@@ -328,7 +328,7 @@ class Check(tk.Frame):
   
   def commit(self):
     string = self.info_text.get("1.0", "end-1c")
-    op.commit(entry, string)
+    op.commit(self.entry, string)
   
   def quit(self):
     self.place_forget()

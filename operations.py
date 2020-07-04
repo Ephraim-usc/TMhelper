@@ -398,7 +398,7 @@ def commit(e, string):
       continue
     if re.search("^True$|^False$", value) is not None:
       value = bool(value)
-    if re.search('^[0-9]+\.*[0-9]*$', value) is not None:
+    elif re.search('^[0-9]+\.*[0-9]*$', value) is not None:
       value = float(value)
     e.set(key, value)
   e.submit()

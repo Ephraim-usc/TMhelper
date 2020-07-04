@@ -336,3 +336,14 @@ def open_buyer_confirm(gm, ad, bc):
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()
   newbuyer.submit()
+
+def buy(br, pdt, order_id, cost):
+  od = order([order_id, cost])
+  od.submit()
+  od.place(br, pdt)
+  br.submit()
+  pdt.submit()
+  
+  
+  
+  

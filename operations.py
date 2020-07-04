@@ -365,6 +365,26 @@ def buy(br, pdt, order_id, cost):
   br.submit()
   pdt.submit()
   
-  
+def orderable_buyers():
+  buffer = []
+  for br in buyer.all().values:
+    if br.able_to_order():
+      buffer.append(br)
+  o1, o2, o3, o4, o5, o6 = [], [], [], [], [], []
+  for br in buffer:
+    num = br.num_orders()
+    if num == 0:
+      o1.append(br)
+    if num == 1:
+      o2.append(br)
+    if num == 2:
+      o3.append(br)
+    if num == 3:
+      o4.append(br)
+    if num == 4:
+      o5.append(br)
+    if num == 5:
+      o6.append(br)
+  return o1, o2, o3, o4, o5, o6
   
   

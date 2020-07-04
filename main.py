@@ -316,12 +316,19 @@ class Check(tk.Frame):
     self.info_text.place(x = 50, y = 50, width = 500, height = 300)
     self.info_text.configure(tabs = "5c")
     
+    self.quit_button = ttk.Button(self, text="Commit Change", command = self.commit)
+    self.quit_button.place(x = 650, y = 290, height = 30, width = 95)
+    
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def refresh(self):
     self.info_text.delete("1.0", "end")
     self.info_text.insert("1.0", self.entry.str())
+  
+  def commit(self):
+    string = self.info_text.get("1.0", "end-1c")
+    op.commit(entry, string)
   
   def quit(self):
     self.place_forget()

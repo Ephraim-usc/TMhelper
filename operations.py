@@ -250,7 +250,6 @@ class product(entry):
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.set("creation_time", dt.datetime.now())
     self.orders = set()
   
   def symbol(self):
@@ -277,8 +276,8 @@ class order(entry):
     self.set("OrderTime", dt.datetime.now())
   
   def place(self, br, pdt):
-    self.buyer = br
-    self.product = pdt
+    self.buyer = br.uid
+    self.product = pdt.uid
     br.orders.add(self.uid)
     pdt.orders.add(self.uid)
   

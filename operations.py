@@ -268,12 +268,13 @@ class product(entry):
   filename = "products.p"
   orders = set()
   
-  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image']
+  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks']
   required = entry.required + ['ASIN', 'name', 'Store']
   
   def __init__(self, data):
     entry.__init__(self, data)
     self.orders = set()
+    self.set("num_tasks", 0)
   
   def symbol(self):
     buffer = "<" + str(self.get("name")) + "|" + str(self.uid) + ">"

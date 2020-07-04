@@ -251,7 +251,7 @@ class buyer(entry):
       if current > self.get("creation_time") + TIME_INTERVAL_1:
         buffer = True
     elif num == 1:
-      od = order.query(self.latest_order())
+      od = self.latest_order()
       if current > self.latest_order_time() + TIME_INTERVAL_1:
         buffer = True
       if od.get("EstimatedDeliveryTime") != None and current > od.get("EstimatedDeliveryTime"):

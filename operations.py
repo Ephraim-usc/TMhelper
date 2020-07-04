@@ -3,6 +3,7 @@ import numpy as np
 import os
 import pickle
 import datetime as dt
+import re
 
 class entry():
   uid = None
@@ -389,5 +390,17 @@ def orderable_buyers():
     if num == 5:
       o6.append(br)
   return o1, o2, o3, o4, o5, o6
-  
+
+def commit(e, string):
+  stringll = [stringl.split('\t') for stringl in string.split('\n')]
+  for key, value in stringll:
+    if not key in e.attributes:
+      continue
+    if re.search("^True$|^False$", value) is not None:
+      value = bool(value)
+    if re.search('^[0-9]+\.*[0-9]*$', value) is not None:
+      value = float(value)
+    e.set(key, value)
+  e.submit()
+    
   

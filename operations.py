@@ -321,6 +321,7 @@ class order(entry):
   
   def str(self):
     buffer = entry.str(self)
+    buffer += '\nbuyer\t' + buyer.query(self.buyer).symbol()
     buffer += '\nproduct\t' + product.query(self.product).symbol()
     return buffer
 

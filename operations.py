@@ -368,6 +368,7 @@ def buy(br, pdt, order_id, cost):
   od.place(br, pdt)
   br.submit()
   pdt.submit()
+  od.submit()
   
 def orderable_buyers():
   buffer = []

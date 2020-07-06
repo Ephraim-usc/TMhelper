@@ -398,7 +398,7 @@ OTHER.symbol = lambda : "<other>"
 def orderable_products(br):
   num = br.num_orders()
   if num in [0, 4]:
-    return OTHER
+    return [OTHER]
   pds = product.all().values
   ordered = br.orders
   buffer = []

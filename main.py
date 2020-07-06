@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import datetime as dt
+import numpy as np
 
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -84,6 +85,7 @@ class Menu(tk.Frame):
   
   def pre_order_event(self):
     self.parent.refresh()
+    self.parent.preorderframe.refresh()
     self.parent.preorderframe.place(x = 0, y = 30)
   
   def review_event(self):
@@ -237,24 +239,22 @@ class PreOrder(tk.Frame):
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    o1, o2, o3, o4, o5, o6 = op.orderable_buyers()
-    
-    self.scale1 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o1))
+    self.scale1 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale1.place(x = 50, y = 50)
     
-    self.scale2 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o2))
+    self.scale2 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale2.place(x = 50, y = 100)
     
-    self.scale3 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o3))
+    self.scale3 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale3.place(x = 50, y = 150)
     
-    self.scale4 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o4))
+    self.scale4 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale4.place(x = 50, y = 200)
     
-    self.scale5 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o5))
+    self.scale5 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale5.place(x = 50, y = 250)
     
-    self.scale6 = tk.Scale(self, orient = "horizontal", length = 400, to = len(o6))
+    self.scale6 = tk.Scale(self, orient = "horizontal", length = 400)
     self.scale6.place(x = 50, y = 300)
     
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
@@ -263,33 +263,57 @@ class PreOrder(tk.Frame):
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
+  def refresh(self):
+    self.o1, self.o2, self.o3, self.o4, self.o5, self.o6 = op.orderable_buyers()
+    self.scale1.configure(to = len(self.o1))
+    self.scale2.configure(to = len(self.o2))
+    self.scale3.configure(to = len(self.o3))
+    self.scale4.configure(to = len(self.o4))
+    self.scale5.configure(to = len(self.o5))
+    self.scale6.configure(to = len(self.o6))
+  
   def start(self):
     self.parent.refresh()
     self.parent.orderframe.place(x = 0, y = 30)
+    
+    buyers = []
+    buyers += list(np.random.choice(self.o1, self.scale1.get()))
+    buyers += list(np.random.choice(self.o2, self.scale2.get()))
+    buyers += list(np.random.choice(self.o3, self.scale3.get()))
+    buyers += list(np.random.choice(self.o4, self.scale4.get()))
+    buyers += list(np.random.choice(self.o5, self.scale5.get()))
+    buyers += list(np.random.choice(self.o6, self.scale6.get()))
+    self.parent.orderframe.buyers = buyers
   
   def quit(self):
     self.place_forget()
 
 class Order(tk.Frame):
+  buyers = []
+  buyer = None
+  product = None
+  
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    self.attributes_text = tk.Text(self); 
-    self.attributes_text.place(x = 50, y = 50, width = 150, height = 300)
-    self.attributes_text.configure(state = "disabled")
+    self.buyer_text = tk.Text(self); 
+    self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
     
-    self.values_text = tk.Text(self); 
-    self.values_text.place(x = 210, y = 50, width = 150, height = 300)
-    self.values_text.configure(state = "disabled")
+    self.product_combobox = ttk.Combobox(self);
+    self.product_combobox.place(x = 310, y = 100, width = 250)
+    
+    self.product_text = tk.Text(self); 
+    self.product_text.place(x = 310, y = 150, width = 250, height = 250)
+    
+    self.progressbar = ttk.Progressbar(self, length = 510)
+    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.progressbar.place(x = 50, y = 50)
     
     self.image_label = tk.Label(self);
-    self.image_label.place(x = 400, y = 50, width = 150, height = 150)
-    
-    self.ordernumber_text = tk.Text(self); 
-    self.ordernumber_text.place(x = 210, y = 200, width = 150, height = 30)
+    self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit")
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)

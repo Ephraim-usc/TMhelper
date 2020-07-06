@@ -284,14 +284,14 @@ class PreOrder(tk.Frame):
     buyers += list(np.random.choice(self.o5, self.scale5.get()))
     buyers += list(np.random.choice(self.o6, self.scale6.get()))
     self.parent.orderframe.buyers = buyers
+    self.parent.orderframe.show_buyer()
   
   def quit(self):
     self.place_forget()
 
 class Order(tk.Frame):
   buyers = []
-  buyer = None
-  product = None
+  products = []
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -323,6 +323,10 @@ class Order(tk.Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def show_buyer(self):
+    buyer = self.buyers[self.progressbar['value']]
+    self.buyer_text.insert("1.0", buyer.str())
   
   def quit(self):
     self.place_forget()

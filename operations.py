@@ -243,8 +243,8 @@ class buyer(entry):
         return od
   
   def able_to_order(self):
-    TIME_INTERVAL_1 = dt.timedelta(seconds = 500)
-    TIME_INTERVAL_2 = dt.timedelta(seconds = 600)
+    TIME_INTERVAL_1 = dt.timedelta(seconds = 300)
+    TIME_INTERVAL_2 = dt.timedelta(seconds = 400)
     num = self.num_orders()
     current = dt.datetime.now()
     buffer = False

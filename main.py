@@ -284,7 +284,7 @@ class PreOrder(tk.Frame):
     buyers += list(np.random.choice(self.o5, self.scale5.get()))
     buyers += list(np.random.choice(self.o6, self.scale6.get()))
     self.parent.orderframe.buyers = buyers
-    self.parent.orderframe.show_buyer()
+    self.parent.orderframe.init()
   
   def quit(self):
     self.place_forget()
@@ -318,15 +318,29 @@ class Order(tk.Frame):
     self.submit_button = ttk.Button(self, text="Submit")
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
-    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
     self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
+  def init(self):
+    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.show_buyer()
+  
   def show_buyer(self):
-    buyer = self.buyers[self.progressbar['value']]
-    self.buyer_text.insert("1.0", buyer.str())
+    br = self.buyers[self.progressbar['value']]
+    self.buyer_text.delete("1.0", "end")
+    self.buyer_text.insert("1.0", br.str())
+    self.products = op.orderable_products(br)
+    self.product_combobox['values'] = [x.symbol() for x in self.products]
+  
+  def skip(self):
+    self.progressbar['value'] += 1
+    if self.progressbar['value'] == self.progressbar['maximum']:
+      self.quit()
+    else:
+      self.show_buyer()
   
   def quit(self):
     self.place_forget()

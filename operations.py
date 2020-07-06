@@ -294,7 +294,8 @@ class product(entry):
       global OTHER
       return OTHER
     else:
-      return entry.query(cls, uid)
+      el = cls.all()
+      return el.query(uid)
 
 class order(entry):
   filename = "orders.p"

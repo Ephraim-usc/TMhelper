@@ -395,6 +395,7 @@ def orderable_buyers():
 OTHER = product([None, None, None])
 OTHER.str = lambda : "other item"
 OTHER.symbol = lambda : "<other>"
+OTHER.submit = lambda : return None
 
 def orderable_products(br):
   num = br.num_orders()

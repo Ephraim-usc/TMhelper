@@ -324,6 +324,27 @@ class order(entry):
     buffer += '\nbuyer\t' + buyer.query(self.buyer).symbol()
     buffer += '\nproduct\t' + product.query(self.product).symbol()
     return buffer
+  
+  def able_to_review(self):
+    TIME_INTERVAL_3 = dt.timedelta(seconds = 300)
+    br = buyer.query(self.buyer)
+    num = 
+    buffer = False
+    if num == 0:
+      if current > self.get("creation_time") + TIME_INTERVAL_1:
+        buffer = True
+    elif num == 1:
+      od = self.latest_order()
+      if current > self.latest_order_time() + TIME_INTERVAL_1:
+        buffer = True
+      if od.get("EstimatedDeliveryTime") != None and current > od.get("EstimatedDeliveryTime"):
+        buffer = True
+      if od.get("DeliveryTime") != None:
+        buffer = True
+    elif num in [2,3,4,5]:
+      if current > self.latest_order_time() + TIME_INTERVAL_2:
+        buffer = True
+    return buffer
 
     
 ### special functionalities

@@ -287,6 +287,14 @@ class product(entry):
     buffer += ','.join([str(order.query(b).symbol()) for b in self.orders])
     buffer += ']'
     return buffer
+  
+  @classmethod
+  def query(cls, uid):
+    if uid == -1:
+      global OTHER
+      return OTHER
+    else:
+      return entry.query(cls, uid)
 
 class order(entry):
   filename = "orders.p"
@@ -396,6 +404,7 @@ OTHER = product([None, None, None])
 OTHER.str = lambda : "other item"
 OTHER.symbol = lambda : "<other>"
 OTHER.submit = lambda : None
+OTHER.uid = -1
 
 def orderable_products(br):
   num = br.num_orders()

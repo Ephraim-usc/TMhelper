@@ -146,7 +146,7 @@ class Admin(tk.Frame):
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
-    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products']
+    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders']
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
@@ -164,7 +164,7 @@ class Admin(tk.Frame):
   def search(self):
     string = self.search_text.get("1.0","end-1c")
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, 
-                "Buyers":op.buyer, "Products":op.product}[self.search_combobox.get()]
+                "Buyers":op.buyer, "Products":op.product, "Orders":op.order}[self.search_combobox.get()]
     self.results = op.search(datatype, string)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:
@@ -292,6 +292,7 @@ class PreOrder(tk.Frame):
 class Order(tk.Frame):
   buyers = []
   products = []
+  tmp = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -302,11 +303,19 @@ class Order(tk.Frame):
     self.buyer_text = tk.Text(self); 
     self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
     
-    self.product_combobox = ttk.Combobox(self);
+    self.tmp = tk.StringVar()
+    self.product_combobox = ttk.Combobox(self, textvariable = self.tmp);
     self.product_combobox.place(x = 310, y = 100, width = 250)
+    self.tmp.trace("w", self.show_product)
     
     self.product_text = tk.Text(self); 
     self.product_text.place(x = 310, y = 150, width = 250, height = 250)
+    
+    self.ordernumber_text = tk.Text(self); 
+    self.ordernumber_text.place(x = 50, y = 410, width = 300, height = 30)
+    
+    self.cost_text = tk.Text(self); 
+    self.cost_text.place(x = 50, y = 410, width = 100, height = 30)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -315,7 +324,7 @@ class Order(tk.Frame):
     self.image_label = tk.Label(self);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
-    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
@@ -334,6 +343,19 @@ class Order(tk.Frame):
     self.buyer_text.insert("1.0", br.str())
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
+  
+  def show_product(self, var, indx, mode):
+    pd = self.products[self.product_combobox.current()]
+    self.product_text.delete("1.0", "end")
+    self.product_text.insert("1.0", pd.str())
+  
+  def submit(self):
+    br = self.buyers[self.progressbar['value']]
+    pd = self.products[self.product_combobox.current()]
+    ordernumber = self.ordernumber_text.get("1.0", "end-1c")
+    cost = self.cost_text.get("1.0", "end-1c")
+    op.buy(br, pd, ordernumber, cost)
+    self.skip()
   
   def skip(self):
     self.progressbar['value'] += 1

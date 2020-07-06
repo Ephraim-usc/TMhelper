@@ -392,16 +392,20 @@ def orderable_buyers():
   return o1, o2, o3, o4, o5, o6
 
 OTHER = product([None, None, None])
-OTHER.str = lambda x: "other item"
-OTHER.symbol = lambda x: "<other>"
+OTHER.str = lambda : "other item"
+OTHER.symbol = lambda : "<other>"
 
 def orderable_products(br):
-  pds = product.all().values
   num = br.num_orders()
   if num in [0, 4]:
     return OTHER
-  else:
-    return pds
+  pds = product.all().values
+  ordered = br.orders
+  buffer = []
+  for pd in pds:
+    if pd.uid not in ordered:
+      buffer.append(pd)
+  return buffer
 
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]

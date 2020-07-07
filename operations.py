@@ -289,6 +289,14 @@ class product(entry):
     buffer += ']'
     return buffer
   
+  def num_orders_today():
+    today = dt.datetime.combine(dt.date.today(), dt.datetime.min.time())
+    buffer = 0
+    for i in self.orders:
+      if order.query(i).get("OrderTime") > today:
+        buffer += 1
+    return buffer
+  
   @classmethod
   def query(cls, uid):
     if uid == -1:

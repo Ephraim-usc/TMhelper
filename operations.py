@@ -452,10 +452,15 @@ def orderable_products(br):
   return buffer
 
 def reviewable_orders():
-  buffer = []
+  ods = []
   for od in order.all().values:
     if od.able_to_review():
-      buffer.append(od)
+      ods.append(od)
+  
+  pds_uid = list(set([product.query(od.product).uid for od in ods]))
+  buffer = {x:[] for x in pds_uid}
+  for od in ods:
+    buffer[od.product].append(od)
   
   return buffer
   

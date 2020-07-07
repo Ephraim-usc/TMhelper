@@ -329,9 +329,9 @@ class order(entry):
   
   def able_to_review(self):
     pd = product.query(self.product)
-    if pd.num_daily_reviews == 0:
+    if pd.get("num_daily_reviews") == 0:
       return False
-    if od.get("ReviewTime") != None:
+    if self.get("ReviewTime") != None:
       return False
     
     TIME_INTERVAL_3 = dt.timedelta(seconds = 300)

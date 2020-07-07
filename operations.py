@@ -457,7 +457,7 @@ def reviewable_orders():
     if od.able_to_review():
       ods.append(od)
   
-  pds_uid = list(set([product.query(od.product).uid for od in ods]))
+  pds_uid = list(set([od.product for od in ods]))
   buffer = {x:[] for x in pds_uid}
   for od in ods:
     buffer[od.product].append(od)

@@ -440,7 +440,7 @@ def orderable_products(br):
     return [OTHER]
   pds = product.all().values
   ordered = br.orders
-  stores = [product.query(od.product).get("Store") for od in ordered]
+  stores = [product.query(order.query(od).product).get("Store") for od in ordered]
   buffer = []
   for pd in pds:
     if pd.get("Store") not in stores:

@@ -456,14 +456,9 @@ def reviewable_orders():
   for od in order.all().values:
     if od.able_to_review():
       buffer.append(od)
-  r1, r2 = [], []
-  for od in buffer:
-    rank = od.get("rank")
-    if rank == 2:
-      r1.append(od)
-    if rank == 3:
-      r2.append(od)
-  return r1, r2
+  
+  return buffer
+  
 
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]

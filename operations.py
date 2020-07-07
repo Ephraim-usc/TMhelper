@@ -289,7 +289,7 @@ class product(entry):
     buffer += ']'
     return buffer
   
-  def num_orders_today():
+  def num_orders_today(self):
     today = dt.datetime.combine(dt.date.today(), dt.datetime.min.time())
     buffer = 0
     for i in self.orders:

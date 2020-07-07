@@ -343,11 +343,11 @@ class order(entry):
     num = br.num_orders()
     current = dt.datetime.now()
     if self.get("rank") == 2 and num >= 4:
-      fourthorder = buyer.query(br.orders[3])
+      fourthorder = order.query(br.orders[3])
       if current > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
         return True
     if self.get("rank") == 3:
-      secondorder = buyer.query(br.orders[1])
+      secondorder = order.query(br.orders[1])
       srt = secondorder.get("ReviewTime")
       if srt != None and current > srt + TIME_INTERVAL_4:
         return True

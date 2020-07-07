@@ -277,12 +277,12 @@ class PreOrder(tk.Frame):
     self.parent.orderframe.place(x = 0, y = 30)
     
     buyers = []
-    buyers += list(np.random.choice(self.o1, self.scale1.get()))
-    buyers += list(np.random.choice(self.o2, self.scale2.get()))
-    buyers += list(np.random.choice(self.o3, self.scale3.get()))
-    buyers += list(np.random.choice(self.o4, self.scale4.get()))
-    buyers += list(np.random.choice(self.o5, self.scale5.get()))
-    buyers += list(np.random.choice(self.o6, self.scale6.get()))
+    buyers += list(np.random.choice(self.o1, self.scale1.get(), replace = False))
+    buyers += list(np.random.choice(self.o2, self.scale2.get(), replace = False))
+    buyers += list(np.random.choice(self.o3, self.scale3.get(), replace = False))
+    buyers += list(np.random.choice(self.o4, self.scale4.get(), replace = False))
+    buyers += list(np.random.choice(self.o5, self.scale5.get(), replace = False))
+    buyers += list(np.random.choice(self.o6, self.scale6.get(), replace = False))
     self.parent.orderframe.buyers = buyers
     self.parent.orderframe.init()
   

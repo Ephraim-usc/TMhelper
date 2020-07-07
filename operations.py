@@ -451,6 +451,20 @@ def orderable_products(br):
     buffer = [pd for pd in buffer if pd.get("num_daily_reviews") > 0]
   return buffer
 
+def reviewable_orders():
+  buffer = []
+  for od in order.all().values:
+    if od.able_to_review():
+      buffer.append(od)
+  r1, r2 = [], []
+  for od in buffer:
+    rank = od.get("rank")
+    if rank == 1:
+      r1.append(od)
+    if num == 1:
+      r2.append(od)
+  return r1, r2
+
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]
   for key, value in stringll:

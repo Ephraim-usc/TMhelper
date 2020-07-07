@@ -329,6 +329,8 @@ class order(entry):
   
   def able_to_review(self):
     pd = product.query(self.product)
+    if pd.uid == -1:
+      return False
     if pd.get("num_daily_reviews") == 0:
       return False
     if self.get("ReviewTime") != None:

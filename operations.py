@@ -459,9 +459,9 @@ def reviewable_orders():
   r1, r2 = [], []
   for od in buffer:
     rank = od.get("rank")
-    if rank == 1:
+    if rank == 2:
       r1.append(od)
-    if num == 1:
+    if rank == 3:
       r2.append(od)
   return r1, r2
 

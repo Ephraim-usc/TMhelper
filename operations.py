@@ -328,7 +328,7 @@ class order(entry):
     return buffer
   
   def able_to_review(self):
-    pd = self.product
+    pd = product.query(self.product)
     if pd.num_daily_reviews == 0:
       return False
     if od.get("ReviewTime") != None:

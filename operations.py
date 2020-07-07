@@ -125,14 +125,14 @@ class entryList():
 
 class gmail(entry):
   filename = "gmails.p"
-  buyers = set()
+  buyers = []
   
   attributes = entry.attributes + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
   required = entry.required + ['Gmail', 'Password', 'SupportGmail', 'SupportGmailPassword']
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.buyers = set()
+    self.buyers = []
   
   def symbol(self):
     buffer = "<" + str(self.get("Gmail")) + "|" + str(self.uid) + ">"
@@ -147,7 +147,7 @@ class gmail(entry):
 
 class address(entry):
   filename = "addresses.p"
-  buyers = set()
+  buyers = []
   
   attributes = entry.attributes + ['RecipientName', 'Address1', 'Address2', 
                                    'City', 'Zip', 'State', 'PhoneNumber']
@@ -156,7 +156,7 @@ class address(entry):
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.buyers = set()
+    self.buyers = []
   
   def symbol(self):
     buffer = "<" + str(self.get("RecipientName")) + "|" + str(self.uid) + ">"
@@ -171,14 +171,14 @@ class address(entry):
 
 class bankcard(entry):
   filename = "bankcards.p"
-  buyers = set()
+  buyers = []
   
   attributes = entry.attributes + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
   required = entry.required + ['BankNumber', 'BankCard', 'BankCardExpirationDate']
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.buyers = set()
+    self.buyers = []
   
   def symbol(self):
     buffer = "<" + str(self.get("BankCard")) + "|" + str(self.uid) + ">"
@@ -196,7 +196,7 @@ class buyer(entry):
   gmail = None
   address = None
   bankcard = None
-  orders = set()
+  orders = []
   
   attributes = entry.attributes + ['creation_time', 'prime_time']
   required = entry.required
@@ -204,15 +204,15 @@ class buyer(entry):
   def __init__(self, data):
     entry.__init__(self, data)
     self.set("creation_time", dt.datetime.now())
-    self.orders = set()
+    self.orders = []
   
   def bind(self, gm, ad, bc):
     self.gmail = gm.uid
     self.address = ad.uid
     self.bankcard = bc.uid
-    gm.buyers.add(self.uid)
-    ad.buyers.add(self.uid)
-    bc.buyers.add(self.uid)
+    gm.buyers.append(self.uid)
+    ad.buyers.append(self.uid)
+    bc.buyers.append(self.uid)
   
   def str(self):
     buffer = entry.str(self)
@@ -242,7 +242,7 @@ class buyer(entry):
       if od.get("OrderTime") == latest:
         return od
   
-  def able_to_order(self):
+  def able_to_order(self): # store instead of uid; first 2 orders should be reviewable products
     TIME_INTERVAL_1 = dt.timedelta(seconds = 300)
     TIME_INTERVAL_2 = dt.timedelta(seconds = 400)
     num = self.num_orders()
@@ -267,15 +267,16 @@ class buyer(entry):
 
 class product(entry):
   filename = "products.p"
-  orders = set()
+  orders = []
   
-  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks']
+  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks', 'num_daily_reviews']
   required = entry.required + ['ASIN', 'name', 'Store']
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.orders = set()
+    self.orders = []
     self.set("num_tasks", 0)
+    self.set("num_daily_reviews", 2)
   
   def symbol(self):
     buffer = "<" + str(self.get("name")) + "|" + str(self.uid) + ">"
@@ -302,7 +303,7 @@ class order(entry):
   buyer = None
   product = None
   
-  attributes = entry.attributes + ['OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
+  attributes = entry.attributes + ['rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime', 'ReviewTime']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data):
@@ -312,8 +313,9 @@ class order(entry):
   def place(self, br, pdt):
     self.buyer = br.uid
     self.product = pdt.uid
-    br.orders.add(self.uid)
-    pdt.orders.add(self.uid)
+    br.orders.append(self.uid)
+    pdt.orders.append(self.uid)
+    self.set("rank", len(br.orders)) 
   
   def symbol(self):
     buffer = "<" + str(self.get("OrderID")) + "|" + str(self.uid) + ">"
@@ -326,25 +328,28 @@ class order(entry):
     return buffer
   
   def able_to_review(self):
+    pd = self.product
+    if pd.num_daily_reviews == 0:
+      return False
+    if od.get("ReviewTime") != None:
+      return False
+    
     TIME_INTERVAL_3 = dt.timedelta(seconds = 300)
+    TIME_INTERVAL_4 = dt.timedelta(seconds = 500)
+    
     br = buyer.query(self.buyer)
-    num = 
-    buffer = False
-    if num == 0:
-      if current > self.get("creation_time") + TIME_INTERVAL_1:
-        buffer = True
-    elif num == 1:
-      od = self.latest_order()
-      if current > self.latest_order_time() + TIME_INTERVAL_1:
-        buffer = True
-      if od.get("EstimatedDeliveryTime") != None and current > od.get("EstimatedDeliveryTime"):
-        buffer = True
-      if od.get("DeliveryTime") != None:
-        buffer = True
-    elif num in [2,3,4,5]:
-      if current > self.latest_order_time() + TIME_INTERVAL_2:
-        buffer = True
-    return buffer
+    num = br.num_orders()
+    current = dt.datetime.now()
+    if self.rank == 2 and num >= 4:
+      fourthorder = buyer.query(br.orders[3])
+      if current > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
+        return True
+    if self.rank == 3:
+      secondorder = buyer.query(br.orders[1])
+      srt = secondorder.get("ReviewTime")
+      if srt != None and current > srt + TIME_INTERVAL_4:
+        return = True
+    return False
 
     
 ### special functionalities
@@ -373,13 +378,13 @@ def search(datatype, string):
   return buffer
 
 def open_buyer():
-  available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
+  available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   gm = np.random.choice(available_gmails); gm.set("working", True)
   
-  available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
+  available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   ad = np.random.choice(available_addresses); ad.set("working", True)
   
-  available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==set() ]
+  available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   bc = np.random.choice(available_bankcards); bc.set("working", True)
   
   return gm, ad, bc
@@ -435,10 +440,13 @@ def orderable_products(br):
     return [OTHER]
   pds = product.all().values
   ordered = br.orders
+  stores = [product.query(od.product).get("Store") for od in ordered]
   buffer = []
   for pd in pds:
-    if pd.uid not in ordered:
+    if pd.get("Store") not in stores:
       buffer.append(pd)
+  if num in [2, 3]:
+    buffer = [pd for pd in buffer if pd.get("num_daily_reviews") > 0]
   return buffer
 
 def commit(e, string):

@@ -348,7 +348,7 @@ class order(entry):
       secondorder = buyer.query(br.orders[1])
       srt = secondorder.get("ReviewTime")
       if srt != None and current > srt + TIME_INTERVAL_4:
-        return = True
+        return True
     return False
 
     

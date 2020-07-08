@@ -436,21 +436,22 @@ class PreReview(tk.Frame):
   
   def start(self):
     buffer = []
-    for key, value in self.seletion.items():
+    for key, value in self.selection.items():
       if key == 0:
         continue
-      ods = list(np.random.choice(self.orders[key], value, replace = False))
-      buffer.append((key, ods))
+      ods = list(np.random.choice(self.orders_[key], value, replace = False))
+      buffer += ods
     
     self.parent.refresh()
     self.parent.reviewframe.orders = buffer
     self.parent.reviewframe.place(x = 0, y = 30)
+    self.parent.reviewframe.init()
   
   def quit(self):
     self.place_forget()
 
 class Review(tk.Frame):
-  orders = None
+  orders = []
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -458,8 +459,8 @@ class Review(tk.Frame):
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    self.buyer_text = tk.Text(self); 
-    self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
+    self.order_text = tk.Text(self); 
+    self.order_text.place(x = 50, y = 100, width = 250, height = 300)
     
     self.title_text = tk.Text(self); 
     self.title_text.place(x = 310, y = 100, width = 250, height = 30)
@@ -468,7 +469,7 @@ class Review(tk.Frame):
     self.content_text.place(x = 310, y = 150, width = 250, height = 250)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
-    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.progressbar.configure(maximum = 100, value = 0)
     self.progressbar.place(x = 50, y = 50)
     
     self.image_label = tk.Label(self);
@@ -484,35 +485,19 @@ class Review(tk.Frame):
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def init(self):
-    self.progressbar.configure(maximum = len(self.buyers), value = 0)
-    self.show_buyer()
+    self.progressbar.configure(maximum = len(self.orders), value = 0)
+    self.show_order()
   
-  def show_buyer(self):
-    br = self.buyers[self.progressbar['value']]
-    self.buyer_text.delete("1.0", "end")
-    self.buyer_text.insert("1.0", br.str())
-    self.products = op.orderable_products(br)
-    self.product_combobox['values'] = [x.symbol() for x in self.products]
-  
-  def show_product(self, var, indx, mode):
-    pd = self.products[self.product_combobox.current()]
-    self.product_text.delete("1.0", "end")
-    self.product_text.insert("1.0", pd.str())
+  def show_order(self):
+    order = self.orders[self.progressbar['value']]
+    self.order_text.delete("1.0", "end")
+    self.order_text.insert("end", order.str())
   
   def submit(self):
-    br = self.buyers[self.progressbar['value']]
-    pd = self.products[self.product_combobox.current()]
-    ordernumber = self.ordernumber_text.get("1.0", "end-1c")
-    cost = self.cost_text.get("1.0", "end-1c")
-    op.buy(br, pd, ordernumber, cost)
-    self.skip()
+    pass
   
   def skip(self):
-    self.progressbar['value'] += 1
-    if self.progressbar['value'] == self.progressbar['maximum']:
-      self.quit()
-    else:
-      self.show_buyer()
+    pass
   
   def quit(self):
     self.place_forget()

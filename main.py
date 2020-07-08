@@ -149,7 +149,7 @@ class Admin(tk.Frame):
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
-    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders']
+    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders', "Reviews"]
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
@@ -166,7 +166,7 @@ class Admin(tk.Frame):
   
   def search(self):
     string = self.search_text.get("1.0","end-1c")
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, 
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Reviews":op.review, 
                 "Buyers":op.buyer, "Products":op.product, "Orders":op.order}[self.search_combobox.get()]
     self.results = op.search(datatype, string)
     self.search_listbox.delete(0, "end")

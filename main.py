@@ -25,6 +25,7 @@ class TMhelper(tk.Tk):
     self.preorderframe = PreOrder(self)
     self.orderframe = Order(self)
     self.prereviewframe = PreReview(self)
+    self.reviewframe = Review(self)
     self.checkframe = Check(self)
   
   def refresh(self):
@@ -400,7 +401,7 @@ class PreReview(tk.Frame):
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
     
-    self.selection = []
+    self.selection = {}
     self.tmp.trace("w", self.max_num)
   
   def refresh(self):
@@ -408,7 +409,7 @@ class PreReview(tk.Frame):
     self.products = [op.product.query(i) for i in self.orders_.keys()]
     self.combobox['values'] = [pd.symbol() for pd in self.products]
     self.combobox.current(0)
-    self.selection = []
+    self.selection = {key:0 for key in self.orders_}
     self.listbox.delete("0", "end")
   
   def max_num(self, var, indx, mode):
@@ -416,19 +417,106 @@ class PreReview(tk.Frame):
     self.scale.configure(to = min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid])))
     pass
   
+  def show_selection(self):
+    self.listbox.delete("0", "end")
+    for key, value in self.selection.items():
+      if value == 0:
+        continue
+      self.listbox.insert("end", op.product.query(key).symbol() + " * " + str(value))
+  
   def add(self):
     pd = self.products[self.combobox.current()]
     num = self.scale.get()
-    self.selection.append((pd, num))
-    self.listbox.insert("end", pd.symbol() + " * " + str(num))
+    self.selection[pd.uid] += num
+    limit = int(self.scale['to'])
+    if self.selection[pd.uid] > limit:
+      self.selection[pd.uid] = limit
+    self.show_selection()
     pass
   
   def start(self):
-    pass
+    buffer = []
+    for key, value in self.seletion.items():
+      if key == 0:
+        continue
+      ors = np.random.choice(self.orders[key], value)
+      buffer.append((key, ))
+    
+    self.parent.refresh()
+    self.parent.reviewframe.place(x = 0, y = 30)
   
   def quit(self):
     self.place_forget()
 
+class Review(tk.Frame):
+  buyers = []
+  products = []
+  tmp = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.buyer_text = tk.Text(self); 
+    self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
+    
+    self.title_text = tk.Text(self); 
+    self.title_text.place(x = 310, y = 100, width = 250, height = 30)
+    
+    self.content_text = tk.Text(self); 
+    self.content_text.place(x = 310, y = 150, width = 250, height = 250)
+    
+    self.progressbar = ttk.Progressbar(self, length = 510)
+    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.progressbar.place(x = 50, y = 50)
+    
+    self.image_label = tk.Label(self);
+    self.image_label.place(x = 600, y = 50, width = 150, height = 150)
+    
+    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    
+    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def init(self):
+    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.show_buyer()
+  
+  def show_buyer(self):
+    br = self.buyers[self.progressbar['value']]
+    self.buyer_text.delete("1.0", "end")
+    self.buyer_text.insert("1.0", br.str())
+    self.products = op.orderable_products(br)
+    self.product_combobox['values'] = [x.symbol() for x in self.products]
+  
+  def show_product(self, var, indx, mode):
+    pd = self.products[self.product_combobox.current()]
+    self.product_text.delete("1.0", "end")
+    self.product_text.insert("1.0", pd.str())
+  
+  def submit(self):
+    br = self.buyers[self.progressbar['value']]
+    pd = self.products[self.product_combobox.current()]
+    ordernumber = self.ordernumber_text.get("1.0", "end-1c")
+    cost = self.cost_text.get("1.0", "end-1c")
+    op.buy(br, pd, ordernumber, cost)
+    self.skip()
+  
+  def skip(self):
+    self.progressbar['value'] += 1
+    if self.progressbar['value'] == self.progressbar['maximum']:
+      self.quit()
+    else:
+      self.show_buyer()
+  
+  def quit(self):
+    self.place_forget()
 
 class Check(tk.Frame):
   entry = None

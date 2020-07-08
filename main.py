@@ -439,19 +439,18 @@ class PreReview(tk.Frame):
     for key, value in self.seletion.items():
       if key == 0:
         continue
-      ors = np.random.choice(self.orders[key], value)
-      buffer.append((key, ))
+      ods = list(np.random.choice(self.orders[key], value, replace = False))
+      buffer.append((key, ods))
     
     self.parent.refresh()
+    self.parent.reviewframe.orders = buffer
     self.parent.reviewframe.place(x = 0, y = 30)
   
   def quit(self):
     self.place_forget()
 
 class Review(tk.Frame):
-  buyers = []
-  products = []
-  tmp = None
+  orders = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)

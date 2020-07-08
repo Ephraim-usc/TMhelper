@@ -500,7 +500,8 @@ def suitable_reviews(pd):
       continue
     if rv.get("ASIN") == asin:
       buffer.append(rv)
-
+  
+  return buffer
 
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]

@@ -276,9 +276,6 @@ class PreOrder(tk.Frame):
     self.scale6.configure(to = len(self.o6))
   
   def start(self):
-    self.parent.refresh()
-    self.parent.orderframe.place(x = 0, y = 30)
-    
     buyers = []
     buyers += list(np.random.choice(self.o1, self.scale1.get(), replace = False))
     buyers += list(np.random.choice(self.o2, self.scale2.get(), replace = False))
@@ -286,6 +283,10 @@ class PreOrder(tk.Frame):
     buyers += list(np.random.choice(self.o4, self.scale4.get(), replace = False))
     buyers += list(np.random.choice(self.o5, self.scale5.get(), replace = False))
     buyers += list(np.random.choice(self.o6, self.scale6.get(), replace = False))
+    
+    if buyers == []: return None
+    self.parent.refresh()
+    self.parent.orderframe.place(x = 0, y = 30)
     self.parent.orderframe.buyers = buyers
     self.parent.orderframe.init()
   
@@ -346,6 +347,7 @@ class Order(tk.Frame):
     self.buyer_text.insert("1.0", br.str())
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
+    self.product_combobox.current(0)
   
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
@@ -371,9 +373,9 @@ class Order(tk.Frame):
     self.place_forget()
 
 class PreReview(tk.Frame):
-  products = None
-  orders_ = None
-  selection = None
+  products = []
+  orders_ = {}
+  selection = {}
   tmp = None
   
   def __init__(self, parent, *args, **kwargs):
@@ -406,6 +408,8 @@ class PreReview(tk.Frame):
   
   def refresh(self):
     self.orders_ = op.reviewable_orders()
+    if self.orders_ == {}:
+      return None
     self.products = [op.product.query(i) for i in self.orders_.keys()]
     self.combobox['values'] = [pd.symbol() for pd in self.products]
     self.combobox.current(0)
@@ -437,11 +441,11 @@ class PreReview(tk.Frame):
   def start(self):
     buffer = []
     for key, value in self.selection.items():
-      if key == 0:
+      if value == 0:
         continue
       ods = list(np.random.choice(self.orders_[key], value, replace = False))
       buffer += ods
-    
+    if buffer == []: return None
     self.parent.refresh()
     self.parent.reviewframe.orders = buffer
     self.parent.reviewframe.place(x = 0, y = 30)
@@ -452,6 +456,7 @@ class PreReview(tk.Frame):
 
 class Review(tk.Frame):
   orders = []
+  review = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -475,10 +480,10 @@ class Review(tk.Frame):
     self.image_label = tk.Label(self);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
-    self.submit_button = ttk.Button(self, text="Submit")
+    self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
-    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
     self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
@@ -486,18 +491,38 @@ class Review(tk.Frame):
   
   def init(self):
     self.progressbar.configure(maximum = len(self.orders), value = 0)
+    if self.orders == []:
+      return
     self.show_order()
+    self.show_review()
   
   def show_order(self):
     order = self.orders[self.progressbar['value']]
     self.order_text.delete("1.0", "end")
     self.order_text.insert("end", order.str())
   
+  def show_review(self):
+    order = self.orders[self.progressbar['value']]
+    pd = op.product.query(order.product)
+    rvs = op.suitable_reviews(pd)
+    self.review = list(np.random.choice(rvs, 1))[0]
+    self.title_text.delete("1.0", "end")
+    self.content_text.delete("1.0", "end")
+    self.title_text.insert("end", self.review.get("Title"))
+    self.content_text.insert("end", self.review.get("Content"))
+  
   def submit(self):
-    pass
+    order = self.orders[self.progressbar['value']]
+    op.submit_review(order, self.review)
+    self.skip()
   
   def skip(self):
-    pass
+    self.progressbar['value'] += 1
+    if self.progressbar['value'] == self.progressbar['maximum']:
+      self.quit()
+    else:
+      self.show_order()
+      self.show_review()
   
   def quit(self):
     self.place_forget()

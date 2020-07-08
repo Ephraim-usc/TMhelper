@@ -362,7 +362,7 @@ class order(entry):
     current = dt.datetime.now()
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])
-      if current > fourthorder.review.get("OrderTime") + TIME_INTERVAL_3:
+      if current > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
         return True
     if self.get("rank") == 3:
       secondorder = order.query(br.orders[1])

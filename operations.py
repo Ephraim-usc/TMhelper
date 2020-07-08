@@ -351,7 +351,7 @@ class order(entry):
       return False
     if pd.get("num_daily_reviews") == 0:
       return False
-    if self.get("ReviewTime") != None:
+    if self.review != None:
       return False
     
     TIME_INTERVAL_3 = dt.timedelta(seconds = 300)

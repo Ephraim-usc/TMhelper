@@ -408,6 +408,8 @@ class PreReview(tk.Frame):
     self.products = [op.product.query(i) for i in self.orders_.keys()]
     self.combobox['values'] = [pd.symbol() for pd in self.products]
     self.combobox.current(0)
+    self.selection = []
+    self.listbox.delete("0", "end")
   
   def max_num(self, var, indx, mode):
     pd = self.products[self.combobox.current()]
@@ -417,10 +419,8 @@ class PreReview(tk.Frame):
   def add(self):
     pd = self.products[self.combobox.current()]
     num = self.scale.get()
-    self.selection[pd.uid] = num
-    string = pd.symbol() + " * " + str(num)
-    
-    
+    self.selection.append((pd, num))
+    self.listbox.insert("end", pd.symbol() + " * " + str(num))
     pass
   
   def start(self):

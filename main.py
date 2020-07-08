@@ -370,7 +370,10 @@ class Order(tk.Frame):
     self.place_forget()
 
 class PreReview(tk.Frame):
-  product = None
+  products = None
+  orders_ = None
+  selection = None
+  tmp = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -381,19 +384,43 @@ class PreReview(tk.Frame):
     self.listbox = tk.Listbox(self)
     self.listbox.place(x = 470, y = 50, height = 200, width = 230)
     
-    self.combobox = ttk.Combobox(self)
+    self.tmp = tk.StringVar()
+    self.combobox = ttk.Combobox(self, textvariable = self.tmp)
     self.combobox.place(x = 50, y = 50, width = 300)
     
     self.scale = tk.Scale(self, length = 300, orient = "horizontal")
     self.scale.place(x = 50, y = 100)
+    
+    self.start_button = ttk.Button(self, text="Add", command = self.add)
+    self.start_button.place(x = 50, y = 150, height = 30, width = 95)
     
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
     self.start_button.place(x = 650, y = 280, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    
+    self.selection = []
+    self.tmp.trace("w", self.max_num)
   
   def refresh(self):
+    self.orders_ = op.reviewable_orders()
+    self.products = [op.product.query(i) for i in self.orders_.keys()]
+    self.combobox['values'] = [pd.symbol() for pd in self.products]
+    self.combobox.current(0)
+  
+  def max_num(self, var, indx, mode):
+    pd = self.products[self.combobox.current()]
+    self.scale.configure(to = min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid])))
+    pass
+  
+  def add(self):
+    pd = self.products[self.combobox.current()]
+    num = self.scale.get()
+    self.selection[pd.uid] = num
+    string = pd.symbol() + " * " + str(num)
+    
+    
     pass
   
   def start(self):

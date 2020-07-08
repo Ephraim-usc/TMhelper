@@ -123,7 +123,7 @@ class Feed(tk.Frame):
   def submit(self):
     string = self.input_text.get("1.0","end-1c")
     self.input_text.delete('1.0', tk.END)
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, 
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
                 "BankCards":op.bankcard, "Products":op.product}[self.parent.menuframe.feed.get()]
     remaining = op.feed(datatype, string)
     self.input_text.insert('1.0', remaining)

@@ -496,9 +496,9 @@ def suitable_reviews(pd):
   asin = pd.get("ASIN")
   buffer = []
   for rv in rvs:
-    if rvs.order != None:
+    if rv.order != None:
       continue
-    if rvs.get("ASIN") == asin:
+    if rv.get("ASIN") == asin:
       buffer.append(rv)
 
 

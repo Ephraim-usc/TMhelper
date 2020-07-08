@@ -374,7 +374,7 @@ class review(entry):
   attributes = entry.attributes + ['ASIN', 'Title', 'Content', 'Time']
   required = entry.required + ['ASIN', 'Title', 'Content']
   
-  def symbol():
+  def symbol(self):
     return "<" + str(self.get("Content")) + "|" + str(self.uid) + ">"
 
 ### special functionalities

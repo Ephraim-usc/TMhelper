@@ -339,6 +339,10 @@ class order(entry):
     buffer = entry.str(self)
     buffer += '\nbuyer\t' + buyer.query(self.buyer).symbol()
     buffer += '\nproduct\t' + product.query(self.product).symbol()
+    if self.review != None:
+      buffer += '\nreview\t' + review.query(self.review).symbol()
+    else:
+      buffer += '\nreview\t' + "None"
     return buffer
   
   def able_to_review(self):

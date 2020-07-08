@@ -198,8 +198,8 @@ class buyer(entry):
   bankcard = None
   orders = []
   
-  attributes = entry.attributes + ['creation_time', 'prime_time']
-  required = entry.required
+  attributes = entry.attributes + ['creation_time', 'prime_time', 'AmazonPassword']
+  required = entry.required + ['AmazonPassword']
   
   def __init__(self, data):
     entry.__init__(self, data)
@@ -418,8 +418,8 @@ def open_buyer():
   
   return gm, ad, bc
 
-def open_buyer_confirm(gm, ad, bc):
-  newbuyer = buyer([])
+def open_buyer_confirm(gm, ad, bc, pwd):
+  newbuyer = buyer([pwd])
   newbuyer.submit()
   newbuyer.bind(gm, ad, bc)
   gm.set("working", False); gm.submit()

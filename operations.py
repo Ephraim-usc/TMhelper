@@ -503,6 +503,11 @@ def suitable_reviews(pd):
   
   return buffer
 
+def submit_review(pd, rv):
+  pd.leave_review(rv)
+  pd.submit()
+  rv.submit()
+
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]
   for key, value in stringll:

@@ -310,8 +310,9 @@ class order(entry):
   filename = "orders.p"
   buyer = None
   product = None
+  review = None
   
-  attributes = entry.attributes + ['rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime', 'ReviewTime']
+  attributes = entry.attributes + ['rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data):
@@ -323,7 +324,12 @@ class order(entry):
     self.product = pdt.uid
     br.orders.append(self.uid)
     pdt.orders.append(self.uid)
-    self.set("rank", len(br.orders)) 
+    self.set("rank", len(br.orders))
+  
+  def leave_review(self, rv):
+    self.review = rv
+    rv.order = self.uid
+    rv.set("Time", dt.datetime.now())
   
   def symbol(self):
     buffer = "<" + str(self.get("OrderID")) + "|" + str(self.uid) + ">"
@@ -352,16 +358,22 @@ class order(entry):
     current = dt.datetime.now()
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])
-      if current > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
+      if current > fourthorder.review.get("OrderTime") + TIME_INTERVAL_3:
         return True
     if self.get("rank") == 3:
       secondorder = order.query(br.orders[1])
-      srt = secondorder.get("ReviewTime")
-      if srt != None and current > srt + TIME_INTERVAL_4:
+      sr = secondorder.review
+      if sr != None and current > sr.get("Time") + TIME_INTERVAL_4:
         return True
     return False
 
-    
+class review(entry):
+  filename = "reviews.p"
+  order = None
+  
+  attributes = entry.attributes + ['ASIN', 'Title', 'Content', 'Time']
+  required = entry.required + ['ASIN', 'Title', 'Content']
+
 ### special functionalities
 
 def feed(datatype, string):

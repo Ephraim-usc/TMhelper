@@ -491,6 +491,16 @@ def reviewable_orders():
   
   return buffer
   
+def suitable_reviews(pd):
+  rvs = review.all().values
+  asin = pd.get("ASIN")
+  buffer = []
+  for rv in rvs:
+    if rvs.order != None:
+      continue
+    if rvs.get("ASIN") == asin:
+      buffer.append(rv)
+
 
 def commit(e, string):
   stringll = [stringl.split('\t') for stringl in string.split('\n')]

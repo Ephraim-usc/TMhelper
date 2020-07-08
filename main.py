@@ -24,6 +24,7 @@ class TMhelper(tk.Tk):
     self.buyerframe = Buyer(self)
     self.preorderframe = PreOrder(self)
     self.orderframe = Order(self)
+    self.prereviewframe = PreReview(self)
     self.checkframe = Check(self)
   
   def refresh(self):
@@ -56,7 +57,7 @@ class Menu(tk.Frame):
     self.order_button = ttk.Button(self, text="Order", command = self.pre_order_event)
     self.order_button.place(x = 300, y = 0, height = 30, width = 95)
     
-    self.review_button = ttk.Button(self, text="Review")
+    self.review_button = ttk.Button(self, text="Review", command = self.pre_review_event)
     self.review_button.place(x = 400, y = 0, height = 30, width = 95)
     
     self.feed_combobox = ttk.Combobox(self, textvariable = self.feed)
@@ -88,9 +89,10 @@ class Menu(tk.Frame):
     self.parent.preorderframe.refresh()
     self.parent.preorderframe.place(x = 0, y = 30)
   
-  def review_event(self):
+  def pre_review_event(self):
     self.parent.refresh()
-    self.parent.reviewframe.place(x = 0, y = 30)
+    self.parent.prereviewframe.refresh()
+    self.parent.prereviewframe.place(x = 0, y = 30)
     
   def feed_write_event(self, var, indx, mode):
     self.parent.refresh()
@@ -366,6 +368,40 @@ class Order(tk.Frame):
   
   def quit(self):
     self.place_forget()
+
+class PreReview(tk.Frame):
+  product = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+    
+    self.listbox = tk.Listbox(self)
+    self.listbox.place(x = 470, y = 50, height = 200, width = 230)
+    
+    self.combobox = ttk.Combobox(self)
+    self.combobox.place(x = 50, y = 50, width = 300)
+    
+    self.scale = tk.Scale(self, length = 300, orient = "horizontal")
+    self.scale.place(x = 50, y = 100)
+    
+    self.start_button = ttk.Button(self, text="Start Working", command = self.start)
+    self.start_button.place(x = 650, y = 280, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def refresh(self):
+    pass
+  
+  def start(self):
+    pass
+  
+  def quit(self):
+    self.place_forget()
+
 
 class Check(tk.Frame):
   entry = None

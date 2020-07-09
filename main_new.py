@@ -448,11 +448,13 @@ class Order(tk.Frame):
     self.product_text = tk.Text(self); 
     self.product_text.place(x = 310, y = 150, width = 250, height = 250)
     
-    self.ordernumber_text = tk.Text(self); 
-    self.ordernumber_text.place(x = 50, y = 410, width = 300, height = 30)
+    self.ordernumber_entry = tk.Entry(self); 
+    self.ordernumber_entry.place(x = 50, y = 410, width = 300)
+    self.ordernumber_entry.bind("<Button-1>", self.input)
     
-    self.cost_text = tk.Text(self); 
-    self.cost_text.place(x = 360, y = 410, width = 100, height = 30)
+    self.cost_entry = tk.Entry(self); 
+    self.cost_entry.place(x = 460, y = 410, width = 100)
+    self.cost_entry.bind("<Button-1>", self.input)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -482,6 +484,14 @@ class Order(tk.Frame):
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
     self.product_combobox.current(0)
+    
+    self.ordernumber_entry.configure(fg = "grey")
+    self.ordernumber_entry.delete(0, "end")
+    self.ordernumber_entry.insert("end", "Order Number")
+    
+    self.cost_entry.configure(fg = "grey")
+    self.cost_entry.delete(0, "end")
+    self.cost_entry.insert("end", "Cost")
   
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
@@ -492,6 +502,10 @@ class Order(tk.Frame):
     if pd.get("image") != None:
       self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
       self.image_label.configure(image = self.img)
+  
+  def input(self, event):
+    event.widget.configure(fg = "black")
+    event.widget.delete(0, "end")
   
   def submit(self):
     br = self.buyers[self.progressbar['value']]

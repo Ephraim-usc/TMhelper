@@ -1,6 +1,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.messagebox as messagebox
 from PIL import Image, ImageTk
 import datetime as dt
 import numpy as np
@@ -508,10 +509,15 @@ class Order(tk.Frame):
     event.widget.delete(0, "end")
   
   def submit(self):
+    if (self.ordernumber_entry.get() in ["", "Order Number"] or 
+        self.cost_entry.get() in ["", "Cost"]): 
+      messagebox.showinfo(title= "Error", message= "Make sure order number and cost are typed in.")
+      return None
+    
     br = self.buyers[self.progressbar['value']]
     pd = self.products[self.product_combobox.current()]
-    ordernumber = self.ordernumber_text.get("1.0", "end-1c")
-    cost = self.cost_text.get("1.0", "end-1c")
+    ordernumber = self.ordernumber_entry.get()
+    cost = self.cost_entry.get()
     op.buy(br, pd, ordernumber, cost)
     self.skip()
   

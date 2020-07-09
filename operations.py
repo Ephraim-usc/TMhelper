@@ -427,17 +427,22 @@ def open_buyer():
   
   pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
   br = buyer([pwd])
+  br.submit()
   
   return gm, ad, bc, br
 
-def open_buyer_confirm(gm, ad, bc, pwd):
-  newbuyer = buyer([pwd])
-  newbuyer.submit()
-  newbuyer.bind(gm, ad, bc)
+def open_buyer_confirm(gm, ad, bc, br):
+  br.bind(gm, ad, bc)
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()
-  newbuyer.submit()
+  br.submit()
+
+def open_buyer_abort(gm, ad, bc, br):
+  gm.set("working", False); gm.submit()
+  ad.set("working", False); ad.submit()
+  bc.set("working", False); bc.submit()
+  buyer.delete(br.uid)
 
 def buy(br, pdt, order_id, cost):
   od = order([order_id, cost])

@@ -367,6 +367,24 @@ class PreOrder(tk.Frame):
     tk.Label(self, text = "Other2", bg = "grey").place(x = 50, y = 260, width = 100, height = 20)
     tk.Label(self, text = "PP04", bg = "grey").place(x = 50, y = 310, width = 100, height = 20)
     
+    self.max1_label = tk.Label(self, text = "0", bg = "grey")
+    self.max1_label.place(x = 560, y = 60, width = 60, height = 20)
+    
+    self.max2_label = tk.Label(self, text = "0", bg = "grey")
+    self.max2_label.place(x = 560, y = 110, width = 60, height = 20)
+    
+    self.max3_label = tk.Label(self, text = "0", bg = "grey")
+    self.max3_label.place(x = 560, y = 160, width = 60, height = 20)
+    
+    self.max4_label = tk.Label(self, text = "0", bg = "grey")
+    self.max4_label.place(x = 560, y = 210, width = 60, height = 20)
+    
+    self.max5_label = tk.Label(self, text = "0", bg = "grey")
+    self.max5_label.place(x = 560, y = 260, width = 60, height = 20)
+    
+    self.max6_label = tk.Label(self, text = "0", bg = "grey")
+    self.max6_label.place(x = 560, y = 310, width = 60, height = 20)
+   
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
     self.start_button.place(x = 650, y = 280, height = 30, width = 95)
     
@@ -381,6 +399,13 @@ class PreOrder(tk.Frame):
     self.scale4.configure(to = len(self.o4))
     self.scale5.configure(to = len(self.o5))
     self.scale6.configure(to = len(self.o6))
+    
+    self.max1_label.configure(text = str(len(self.o1)))
+    self.max2_label.configure(text = str(len(self.o2)))
+    self.max3_label.configure(text = str(len(self.o3)))
+    self.max4_label.configure(text = str(len(self.o4)))
+    self.max5_label.configure(text = str(len(self.o5)))
+    self.max6_label.configure(text = str(len(self.o6)))
   
   def start(self):
     buyers = []
@@ -427,7 +452,7 @@ class Order(tk.Frame):
     self.ordernumber_text.place(x = 50, y = 410, width = 300, height = 30)
     
     self.cost_text = tk.Text(self); 
-    self.cost_text.place(x = 50, y = 410, width = 100, height = 30)
+    self.cost_text.place(x = 360, y = 410, width = 100, height = 30)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
     self.progressbar.configure(maximum = len(self.buyers), value = 0)

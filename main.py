@@ -1,7 +1,10 @@
+
 import tkinter as tk
 import tkinter.ttk as ttk
 import datetime as dt
 import numpy as np
+import random
+import string
 
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -121,11 +124,11 @@ class Feed(tk.Frame):
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def submit(self):
-    string = self.input_text.get("1.0","end-1c")
+    string_ = self.input_text.get("1.0","end-1c")
     self.input_text.delete('1.0', tk.END)
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
                 "BankCards":op.bankcard, "Products":op.product}[self.parent.menuframe.feed.get()]
-    remaining = op.feed(datatype, string)
+    remaining = op.feed(datatype, string_)
     self.input_text.insert('1.0', remaining)
   
   def clear(self):
@@ -165,10 +168,10 @@ class Admin(tk.Frame):
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def search(self):
-    string = self.search_text.get("1.0","end-1c")
+    string_ = self.search_text.get("1.0","end-1c")
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Reviews":op.review, 
                 "Buyers":op.buyer, "Products":op.product, "Orders":op.order}[self.search_combobox.get()]
-    self.results = op.search(datatype, string)
+    self.results = op.search(datatype, string_)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:
       if key == "uid": value = e.uid
@@ -204,6 +207,9 @@ class Buyer(tk.Frame):
     self.bankcard_text = tk.Text(self); 
     self.bankcard_text.place(x = 50, y = 330, width = 300, height = 120)
     
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 400, y = 50, width = 300, height = 20)
+    
     self.submit_button = ttk.Button(self, text="New", command = self.new)
     self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
     
@@ -220,6 +226,7 @@ class Buyer(tk.Frame):
     self.gmail_text.delete("1.0", "end")
     self.address_text.delete("1.0", "end")
     self.bankcard_text.delete("1.0", "end")
+    self.password_text.delete("1.0", "end")
   
   def new(self):
     self.refresh()         # cancel working for gm, ad, bc
@@ -227,9 +234,14 @@ class Buyer(tk.Frame):
     self.gmail_text.insert("1.0", self.gm.str())
     self.address_text.insert("1.0", self.ad.str())
     self.bankcard_text.insert("1.0", self.bc.str())
+    
+    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+    self.password_text.delete("1.0", "end")
+    self.password_text.insert("end", pwd)
   
   def submit(self):
-    op.open_buyer_confirm(self.gm, self.ad, self.bc)
+    pwd = self.password_text.get("1.0", "end-1c")
+    op.open_buyer_confirm(self.gm, self.ad, self.bc, pwd)
     self.refresh()
   
   def quit(self):
@@ -551,8 +563,8 @@ class Check(tk.Frame):
     self.info_text.insert("1.0", self.entry.str())
   
   def commit(self):
-    string = self.info_text.get("1.0", "end-1c")
-    op.commit(self.entry, string)
+    string_ = self.info_text.get("1.0", "end-1c")
+    op.commit(self.entry, string_)
   
   def quit(self):
     self.place_forget()

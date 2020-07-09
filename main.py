@@ -1,6 +1,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from PIL import Image, ImageTk
 import datetime as dt
 import numpy as np
 import random
@@ -309,6 +310,7 @@ class Order(tk.Frame):
   buyers = []
   products = []
   tmp = None
+  img = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -337,7 +339,8 @@ class Order(tk.Frame):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
     self.progressbar.place(x = 50, y = 50)
     
-    self.image_label = tk.Label(self);
+    self.img = tk.PhotoImage()
+    self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
@@ -365,6 +368,10 @@ class Order(tk.Frame):
     pd = self.products[self.product_combobox.current()]
     self.product_text.delete("1.0", "end")
     self.product_text.insert("1.0", pd.str())
+    
+    if pd.get("image") != None:
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
+      self.image_label.configure(image = self.img)
   
   def submit(self):
     br = self.buyers[self.progressbar['value']]

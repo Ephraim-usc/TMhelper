@@ -225,6 +225,7 @@ class buyer(entry):
   
   def str(self):
     buffer = entry.str(self)
+    if self.get("alive") == False: return buffer
     buffer += '\n' + "gmail\t" + str(gmail.query(self.gmail).symbol())
     buffer += '\n' + "address\t" + str(address.query(self.address).symbol())
     buffer += '\n' + "bankcard\t" + str(bankcard.query(self.bankcard).symbol())
@@ -232,8 +233,9 @@ class buyer(entry):
     return buffer
   
   def symbol(self):
-    ad = address.query(self.address)
-    buffer = "<" + str(ad.get("RecipientName")) + "|" + str(self.uid) + ">"
+    if self.get("alive") == False:
+      return "<" + "temporary" + "|" + str(self.uid) + ">"
+    buffer = "<" + str(address.query(self.address).get("RecipientName")) + "|" + str(self.uid) + ">"
     return buffer
   
   def num_orders(self):
@@ -426,7 +428,8 @@ def open_buyer():
   bc = np.random.choice(available_bankcards); bc.set("working", True)
   
   pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
-  br = buyer([pwd])
+  
+  br = buyer([pwd]); br.set("alive", False)
   br.submit()
   
   return gm, ad, bc, br
@@ -436,6 +439,7 @@ def open_buyer_confirm(gm, ad, bc, br):
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()
+  br.set("alive", True)
   br.submit()
 
 def open_buyer_abort(gm, ad, bc, br):

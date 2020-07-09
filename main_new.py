@@ -4,8 +4,6 @@ import tkinter.ttk as ttk
 from PIL import Image, ImageTk
 import datetime as dt
 import numpy as np
-import random
-import string
 
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -192,6 +190,7 @@ class Buyer(tk.Frame):
   gm = None
   ad = None
   bc = None
+  br = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -291,7 +290,7 @@ class Buyer(tk.Frame):
   
   def new(self):
     self.refresh()         # cancel working for gm, ad, bc
-    self.gm, self.ad, self.bc = op.open_buyer()
+    self.gm, self.ad, self.bc, self.br = op.open_buyer()
     
     self.display(self.gmail_text, self.gm.get("Gmail"))
     self.display(self.gmail_password_text, self.gm.get("Password"))
@@ -304,7 +303,7 @@ class Buyer(tk.Frame):
     self.display(self.bankcard_text, self.bc.get("BankCard"))
     self.display(self.expiration_text, self.bc.get("BankCardExpirationDate"))
     
-    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+    pwd = self.br.get("AmazonPassword")
     self.display(self.password_text, pwd)
   
   def submit(self):

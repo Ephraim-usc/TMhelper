@@ -369,6 +369,7 @@ class Order(tk.Frame):
     self.product_text.delete("1.0", "end")
     self.product_text.insert("1.0", pd.str())
     
+    self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
       self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
       self.image_label.configure(image = self.img)

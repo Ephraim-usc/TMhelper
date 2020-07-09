@@ -4,6 +4,8 @@ import os
 import pickle
 import datetime as dt
 import re
+import string
+import random
 
 class entry():
   uid = None
@@ -423,7 +425,10 @@ def open_buyer():
   available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   bc = np.random.choice(available_bankcards); bc.set("working", True)
   
-  return gm, ad, bc
+  pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+  br = buyer([pwd])
+  
+  return gm, ad, bc, br
 
 def open_buyer_confirm(gm, ad, bc, pwd):
   newbuyer = buyer([pwd])

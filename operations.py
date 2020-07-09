@@ -51,6 +51,12 @@ class entry():
     el = cls.all()
     return el.query(uid)
   
+  @classmethod
+  def delete(cls, uid): # only used on entries without reference !!
+    el = cls.all()
+    el.delete(uid)
+    el.write(self.filename)
+  
   def submit(self):
     all = self.all()
     if self.uid == None:
@@ -61,6 +67,7 @@ class entry():
     all.delete(self.uid)
     all.append(self)
     all.write(self.filename)
+
 
 class entryList():
   datatype = entry
@@ -519,5 +526,4 @@ def commit(e, string):
       value = float(value)
     e.set(key, value)
   e.submit()
-    
-  
+

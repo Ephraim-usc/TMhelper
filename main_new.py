@@ -235,7 +235,7 @@ class Buyer(tk.Frame):
     self.address_text.insert("1.0", self.ad.str())
     self.bankcard_text.insert("1.0", self.bc.str())
     
-    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(15))
+    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
     self.password_text.delete("1.0", "end")
     self.password_text.insert("end", pwd)
   

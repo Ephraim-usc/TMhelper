@@ -57,7 +57,7 @@ class entry():
   def delete(cls, uid): # only used on entries without reference !!
     el = cls.all()
     el.delete(uid)
-    el.write(self.filename)
+    el.write(cls.filename)
   
   def submit(self):
     all = self.all()

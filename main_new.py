@@ -242,10 +242,6 @@ class Buyer(tk.Frame):
     self.password_text.place(x = 540, y = 50, width = 200, height = 20)
     self.password_text.bind("<Button-1>", self.copy)
     
-    self.password_text = tk.Text(self); 
-    self.password_text.place(x = 540, y = 50, width = 200, height = 20)
-    self.password_text.bind("<Button-1>", self.copy)
-    
     self.uid_text = tk.Text(self); 
     self.uid_text.place(x = 540, y = 90, width = 200, height = 20)
     self.uid_text.bind("<Button-1>", self.copy)
@@ -268,15 +264,25 @@ class Buyer(tk.Frame):
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
-    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
     self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def refresh(self):
-    self.gmail_text.delete("1.0", "end") 
-    self.password_text.delete("1.0", "end")
+    self.gmail_text.configure(state = "normal"); self.gmail_text.delete("1.0", "end") 
+    self.gmail_password_text.configure(state = "normal"); self.gmail_password_text.delete("1.0", "end")
+    self.name_text.configure(state = "normal"); self.name_text.delete("1.0", "end")
+    self.address_text.configure(state = "normal"); self.address_text.delete("1.0", "end")
+    self.city_text.configure(state = "normal"); self.city_text.delete("1.0", "end")
+    self.state_text.configure(state = "normal"); self.state_text.delete("1.0", "end")
+    self.zip_text.configure(state = "normal"); self.zip_text.delete("1.0", "end")
+    self.phone_text.configure(state = "normal"); self.phone_text.delete("1.0", "end")
+    self.bankcard_text.configure(state = "normal"); self.bankcard_text.delete("1.0", "end")
+    self.expiration_text.configure(state = "normal"); self.expiration_text.delete("1.0", "end")
+    self.password_text.configure(state = "normal"); self.password_text.delete("1.0", "end")
+    self.uid_text.configure(state = "normal"); self.uid_text.delete("1.0", "end")
   
   def copy(self, event):
     self.parent.clipboard_clear()
@@ -289,7 +295,8 @@ class Buyer(tk.Frame):
     widget.configure(state = "disabled")
   
   def new(self):
-    self.refresh()         # cancel working for gm, ad, bc
+    if self.br != None: return None
+    
     self.gm, self.ad, self.bc, self.br = op.open_buyer()
     
     self.display(self.gmail_text, self.gm.get("Gmail"))
@@ -305,10 +312,24 @@ class Buyer(tk.Frame):
     
     pwd = self.br.get("AmazonPassword")
     self.display(self.password_text, pwd)
+    self.display(self.uid_text, str(self.br.uid))
   
   def submit(self):
-    pwd = self.password_text.get("1.0", "end-1c")
-    op.open_buyer_confirm(self.gm, self.ad, self.bc, pwd)
+    if self.br == None: return None
+    op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br)
+    self.gm = None
+    self.ad = None
+    self.bc = None
+    self.br = None
+    self.refresh()
+  
+  def skip(self):
+    if self.br == None: return None
+    op.open_buyer_abort(self.gm, self.ad, self.bc, self.br)
+    self.gm = None
+    self.ad = None
+    self.bc = None
+    self.br = None
     self.refresh()
   
   def quit(self):
@@ -322,22 +343,29 @@ class PreOrder(tk.Frame):
     self['bg'] = 'grey'
     
     self.scale1 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale1.place(x = 50, y = 50)
+    self.scale1.place(x = 150, y = 50)
     
     self.scale2 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale2.place(x = 50, y = 100)
+    self.scale2.place(x = 150, y = 100)
     
     self.scale3 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale3.place(x = 50, y = 150)
+    self.scale3.place(x = 150, y = 150)
     
     self.scale4 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale4.place(x = 50, y = 200)
+    self.scale4.place(x = 150, y = 200)
     
     self.scale5 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale5.place(x = 50, y = 250)
+    self.scale5.place(x = 150, y = 250)
     
     self.scale6 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale6.place(x = 50, y = 300)
+    self.scale6.place(x = 150, y = 300)
+    
+    tk.Label(self, text = "Other", bg = "grey").place(x = 50, y = 60, width = 100, height = 20)
+    tk.Label(self, text = "PP01", bg = "grey").place(x = 50, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "PP02", bg = "grey").place(x = 50, y = 160, width = 100, height = 20)
+    tk.Label(self, text = "PP03", bg = "grey").place(x = 50, y = 210, width = 100, height = 20)
+    tk.Label(self, text = "Other2", bg = "grey").place(x = 50, y = 260, width = 100, height = 20)
+    tk.Label(self, text = "PP04", bg = "grey").place(x = 50, y = 310, width = 100, height = 20)
     
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
     self.start_button.place(x = 650, y = 280, height = 30, width = 95)

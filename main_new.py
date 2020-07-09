@@ -1,6 +1,7 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from PIL import Image, ImageTk
 import datetime as dt
 import numpy as np
 import random
@@ -199,16 +200,68 @@ class Buyer(tk.Frame):
     self['bg'] = 'grey'
     
     self.gmail_text = tk.Text(self); 
-    self.gmail_text.place(x = 50, y = 50, width = 300, height = 120)
+    self.gmail_text.place(x = 150, y = 50, width = 250, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 90, width = 250, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    self.name_text = tk.Text(self); 
+    self.name_text.place(x = 150, y = 130, width = 250, height = 20)
+    self.name_text.bind("<Button-1>", self.copy)
     
     self.address_text = tk.Text(self); 
-    self.address_text.place(x = 50, y = 190, width = 300, height = 120)
+    self.address_text.place(x = 150, y = 170, width = 250, height = 20)
+    self.address_text.bind("<Button-1>", self.copy)
+    
+    self.city_text = tk.Text(self); 
+    self.city_text.place(x = 150, y = 210, width = 100, height = 20)
+    self.city_text.bind("<Button-1>", self.copy)
+    
+    self.state_text = tk.Text(self); 
+    self.state_text.place(x = 300, y = 210, width = 100, height = 20)
+    self.state_text.bind("<Button-1>", self.copy)
+    
+    self.zip_text = tk.Text(self); 
+    self.zip_text.place(x = 150, y = 250, width = 100, height = 20)
+    self.zip_text.bind("<Button-1>", self.copy)
+    
+    self.phone_text = tk.Text(self); 
+    self.phone_text.place(x = 300, y = 250, width = 100, height = 20)
+    self.phone_text.bind("<Button-1>", self.copy)
     
     self.bankcard_text = tk.Text(self); 
-    self.bankcard_text.place(x = 50, y = 330, width = 300, height = 120)
+    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_text.bind("<Button-1>", self.copy)
+    
+    self.expiration_text = tk.Text(self); 
+    self.expiration_text.place(x = 150, y = 330, width = 250, height = 20)
+    self.expiration_text.bind("<Button-1>", self.copy)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 400, y = 50, width = 300, height = 20)
+    self.password_text.place(x = 540, y = 50, width = 200, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 540, y = 50, width = 200, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 540, y = 90, width = 200, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 90, width = 100, height = 20)
+    tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 130, width = 100, height = 20)
+    tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 210, width = 100, height = 20)
+    tk.Label(self, text = "Zip / Phone", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
+    tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
+    tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 330, width = 100, height = 20)
+    
+    tk.Label(self, text = "Password", bg = "grey").place(x = 440, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "UID", bg = "grey").place(x = 440, y = 90, width = 100, height = 20)
     
     self.submit_button = ttk.Button(self, text="New", command = self.new)
     self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
@@ -223,21 +276,36 @@ class Buyer(tk.Frame):
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def refresh(self):
-    self.gmail_text.delete("1.0", "end")
-    self.address_text.delete("1.0", "end")
-    self.bankcard_text.delete("1.0", "end")
+    self.gmail_text.delete("1.0", "end") 
     self.password_text.delete("1.0", "end")
+  
+  def copy(self, event):
+    self.parent.clipboard_clear()
+    self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+  
+  def display(self, widget, string):
+    widget.configure(state = "normal")
+    widget.delete("1.0", "end")
+    widget.insert("1.0", string)
+    widget.configure(state = "disabled")
   
   def new(self):
     self.refresh()         # cancel working for gm, ad, bc
     self.gm, self.ad, self.bc = op.open_buyer()
-    self.gmail_text.insert("1.0", self.gm.str())
-    self.address_text.insert("1.0", self.ad.str())
-    self.bankcard_text.insert("1.0", self.bc.str())
+    
+    self.display(self.gmail_text, self.gm.get("Gmail"))
+    self.display(self.gmail_password_text, self.gm.get("Password"))
+    self.display(self.name_text, self.ad.get("RecipientName"))
+    self.display(self.address_text, self.ad.get("Address1"))
+    self.display(self.city_text, self.ad.get("City"))
+    self.display(self.state_text, self.ad.get("State"))
+    self.display(self.zip_text, self.ad.get("Zip"))
+    self.display(self.phone_text, self.ad.get("PhoneNumber"))
+    self.display(self.bankcard_text, self.bc.get("BankCard"))
+    self.display(self.expiration_text, self.bc.get("BankCardExpirationDate"))
     
     pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
-    self.password_text.delete("1.0", "end")
-    self.password_text.insert("end", pwd)
+    self.display(self.password_text, pwd)
   
   def submit(self):
     pwd = self.password_text.get("1.0", "end-1c")
@@ -309,6 +377,7 @@ class Order(tk.Frame):
   buyers = []
   products = []
   tmp = None
+  img = None
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -337,7 +406,8 @@ class Order(tk.Frame):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
     self.progressbar.place(x = 50, y = 50)
     
-    self.image_label = tk.Label(self);
+    self.img = tk.PhotoImage()
+    self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
@@ -365,6 +435,11 @@ class Order(tk.Frame):
     pd = self.products[self.product_combobox.current()]
     self.product_text.delete("1.0", "end")
     self.product_text.insert("1.0", pd.str())
+    
+    self.image_label.configure(image = tk.PhotoImage())
+    if pd.get("image") != None:
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
+      self.image_label.configure(image = self.img)
   
   def submit(self):
     br = self.buyers[self.progressbar['value']]

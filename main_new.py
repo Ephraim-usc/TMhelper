@@ -312,7 +312,7 @@ class Buyer(tk.Frame):
     
     pwd = self.br.get("AmazonPassword")
     self.display(self.password_text, pwd)
-    self.display(self.uid_text, str(self.br.uid))
+    self.display(self.uid_text, "B" + str(self.br.uid))
   
   def submit(self):
     if self.br == None: return None

@@ -542,6 +542,8 @@ def commit(e, string):
       value = bool(value)
     elif re.search('^[0-9]+\.*[0-9]*$', value) is not None:  # dt.time!!!
       value = float(value)
+    elif re.search('^None$', value) is not None:
+      value = None
     e.set(key, value)
   e.submit()
 

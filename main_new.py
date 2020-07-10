@@ -598,7 +598,6 @@ class Order(tk.Frame):
   
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
-    if pd.uid == -1: return None
     
     self.display(self.keyword_text, pd.get("keyword"))
     self.display(self.store_text, pd.get("Store"))
@@ -664,6 +663,9 @@ class PreReview(tk.Frame):
     self.scale = tk.Scale(self, length = 300, orient = "horizontal")
     self.scale.place(x = 50, y = 100)
     
+    self.max_label = tk.Label(self, text = "0", bg = "grey")
+    self.max_label.place(x = 360, y = 110, width = 60, height = 20)
+    
     self.start_button = ttk.Button(self, text="Add", command = self.add)
     self.start_button.place(x = 50, y = 150, height = 30, width = 95)
     
@@ -689,7 +691,7 @@ class PreReview(tk.Frame):
   def max_num(self, var, indx, mode):
     pd = self.products[self.combobox.current()]
     self.scale.configure(to = min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid])))
-    pass
+    self.max_label.configure(text = str(min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid]))))
   
   def show_selection(self):
     self.listbox.delete("0", "end")

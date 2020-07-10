@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 import tkinter.messagebox as messagebox
 from PIL import Image, ImageTk
 import numpy as np
+import os
 
 '''
 import requests
@@ -827,8 +828,11 @@ class Review(Frame):
       self.show_order()
       self.show_review()
 
-
 if __name__ == '__main__':
-    tmhelper = TMhelper()
-    tmhelper.mainloop()
+  abspath = os.path.abspath(__file__)
+  dname = os.path.dirname(abspath)
+  os.chdir(dname)
+  
+  tmhelper = TMhelper()
+  tmhelper.mainloop()
 

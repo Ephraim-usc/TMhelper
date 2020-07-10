@@ -736,20 +736,47 @@ class Review(tk.Frame):
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    self.order_text = tk.Text(self); 
-    self.order_text.place(x = 50, y = 100, width = 250, height = 300)
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 150, y = 100, width = 280, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 150, y = 130, width = 280, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 150, y = 160, width = 280, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 190, width = 280, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 100, width = 100, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 130, width = 100, height = 20)
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 160, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 190, width = 100, height = 20)
+    
+    #self.order_text = tk.Text(self); 
+    #self.order_text.place(x = 50, y = 100, width = 250, height = 300)
     
     self.title_text = tk.Text(self); 
-    self.title_text.place(x = 310, y = 100, width = 250, height = 30)
+    self.title_text.place(x = 150, y = 250, width = 280, height = 20)
+    self.title_text.bind("<Button-1>", self.copy)
     
-    self.content_text = tk.Text(self); 
-    self.content_text.place(x = 310, y = 150, width = 250, height = 250)
+    self.content_text = tk.Text(self);
+    self.content_text.place(x = 150, y = 280, width = 280, height = 100)
+    self.content_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Title", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
+    tk.Label(self, text = "Content", bg = "grey").place(x = 50, y = 280, width = 100, height = 20)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
     self.progressbar.configure(maximum = 100, value = 0)
     self.progressbar.place(x = 50, y = 50)
     
-    self.image_label = tk.Label(self);
+    self.img = tk.PhotoImage()
+    self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
@@ -768,10 +795,30 @@ class Review(tk.Frame):
     self.show_order()
     self.show_review()
   
+  def copy(self, event):
+    self.parent.clipboard_clear()
+    self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+  
+  def display(self, widget, string):
+    widget.configure(state = "normal")
+    widget.delete("1.0", "end")
+    widget.insert("1.0", str(string))
+    widget.configure(state = "disabled")
+  
   def show_order(self):
-    order = self.orders[self.progressbar['value']]
-    self.order_text.delete("1.0", "end")
-    self.order_text.insert("end", order.str())
+    od = self.orders[self.progressbar['value']]
+    br = op.buyer.query(od.buyer)
+    pd = op.product.query(od.product)
+    
+    self.display(self.uid_text, "B" + str(br.uid))
+    self.display(self.password_text, br.get("AmazonPassword"))
+    self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
+    self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("Password"))
+    
+    self.image_label.configure(image = tk.PhotoImage())
+    if pd.get("image") != None:
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
+      self.image_label.configure(image = self.img)
   
   def show_review(self):
     order = self.orders[self.progressbar['value']]

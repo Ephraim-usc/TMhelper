@@ -421,18 +421,18 @@ def search(datatype, string):
 
 def open_buyer():
   available_gmails = [e for e in gmail.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
-  gm = np.random.choice(available_gmails); gm.set("working", True)
-  
   available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
-  ad = np.random.choice(available_addresses); ad.set("working", True)
-  
   available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
+  
+  if (available_gmails == [] or available_addresses == [] or available_bankcards == []):
+    return None, None, None, None
+  
+  gm = np.random.choice(available_gmails); gm.set("working", True)
+  ad = np.random.choice(available_addresses); ad.set("working", True)
   bc = np.random.choice(available_bankcards); bc.set("working", True)
   
   pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
-  
-  br = buyer([pwd]); br.set("alive", False)
-  br.submit()
+  br = buyer([pwd]); br.set("alive", False); br.submit()
   
   return gm, ad, bc, br
 
@@ -526,7 +526,8 @@ def suitable_reviews(pd):
   
   return buffer
 
-def submit_review(pd, rv):
+def submit_review(pd, rv, string_):
+  commit(rv, string_)
   pd.leave_review(rv)
   pd.submit()
   rv.submit()

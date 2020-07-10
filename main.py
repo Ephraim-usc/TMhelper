@@ -825,6 +825,8 @@ class Review(Frame):
       self.show_order()
       self.show_review()
 
-tmhelper = TMhelper()
 
+if __name__ == '__main__':
+    tmhelper = TMhelper()
+    tmhelper.mainloop()
 

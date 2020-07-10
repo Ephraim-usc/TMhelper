@@ -1,11 +1,9 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.messagebox as messagebox
 from PIL import Image, ImageTk
-import datetime as dt
 import numpy as np
-import random
-import string
 
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -15,7 +13,6 @@ with open("operations.py", "w", encoding="utf-8") as f:
 import operations as op
 
 
-
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
@@ -23,18 +20,55 @@ class TMhelper(tk.Tk):
     self.geometry("800x500")
     
     self.menuframe = Menu(self)
+    self.menuframe.place(x = 0, y = 0)
+    
     self.feedframe = Feed(self)
     self.adminframe = Admin(self)
+    self.checkframe = Check(self)
     self.buyerframe = Buyer(self)
     self.preorderframe = PreOrder(self)
     self.orderframe = Order(self)
     self.prereviewframe = PreReview(self)
     self.reviewframe = Review(self)
-    self.checkframe = Check(self)
   
   def refresh(self):
     other_frames = [w for w in self.winfo_children() if w.winfo_y() > 0]
     for w in other_frames: w.place_forget()
+
+class Frame(tk.Frame):
+  def __init__(self, parent, *args, **kwargs):
+    tk.Frame.__init__(self, parent, *args, **kwargs)
+    self.parent = parent
+    self.configure(width = 800, height = 470)
+    self['bg'] = 'grey'
+  
+  def copy(self, event):
+    self.parent.clipboard_clear()
+    self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+  
+  def clear(self):
+    children = self.winfo_children()
+    children_text = [w for w in children if type(w) == tk.Text]
+    for w in children_text:
+      if w['state'] == 'normal':
+        w.delete("1.0", "end")
+      if w['state'] == 'disabled':
+        w.configure(state = 'normal')
+        w.delete("1.0", "end")
+        w.configure(state = 'disabled')
+  
+  def display(self, widget, string):
+    if widget['state'] == 'normal':
+      widget.delete("1.0", "end")
+      widget.insert("1.0", str(string))
+    if widget['state'] == 'disabled':
+      widget.configure(state = "normal")
+      widget.delete("1.0", "end")
+      widget.insert("1.0", str(string))
+      widget.configure(state = "disabled")
+  
+  def quit(self):
+    self.place_forget()
 
 class Menu(tk.Frame):
   feed = None
@@ -44,7 +78,6 @@ class Menu(tk.Frame):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
     self.configure(width = 800, height = 30)
-    self.place(x= 0, y = 0)
     self['bg'] = 'grey'
     
     self.feed = tk.StringVar()
@@ -104,13 +137,9 @@ class Menu(tk.Frame):
     if self.feed.get() != "Import Data":
       self.parent.feedframe.place(x = 0, y = 30)
 
-
-class Feed(tk.Frame):
+class Feed(Frame):
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
     self.input_text = tk.Text(self)
     self.input_text.place(x = 30, y = 30, width = 600, height = 400)
@@ -131,24 +160,15 @@ class Feed(tk.Frame):
                 "BankCards":op.bankcard, "Products":op.product}[self.parent.menuframe.feed.get()]
     remaining = op.feed(datatype, string_)
     self.input_text.insert('1.0', remaining)
-  
-  def clear(self):
-    self.input_text.delete('1.0', tk.END)
-  
-  def quit(self):
-    self.place_forget()
 
-class Admin(tk.Frame):
+class Admin(Frame):
   results = []
   selected = None
   
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
-    self.search_text = tk.Text(self); 
+    self.search_text = tk.Text(self)
     self.search_text.place(x = 50, y = 50, width = 400, height = 25)
     
     self.search_combobox = ttk.Combobox(self)
@@ -184,95 +204,201 @@ class Admin(tk.Frame):
     self.parent.checkframe.entry = self.selected
     self.parent.checkframe.refresh()
     self.parent.checkframe.place(x = 0, y = 30)
-  
-  def quit(self):
-    self.place_forget()
 
-class Buyer(tk.Frame):
+class Check(Frame):
+  entry = None
+  
+  def __init__(self, parent, *args, **kwargs):
+    Frame.__init__(self, parent, *args, **kwargs)
+    
+    self.info_text = tk.Text(self); 
+    self.info_text.place(x = 50, y = 50, width = 500, height = 300)
+    self.info_text.configure(tabs = "5c")
+    
+    self.commit_button = ttk.Button(self, text="Commit Change", command = self.commit)
+    self.commit_button.place(x = 650, y = 290, height = 30, width = 95)
+    
+    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
+    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+  
+  def refresh(self):
+    self.display(self.info_text, self.entry.str())
+  
+  def commit(self):
+    string_ = self.info_text.get("1.0", "end-1c")
+    op.commit(self.entry, string_)
+
+class Buyer(Frame):
   gm = None
   ad = None
   bc = None
+  br = None
   
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
     self.gmail_text = tk.Text(self); 
-    self.gmail_text.place(x = 50, y = 50, width = 300, height = 120)
+    self.gmail_text.place(x = 150, y = 50, width = 250, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 90, width = 250, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    self.name_text = tk.Text(self); 
+    self.name_text.place(x = 150, y = 130, width = 250, height = 20)
+    self.name_text.bind("<Button-1>", self.copy)
     
     self.address_text = tk.Text(self); 
-    self.address_text.place(x = 50, y = 190, width = 300, height = 120)
+    self.address_text.place(x = 150, y = 170, width = 250, height = 20)
+    self.address_text.bind("<Button-1>", self.copy)
+    
+    self.city_text = tk.Text(self); 
+    self.city_text.place(x = 150, y = 210, width = 100, height = 20)
+    self.city_text.bind("<Button-1>", self.copy)
+    
+    self.state_text = tk.Text(self); 
+    self.state_text.place(x = 300, y = 210, width = 100, height = 20)
+    self.state_text.bind("<Button-1>", self.copy)
+    
+    self.zip_text = tk.Text(self); 
+    self.zip_text.place(x = 150, y = 250, width = 100, height = 20)
+    self.zip_text.bind("<Button-1>", self.copy)
+    
+    self.phone_text = tk.Text(self); 
+    self.phone_text.place(x = 300, y = 250, width = 100, height = 20)
+    self.phone_text.bind("<Button-1>", self.copy)
     
     self.bankcard_text = tk.Text(self); 
-    self.bankcard_text.place(x = 50, y = 330, width = 300, height = 120)
+    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_text.bind("<Button-1>", self.copy)
+    
+    self.expiration_text = tk.Text(self); 
+    self.expiration_text.place(x = 150, y = 330, width = 250, height = 20)
+    self.expiration_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 90, width = 100, height = 20)
+    tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 130, width = 100, height = 20)
+    tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 210, width = 100, height = 20)
+    tk.Label(self, text = "Zip / Phone", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
+    tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
+    tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 330, width = 100, height = 20)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 400, y = 50, width = 300, height = 20)
+    self.password_text.place(x = 540, y = 50, width = 200, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
     
-    self.submit_button = ttk.Button(self, text="New", command = self.new)
-    self.submit_button.place(x = 650, y = 210, height = 30, width = 95)
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 540, y = 90, width = 200, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Password", bg = "grey").place(x = 440, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "UID", bg = "grey").place(x = 440, y = 90, width = 100, height = 20)
+    
+    self.new_button = ttk.Button(self, text="New", command = self.new)
+    self.new_button.place(x = 650, y = 210, height = 30, width = 95)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
     
-    self.skip_button = ttk.Button(self, text="Skip")
+    self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
     self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
   def refresh(self):
-    self.gmail_text.delete("1.0", "end")
-    self.address_text.delete("1.0", "end")
-    self.bankcard_text.delete("1.0", "end")
-    self.password_text.delete("1.0", "end")
+    self.clear()
   
   def new(self):
-    self.refresh()         # cancel working for gm, ad, bc
-    self.gm, self.ad, self.bc = op.open_buyer()
-    self.gmail_text.insert("1.0", self.gm.str())
-    self.address_text.insert("1.0", self.ad.str())
-    self.bankcard_text.insert("1.0", self.bc.str())
+    if self.br != None: return None
     
-    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
-    self.password_text.delete("1.0", "end")
-    self.password_text.insert("end", pwd)
+    self.gm, self.ad, self.bc, self.br = op.open_buyer()
+    if self.br == None:
+      messagebox.showinfo(title= "Error", message= "No available gmail/address/bankcard.")
+    
+    self.display(self.gmail_text, self.gm.get("Gmail"))
+    self.display(self.gmail_password_text, self.gm.get("Password"))
+    self.display(self.name_text, self.ad.get("RecipientName"))
+    self.display(self.address_text, self.ad.get("Address1"))
+    self.display(self.city_text, self.ad.get("City"))
+    self.display(self.state_text, self.ad.get("State"))
+    self.display(self.zip_text, self.ad.get("Zip"))
+    self.display(self.phone_text, self.ad.get("PhoneNumber"))
+    self.display(self.bankcard_text, self.bc.get("BankCard"))
+    self.display(self.expiration_text, self.bc.get("BankCardExpirationDate"))
+    
+    pwd = self.br.get("AmazonPassword")
+    self.display(self.password_text, pwd)
+    self.display(self.uid_text, "B" + str(self.br.uid))
   
   def submit(self):
-    pwd = self.password_text.get("1.0", "end-1c")
-    op.open_buyer_confirm(self.gm, self.ad, self.bc, pwd)
-    self.refresh()
+    if self.br == None: return None
+    op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br)
+    self.gm = None
+    self.ad = None
+    self.bc = None
+    self.br = None
+    self.clear()
   
-  def quit(self):
-    self.place_forget()
+  def skip(self):
+    if self.br == None: return None
+    op.open_buyer_abort(self.gm, self.ad, self.bc, self.br)
+    self.gm = None
+    self.ad = None
+    self.bc = None
+    self.br = None
+    self.clear()
 
-class PreOrder(tk.Frame):
+class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
     self.scale1 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale1.place(x = 50, y = 50)
+    self.scale1.place(x = 150, y = 50)
     
     self.scale2 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale2.place(x = 50, y = 100)
+    self.scale2.place(x = 150, y = 100)
     
     self.scale3 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale3.place(x = 50, y = 150)
+    self.scale3.place(x = 150, y = 150)
     
     self.scale4 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale4.place(x = 50, y = 200)
+    self.scale4.place(x = 150, y = 200)
     
     self.scale5 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale5.place(x = 50, y = 250)
+    self.scale5.place(x = 150, y = 250)
     
     self.scale6 = tk.Scale(self, orient = "horizontal", length = 400)
-    self.scale6.place(x = 50, y = 300)
+    self.scale6.place(x = 150, y = 300)
     
+    tk.Label(self, text = "Other", bg = "grey").place(x = 50, y = 60, width = 100, height = 20)
+    tk.Label(self, text = "PP01", bg = "grey").place(x = 50, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "PP02", bg = "grey").place(x = 50, y = 160, width = 100, height = 20)
+    tk.Label(self, text = "PP03", bg = "grey").place(x = 50, y = 210, width = 100, height = 20)
+    tk.Label(self, text = "Other2", bg = "grey").place(x = 50, y = 260, width = 100, height = 20)
+    tk.Label(self, text = "PP04", bg = "grey").place(x = 50, y = 310, width = 100, height = 20)
+    
+    self.max1_label = tk.Label(self, text = "0", bg = "grey")
+    self.max1_label.place(x = 560, y = 60, width = 60, height = 20)
+    
+    self.max2_label = tk.Label(self, text = "0", bg = "grey")
+    self.max2_label.place(x = 560, y = 110, width = 60, height = 20)
+    
+    self.max3_label = tk.Label(self, text = "0", bg = "grey")
+    self.max3_label.place(x = 560, y = 160, width = 60, height = 20)
+    
+    self.max4_label = tk.Label(self, text = "0", bg = "grey")
+    self.max4_label.place(x = 560, y = 210, width = 60, height = 20)
+    
+    self.max5_label = tk.Label(self, text = "0", bg = "grey")
+    self.max5_label.place(x = 560, y = 260, width = 60, height = 20)
+    
+    self.max6_label = tk.Label(self, text = "0", bg = "grey")
+    self.max6_label.place(x = 560, y = 310, width = 60, height = 20)
+   
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
     self.start_button.place(x = 650, y = 280, height = 30, width = 95)
     
@@ -287,6 +413,13 @@ class PreOrder(tk.Frame):
     self.scale4.configure(to = len(self.o4))
     self.scale5.configure(to = len(self.o5))
     self.scale6.configure(to = len(self.o6))
+    
+    self.max1_label.configure(text = str(len(self.o1)))
+    self.max2_label.configure(text = str(len(self.o2)))
+    self.max3_label.configure(text = str(len(self.o3)))
+    self.max4_label.configure(text = str(len(self.o4)))
+    self.max5_label.configure(text = str(len(self.o5)))
+    self.max6_label.configure(text = str(len(self.o6)))
   
   def start(self):
     buyers = []
@@ -302,55 +435,125 @@ class PreOrder(tk.Frame):
     self.parent.orderframe.place(x = 0, y = 30)
     self.parent.orderframe.buyers = buyers
     self.parent.orderframe.init()
-  
-  def quit(self):
-    self.place_forget()
 
-class Order(tk.Frame):
+class Order(Frame):
   buyers = []
   products = []
   tmp = None
   img = None
   
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
-    self.buyer_text = tk.Text(self); 
-    self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 150, y = 50, width = 250, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 150, y = 80, width = 250, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 150, y = 110, width = 250, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 140, width = 250, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    self.name_text = tk.Text(self); 
+    self.name_text.place(x = 150, y = 170, width = 250, height = 20)
+    self.name_text.bind("<Button-1>", self.copy)
+    
+    self.address_text = tk.Text(self); 
+    self.address_text.place(x = 150, y = 200, width = 250, height = 20)
+    self.address_text.bind("<Button-1>", self.copy)
+    
+    self.city_text = tk.Text(self); 
+    self.city_text.place(x = 150, y = 230, width = 100, height = 20)
+    self.city_text.bind("<Button-1>", self.copy)
+    
+    self.state_text = tk.Text(self); 
+    self.state_text.place(x = 300, y = 230, width = 100, height = 20)
+    self.state_text.bind("<Button-1>", self.copy)
+    
+    self.zip_text = tk.Text(self); 
+    self.zip_text.place(x = 150, y = 260, width = 100, height = 20)
+    self.zip_text.bind("<Button-1>", self.copy)
+    
+    self.phone_text = tk.Text(self); 
+    self.phone_text.place(x = 300, y = 260, width = 100, height = 20)
+    self.phone_text.bind("<Button-1>", self.copy)
+    
+    self.bankcard_text = tk.Text(self); 
+    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_text.bind("<Button-1>", self.copy)
+    
+    self.expiration_text = tk.Text(self); 
+    self.expiration_text.place(x = 150, y = 320, width = 250, height = 20)
+    self.expiration_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 80, width = 100, height = 20)
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 140, width = 100, height = 20)
+    tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 200, width = 100, height = 20)
+    tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 230, width = 100, height = 20)
+    tk.Label(self, text = "Zip / Phone", bg = "grey").place(x = 50, y = 260, width = 100, height = 20)
+    tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
+    tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 320, width = 100, height = 20)
+    
+    self.keyword_text = tk.Text(self); 
+    self.keyword_text.place(x = 530, y = 80, width = 180, height = 20)
+    self.keyword_text.bind("<Button-1>", self.copy)
+    
+    self.store_text = tk.Text(self); 
+    self.store_text.place(x = 530, y = 110, width = 180, height = 20)
+    self.store_text.bind("<Button-1>", self.copy)
+    
+    self.product_name_text = tk.Text(self); 
+    self.product_name_text.place(x = 530, y = 140, width = 180, height = 20)
+    self.product_name_text.bind("<Button-1>", self.copy)
+    
+    self.asin_text = tk.Text(self); 
+    self.asin_text.place(x = 530, y = 170, width = 180, height = 20)
+    self.asin_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Key Word", bg = "grey").place(x = 430, y = 80, width = 100, height = 20)
+    tk.Label(self, text = "Store", bg = "grey").place(x = 430, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "Product", bg = "grey").place(x = 430, y = 140, width = 100, height = 20)
+    tk.Label(self, text = "ASIN", bg = "grey").place(x = 430, y = 170, width = 100, height = 20)
+    
+    self.progressbar = ttk.Progressbar(self, length = 700)
+    self.progressbar.configure(maximum = len(self.buyers), value = 0)
+    self.progressbar.place(x = 50, y = 10)
     
     self.tmp = tk.StringVar()
     self.product_combobox = ttk.Combobox(self, textvariable = self.tmp);
-    self.product_combobox.place(x = 310, y = 100, width = 250)
+    self.product_combobox.place(x = 430, y = 50, width = 280)
     self.tmp.trace("w", self.show_product)
     
-    self.product_text = tk.Text(self); 
-    self.product_text.place(x = 310, y = 150, width = 250, height = 250)
+    self.ordernumber_entry = tk.Entry(self); 
+    self.ordernumber_entry.place(x = 50, y = 370, width = 300)
+    self.ordernumber_entry.bind("<Button-1>", self.input)
     
-    self.ordernumber_text = tk.Text(self); 
-    self.ordernumber_text.place(x = 50, y = 410, width = 300, height = 30)
-    
-    self.cost_text = tk.Text(self); 
-    self.cost_text.place(x = 50, y = 410, width = 100, height = 30)
-    
-    self.progressbar = ttk.Progressbar(self, length = 510)
-    self.progressbar.configure(maximum = len(self.buyers), value = 0)
-    self.progressbar.place(x = 50, y = 50)
+    self.cost_entry = tk.Entry(self); 
+    self.cost_entry.place(x = 360, y = 370, width = 100)
+    self.cost_entry.bind("<Button-1>", self.input)
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 600, y = 50, width = 150, height = 150)
+    self.image_label.place(x = 460, y = 200, width = 140, height = 140)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    self.submit_button.place(x = 650, y = 230, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
-    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.skip_button.place(x = 650, y = 270, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 650, y = 310, height = 30, width = 95)
   
   def init(self):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -358,27 +561,64 @@ class Order(tk.Frame):
   
   def show_buyer(self):
     br = self.buyers[self.progressbar['value']]
-    self.buyer_text.delete("1.0", "end")
-    self.buyer_text.insert("1.0", br.str())
+    
+    self.display(self.uid_text, "B" + str(br.uid))
+    self.display(self.password_text, br.get("AmazonPassword"))
+    self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
+    self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("Password"))
+    self.display(self.name_text, op.address.query(br.address).get("RecipientName"))
+    self.display(self.address_text, op.address.query(br.address).get("Address1"))
+    self.display(self.city_text, op.address.query(br.address).get("City"))
+    self.display(self.state_text, op.address.query(br.address).get("State"))
+    self.display(self.zip_text, op.address.query(br.address).get("Zip"))
+    self.display(self.phone_text, op.address.query(br.address).get("PhoneNumber"))
+    self.display(self.bankcard_text, op.bankcard.query(br.bankcard).get("BankCard"))
+    self.display(self.expiration_text, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
+    
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
     self.product_combobox.current(0)
+    
+    self.ordernumber_entry.configure(fg = "grey")
+    self.ordernumber_entry.delete(0, "end")
+    self.ordernumber_entry.insert("end", "Order Number")
+    
+    self.cost_entry.configure(fg = "grey")
+    self.cost_entry.delete(0, "end")
+    self.cost_entry.insert("end", "Cost")
   
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
-    self.product_text.delete("1.0", "end")
-    self.product_text.insert("1.0", pd.str())
+    
+    self.display(self.keyword_text, pd.get("keyword"))
+    self.display(self.store_text, pd.get("Store"))
+    self.display(self.product_name_text, pd.get("name"))
+    self.display(self.asin_text, pd.get("ASIN"))
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
       self.image_label.configure(image = self.img)
+  
+  def input(self, event):
+    event.widget.configure(fg = "black")
+    event.widget.delete(0, "end")
   
   def submit(self):
     br = self.buyers[self.progressbar['value']]
     pd = self.products[self.product_combobox.current()]
-    ordernumber = self.ordernumber_text.get("1.0", "end-1c")
-    cost = self.cost_text.get("1.0", "end-1c")
+    ordernumber = self.ordernumber_entry.get()
+    cost = self.cost_entry.get()
+    
+    if (self.ordernumber_entry.get() in ["", "Order Number"] or 
+        self.cost_entry.get() in ["", "Cost"]) and pd.uid != -1: 
+      messagebox.showinfo(title= "Error", message= "Make sure Order Number and Cost are typed in.")
+      return None
+    
+    if (self.cost_entry.get() in ["", "Cost"]) and pd.uid == -1: 
+      messagebox.showinfo(title= "Error", message= "Make sure Cost is typed in.")
+      return None
+    
     op.buy(br, pd, ordernumber, cost)
     self.skip()
   
@@ -388,21 +628,15 @@ class Order(tk.Frame):
       self.quit()
     else:
       self.show_buyer()
-  
-  def quit(self):
-    self.place_forget()
 
-class PreReview(tk.Frame):
+class PreReview(Frame):
   products = []
   orders_ = {}
   selection = {}
   tmp = None
   
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
     self.listbox = tk.Listbox(self)
     self.listbox.place(x = 470, y = 50, height = 200, width = 230)
@@ -410,9 +644,13 @@ class PreReview(tk.Frame):
     self.tmp = tk.StringVar()
     self.combobox = ttk.Combobox(self, textvariable = self.tmp)
     self.combobox.place(x = 50, y = 50, width = 300)
+    self.tmp.trace("w", self.max_num)
     
     self.scale = tk.Scale(self, length = 300, orient = "horizontal")
     self.scale.place(x = 50, y = 100)
+    
+    self.max_label = tk.Label(self, text = "0", bg = "grey")
+    self.max_label.place(x = 360, y = 110, width = 60, height = 20)
     
     self.start_button = ttk.Button(self, text="Add", command = self.add)
     self.start_button.place(x = 50, y = 150, height = 30, width = 95)
@@ -424,7 +662,6 @@ class PreReview(tk.Frame):
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
     
     self.selection = {}
-    self.tmp.trace("w", self.max_num)
   
   def refresh(self):
     self.orders_ = op.reviewable_orders()
@@ -439,7 +676,7 @@ class PreReview(tk.Frame):
   def max_num(self, var, indx, mode):
     pd = self.products[self.combobox.current()]
     self.scale.configure(to = min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid])))
-    pass
+    self.max_label.configure(text = str(min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid]))))
   
   def show_selection(self):
     self.listbox.delete("0", "end")
@@ -456,7 +693,6 @@ class PreReview(tk.Frame):
     if self.selection[pd.uid] > limit:
       self.selection[pd.uid] = limit
     self.show_selection()
-    pass
   
   def start(self):
     buffer = []
@@ -470,34 +706,52 @@ class PreReview(tk.Frame):
     self.parent.reviewframe.orders = buffer
     self.parent.reviewframe.place(x = 0, y = 30)
     self.parent.reviewframe.init()
-  
-  def quit(self):
-    self.place_forget()
 
-class Review(tk.Frame):
+class Review(Frame):
   orders = []
   review = None
   
   def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
+    Frame.__init__(self, parent, *args, **kwargs)
     
-    self.order_text = tk.Text(self); 
-    self.order_text.place(x = 50, y = 100, width = 250, height = 300)
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 150, y = 100, width = 280, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 150, y = 130, width = 280, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 150, y = 160, width = 280, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 190, width = 280, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 100, width = 100, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 130, width = 100, height = 20)
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 160, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 190, width = 100, height = 20)
     
     self.title_text = tk.Text(self); 
-    self.title_text.place(x = 310, y = 100, width = 250, height = 30)
+    self.title_text.place(x = 150, y = 250, width = 280, height = 20)
+    self.title_text.bind("<Button-1>", self.copy)
     
-    self.content_text = tk.Text(self); 
-    self.content_text.place(x = 310, y = 150, width = 250, height = 250)
+    self.content_text = tk.Text(self);
+    self.content_text.place(x = 150, y = 280, width = 280, height = 100)
+    self.content_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Title", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
+    tk.Label(self, text = "Content", bg = "grey").place(x = 50, y = 280, width = 100, height = 20)
     
     self.progressbar = ttk.Progressbar(self, length = 510)
     self.progressbar.configure(maximum = 100, value = 0)
     self.progressbar.place(x = 50, y = 50)
     
-    self.image_label = tk.Label(self);
+    self.img = tk.PhotoImage()
+    self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 600, y = 50, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
@@ -517,9 +771,19 @@ class Review(tk.Frame):
     self.show_review()
   
   def show_order(self):
-    order = self.orders[self.progressbar['value']]
-    self.order_text.delete("1.0", "end")
-    self.order_text.insert("end", order.str())
+    od = self.orders[self.progressbar['value']]
+    br = op.buyer.query(od.buyer)
+    pd = op.product.query(od.product)
+    
+    self.display(self.uid_text, "B" + str(br.uid))
+    self.display(self.password_text, br.get("AmazonPassword"))
+    self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
+    self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("Password"))
+    
+    self.image_label.configure(image = tk.PhotoImage())
+    if pd.get("image") != None:
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
+      self.image_label.configure(image = self.img)
   
   def show_review(self):
     order = self.orders[self.progressbar['value']]
@@ -532,8 +796,12 @@ class Review(tk.Frame):
     self.content_text.insert("end", self.review.get("Content"))
   
   def submit(self):
-    order = self.orders[self.progressbar['value']]
-    op.submit_review(order, self.review)
+    title = self.title_text.get("1.0", "end-1c")
+    content = self.content_text.get("1.0", "end-1c")
+    string_ = "Title\t" + title + "\nContent\t" + content
+    od = self.orders[self.progressbar['value']]
+    
+    op.submit_review(od, self.review, string_)
     self.skip()
   
   def skip(self):
@@ -543,39 +811,7 @@ class Review(tk.Frame):
     else:
       self.show_order()
       self.show_review()
-  
-  def quit(self):
-    self.place_forget()
-
-class Check(tk.Frame):
-  entry = None
-  
-  def __init__(self, parent, *args, **kwargs):
-    tk.Frame.__init__(self, parent, *args, **kwargs)
-    self.parent = parent
-    self.configure(width = 800, height = 470)
-    self['bg'] = 'grey'
-    
-    self.info_text = tk.Text(self); 
-    self.info_text.place(x = 50, y = 50, width = 500, height = 300)
-    self.info_text.configure(tabs = "5c")
-    
-    self.quit_button = ttk.Button(self, text="Commit Change", command = self.commit)
-    self.quit_button.place(x = 650, y = 290, height = 30, width = 95)
-    
-    self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
-  
-  def refresh(self):
-    self.info_text.delete("1.0", "end")
-    self.info_text.insert("1.0", self.entry.str())
-  
-  def commit(self):
-    string_ = self.info_text.get("1.0", "end-1c")
-    op.commit(self.entry, string_)
-  
-  def quit(self):
-    self.place_forget()
 
 tmhelper = TMhelper()
-#tmhelper.mainloop()
+
+

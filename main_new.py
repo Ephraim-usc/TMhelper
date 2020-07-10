@@ -292,7 +292,7 @@ class Buyer(tk.Frame):
   def display(self, widget, string):
     widget.configure(state = "normal")
     widget.delete("1.0", "end")
-    widget.insert("1.0", string)
+    widget.insert("1.0", str(string))
     widget.configure(state = "disabled")
   
   def new(self):
@@ -438,41 +438,131 @@ class Order(tk.Frame):
     self.configure(width = 800, height = 470)
     self['bg'] = 'grey'
     
-    self.buyer_text = tk.Text(self); 
-    self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
+    self.uid_text = tk.Text(self); 
+    self.uid_text.place(x = 150, y = 50, width = 250, height = 20)
+    self.uid_text.bind("<Button-1>", self.copy)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 150, y = 80, width = 250, height = 20)
+    self.password_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_text = tk.Text(self); 
+    self.gmail_text.place(x = 150, y = 110, width = 250, height = 20)
+    self.gmail_text.bind("<Button-1>", self.copy)
+    
+    self.gmail_password_text = tk.Text(self); 
+    self.gmail_password_text.place(x = 150, y = 140, width = 250, height = 20)
+    self.gmail_password_text.bind("<Button-1>", self.copy)
+    
+    self.name_text = tk.Text(self); 
+    self.name_text.place(x = 150, y = 170, width = 250, height = 20)
+    self.name_text.bind("<Button-1>", self.copy)
+    
+    self.address_text = tk.Text(self); 
+    self.address_text.place(x = 150, y = 200, width = 250, height = 20)
+    self.address_text.bind("<Button-1>", self.copy)
+    
+    self.city_text = tk.Text(self); 
+    self.city_text.place(x = 150, y = 230, width = 100, height = 20)
+    self.city_text.bind("<Button-1>", self.copy)
+    
+    self.state_text = tk.Text(self); 
+    self.state_text.place(x = 300, y = 230, width = 100, height = 20)
+    self.state_text.bind("<Button-1>", self.copy)
+    
+    self.zip_text = tk.Text(self); 
+    self.zip_text.place(x = 150, y = 260, width = 100, height = 20)
+    self.zip_text.bind("<Button-1>", self.copy)
+    
+    self.phone_text = tk.Text(self); 
+    self.phone_text.place(x = 300, y = 260, width = 100, height = 20)
+    self.phone_text.bind("<Button-1>", self.copy)
+    
+    self.bankcard_text = tk.Text(self); 
+    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_text.bind("<Button-1>", self.copy)
+    
+    self.expiration_text = tk.Text(self); 
+    self.expiration_text.place(x = 150, y = 320, width = 250, height = 20)
+    self.expiration_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 80, width = 100, height = 20)
+    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 140, width = 100, height = 20)
+    tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 200, width = 100, height = 20)
+    tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 230, width = 100, height = 20)
+    tk.Label(self, text = "Zip / Phone", bg = "grey").place(x = 50, y = 260, width = 100, height = 20)
+    tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
+    tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 320, width = 100, height = 20)
+    
+    self.keyword_text = tk.Text(self); 
+    self.keyword_text.place(x = 530, y = 80, width = 180, height = 20)
+    self.keyword_text.bind("<Button-1>", self.copy)
+    
+    self.store_text = tk.Text(self); 
+    self.store_text.place(x = 530, y = 110, width = 180, height = 20)
+    self.store_text.bind("<Button-1>", self.copy)
+    
+    self.product_name_text = tk.Text(self); 
+    self.product_name_text.place(x = 530, y = 140, width = 180, height = 20)
+    self.product_name_text.bind("<Button-1>", self.copy)
+    
+    self.asin_text = tk.Text(self); 
+    self.asin_text.place(x = 530, y = 170, width = 180, height = 20)
+    self.asin_text.bind("<Button-1>", self.copy)
+    
+    tk.Label(self, text = "Key Word", bg = "grey").place(x = 430, y = 80, width = 100, height = 20)
+    tk.Label(self, text = "Store", bg = "grey").place(x = 430, y = 110, width = 100, height = 20)
+    tk.Label(self, text = "Product", bg = "grey").place(x = 430, y = 140, width = 100, height = 20)
+    tk.Label(self, text = "ASIN", bg = "grey").place(x = 430, y = 170, width = 100, height = 20)
+    
+    #self.buyer_text = tk.Text(self); 
+    #self.buyer_text.place(x = 50, y = 100, width = 250, height = 300)
     
     self.tmp = tk.StringVar()
     self.product_combobox = ttk.Combobox(self, textvariable = self.tmp);
-    self.product_combobox.place(x = 310, y = 100, width = 250)
+    self.product_combobox.place(x = 430, y = 50, width = 280)
     self.tmp.trace("w", self.show_product)
     
-    self.product_text = tk.Text(self); 
-    self.product_text.place(x = 310, y = 150, width = 250, height = 250)
+    #self.product_text = tk.Text(self); 
+    #self.product_text.place(x = 310, y = 150, width = 250, height = 250)
     
     self.ordernumber_entry = tk.Entry(self); 
-    self.ordernumber_entry.place(x = 50, y = 410, width = 300)
+    self.ordernumber_entry.place(x = 50, y = 370, width = 300)
     self.ordernumber_entry.bind("<Button-1>", self.input)
     
     self.cost_entry = tk.Entry(self); 
-    self.cost_entry.place(x = 460, y = 410, width = 100)
+    self.cost_entry.place(x = 360, y = 370, width = 100)
     self.cost_entry.bind("<Button-1>", self.input)
     
-    self.progressbar = ttk.Progressbar(self, length = 510)
+    self.progressbar = ttk.Progressbar(self, length = 700)
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
-    self.progressbar.place(x = 50, y = 50)
+    self.progressbar.place(x = 50, y = 10)
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 600, y = 50, width = 150, height = 150)
+    self.image_label.place(x = 460, y = 200, width = 140, height = 140)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    self.submit_button.place(x = 650, y = 230, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
-    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.skip_button.place(x = 650, y = 270, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 650, y = 310, height = 30, width = 95)
+  
+  def copy(self, event):
+    self.parent.clipboard_clear()
+    self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+  
+  def display(self, widget, string):
+    widget.configure(state = "normal")
+    widget.delete("1.0", "end")
+    widget.insert("1.0", str(string))
+    widget.configure(state = "disabled")
   
   def init(self):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -480,8 +570,20 @@ class Order(tk.Frame):
   
   def show_buyer(self):
     br = self.buyers[self.progressbar['value']]
-    self.buyer_text.delete("1.0", "end")
-    self.buyer_text.insert("1.0", br.str())
+    
+    self.display(self.uid_text, "B" + str(br.uid))
+    self.display(self.password_text, br.get("AmazonPassword"))
+    self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
+    self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("Password"))
+    self.display(self.name_text, op.address.query(br.address).get("RecipientName"))
+    self.display(self.address_text, op.address.query(br.address).get("Address1"))
+    self.display(self.city_text, op.address.query(br.address).get("City"))
+    self.display(self.state_text, op.address.query(br.address).get("State"))
+    self.display(self.zip_text, op.address.query(br.address).get("Zip"))
+    self.display(self.phone_text, op.address.query(br.address).get("PhoneNumber"))
+    self.display(self.bankcard_text, op.bankcard.query(br.bankcard).get("BankCard"))
+    self.display(self.expiration_text, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
+    
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
     self.product_combobox.current(0)
@@ -496,12 +598,16 @@ class Order(tk.Frame):
   
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
-    self.product_text.delete("1.0", "end")
-    self.product_text.insert("1.0", pd.str())
+    if pd.uid == -1: return None
+    
+    self.display(self.keyword_text, pd.get("keyword"))
+    self.display(self.store_text, pd.get("Store"))
+    self.display(self.product_name_text, pd.get("name"))
+    self.display(self.asin_text, pd.get("ASIN"))
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((150, 150)))
+      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
       self.image_label.configure(image = self.img)
   
   def input(self, event):
@@ -509,15 +615,20 @@ class Order(tk.Frame):
     event.widget.delete(0, "end")
   
   def submit(self):
-    if (self.ordernumber_entry.get() in ["", "Order Number"] or 
-        self.cost_entry.get() in ["", "Cost"]): 
-      messagebox.showinfo(title= "Error", message= "Make sure order number and cost are typed in.")
-      return None
-    
     br = self.buyers[self.progressbar['value']]
     pd = self.products[self.product_combobox.current()]
     ordernumber = self.ordernumber_entry.get()
     cost = self.cost_entry.get()
+    
+    if (self.ordernumber_entry.get() in ["", "Order Number"] or 
+        self.cost_entry.get() in ["", "Cost"]) and pd.uid != -1: 
+      messagebox.showinfo(title= "Error", message= "Make sure Order Number and Cost are typed in.")
+      return None
+    
+    if (self.cost_entry.get() in ["", "Cost"]) and pd.uid == -1: 
+      messagebox.showinfo(title= "Error", message= "Make sure Cost is typed in.")
+      return None
+    
     op.buy(br, pd, ordernumber, cost)
     self.skip()
   

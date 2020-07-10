@@ -588,11 +588,9 @@ class Order(Frame):
     self.display(self.expiration_text, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
     
     self.products = op.orderable_products(br)
-    if self.products == []:
-      self.product_combobox['values'] = []
-    else:
-      self.product_combobox['values'] = [x.symbol() for x in self.products]
-    self.product_combobox.current(0)
+    self.product_combobox['values'] = [x.symbol() for x in self.products]
+    if self.products != []:
+      self.product_combobox.current(0)
     
     self.ordernumber_entry.configure(fg = "grey")
     self.ordernumber_entry.delete(0, "end")

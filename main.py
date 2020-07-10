@@ -613,7 +613,7 @@ class Order(Frame):
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
+      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((140, 140)))
       self.image_label.configure(image = self.img)
   
   def input(self, event):
@@ -798,7 +798,7 @@ class Review(Frame):
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open(pd.get("image")).resize((140, 140)))
+      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((140, 140)))
       self.image_label.configure(image = self.img)
   
   def show_review(self):

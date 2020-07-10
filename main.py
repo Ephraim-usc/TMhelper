@@ -147,7 +147,7 @@ class Feed(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.comment_label = tk.Label(self, text = "Gmail", bg = "grey", justify = "left")
+    self.comment_label = tk.Label(self, text = "Gmail", bg = "grey", anchor = "w")
     self.comment_label.place(x = 30, y = 30, width = 600, height = 20)
     
     self.input_text = tk.Text(self)

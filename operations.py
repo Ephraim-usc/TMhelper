@@ -290,6 +290,7 @@ class product(entry):
     self.orders = []
     self.set("num_tasks", 0)
     self.set("num_daily_reviews", 2)
+    self.set("image", self.get("ASIN") + ".jpg")
   
   def symbol(self):
     buffer = "<" + str(self.get("name")) + "|" + str(self.uid) + ">"

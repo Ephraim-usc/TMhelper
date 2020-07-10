@@ -256,8 +256,8 @@ class buyer(entry):
   def able_to_order(self): # store instead of uid; first 2 orders should be reviewable products
     if self.get("alive") == False: return False
     
-    TIME_INTERVAL_1 = dt.timedelta(seconds = 60)
-    TIME_INTERVAL_2 = dt.timedelta(seconds = 60)
+    TIME_INTERVAL_1 = dt.timedelta(days = 2)
+    TIME_INTERVAL_2 = dt.timedelta(days = 3)
     num = self.num_orders()
     current = dt.datetime.now()
     buffer = False
@@ -370,8 +370,8 @@ class order(entry):
     if self.review != None:
       return False
     
-    TIME_INTERVAL_3 = dt.timedelta(seconds = 60)
-    TIME_INTERVAL_4 = dt.timedelta(seconds = 60)
+    TIME_INTERVAL_3 = dt.timedelta(days = 3)
+    TIME_INTERVAL_4 = dt.timedelta(days = 7)
     
     br = buyer.query(self.buyer)
     num = br.num_orders()

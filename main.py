@@ -351,6 +351,10 @@ class Buyer(Frame):
   
   def submit(self):
     if self.br == None: return None
+    
+    new_password = self.gmail_password_text.get("1.0", "end-1c")
+    op.commit(self.gm, "Password\t" + new_password)
+    
     op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br)
     self.gm = None
     self.ad = None

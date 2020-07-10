@@ -252,7 +252,7 @@ class Buyer(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.gmail_text = tk.Text(self); 
+    self.gmail_text = tk.Text(self, state = "disabled"); 
     self.gmail_text.place(x = 150, y = 50, width = 250, height = 20)
     self.gmail_text.bind("<Button-1>", self.copy)
     
@@ -264,31 +264,31 @@ class Buyer(Frame):
     self.name_text.place(x = 150, y = 130, width = 250, height = 20)
     self.name_text.bind("<Button-1>", self.copy)
     
-    self.address_text = tk.Text(self); 
+    self.address_text = tk.Text(self, state = "disabled"); 
     self.address_text.place(x = 150, y = 170, width = 250, height = 20)
     self.address_text.bind("<Button-1>", self.copy)
     
-    self.city_text = tk.Text(self); 
+    self.city_text = tk.Text(self, state = "disabled"); 
     self.city_text.place(x = 150, y = 210, width = 100, height = 20)
     self.city_text.bind("<Button-1>", self.copy)
     
-    self.state_text = tk.Text(self); 
+    self.state_text = tk.Text(self, state = "disabled"); 
     self.state_text.place(x = 300, y = 210, width = 100, height = 20)
     self.state_text.bind("<Button-1>", self.copy)
     
-    self.zip_text = tk.Text(self); 
+    self.zip_text = tk.Text(self, state = "disabled"); 
     self.zip_text.place(x = 150, y = 250, width = 100, height = 20)
     self.zip_text.bind("<Button-1>", self.copy)
     
-    self.phone_text = tk.Text(self); 
+    self.phone_text = tk.Text(self, state = "disabled"); 
     self.phone_text.place(x = 300, y = 250, width = 100, height = 20)
     self.phone_text.bind("<Button-1>", self.copy)
     
-    self.bankcard_text = tk.Text(self); 
+    self.bankcard_text = tk.Text(self, state = "disabled"); 
     self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
     self.bankcard_text.bind("<Button-1>", self.copy)
     
-    self.expiration_text = tk.Text(self); 
+    self.expiration_text = tk.Text(self, state = "disabled"); 
     self.expiration_text.place(x = 150, y = 330, width = 250, height = 20)
     self.expiration_text.bind("<Button-1>", self.copy)
     
@@ -301,11 +301,11 @@ class Buyer(Frame):
     tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 330, width = 100, height = 20)
     
-    self.password_text = tk.Text(self); 
+    self.password_text = tk.Text(self, state = "disabled"); 
     self.password_text.place(x = 540, y = 50, width = 200, height = 20)
     self.password_text.bind("<Button-1>", self.copy)
     
-    self.uid_text = tk.Text(self); 
+    self.uid_text = tk.Text(self, state = "disabled"); 
     self.uid_text.place(x = 540, y = 90, width = 200, height = 20)
     self.uid_text.bind("<Button-1>", self.copy)
     

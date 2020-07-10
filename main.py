@@ -355,6 +355,9 @@ class Buyer(Frame):
     new_password = self.gmail_password_text.get("1.0", "end-1c")
     op.commit(self.gm, "Password\t" + new_password)
     
+    new_name = self.name_text.get("1.0", "end-1c")
+    op.commit(self.ad, "RecipientName\t" + new_name)
+    
     op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br)
     self.gm = None
     self.ad = None

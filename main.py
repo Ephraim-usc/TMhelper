@@ -135,14 +135,23 @@ class Menu(tk.Frame):
   def feed_write_event(self, var, indx, mode):
     self.parent.refresh()
     if self.feed.get() != "Import Data":
+      datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
+                  "BankCards":op.bankcard, "Products":op.product}[self.feed.get()]
+      self.parent.feedframe.datatype = datatype
+      self.parent.feedframe.refresh()
       self.parent.feedframe.place(x = 0, y = 30)
 
 class Feed(Frame):
+  datatype = None
+  
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
+    self.comment_label = tk.Label(self, text = "Gmail", bg = "grey")
+    self.comment_label.place(x = 30, y = 30, width = 600, height = 20)
+    
     self.input_text = tk.Text(self)
-    self.input_text.place(x = 30, y = 30, width = 600, height = 400)
+    self.input_text.place(x = 30, y = 60, width = 600, height = 370)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
@@ -153,12 +162,15 @@ class Feed(Frame):
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
   
+  def refresh(self):
+    self.clear()
+    string_ = " ".join(self.datatype.required)
+    self.comment_label.configure(text = string_)
+  
   def submit(self):
     string_ = self.input_text.get("1.0","end-1c")
-    self.input_text.delete('1.0', tk.END)
-    datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
-                "BankCards":op.bankcard, "Products":op.product}[self.parent.menuframe.feed.get()]
-    remaining = op.feed(datatype, string_)
+    self.input_text.delete('1.0', "end")
+    remaining = op.feed(self.datatype, string_)
     self.input_text.insert('1.0', remaining)
 
 class Admin(Frame):

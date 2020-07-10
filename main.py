@@ -164,7 +164,7 @@ class Feed(Frame):
   
   def refresh(self):
     self.clear()
-    string_ = " ".join(self.datatype.required)
+    string_ = "    ".join(self.datatype.required)
     self.comment_label.configure(text = string_)
   
   def submit(self):

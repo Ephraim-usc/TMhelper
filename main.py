@@ -5,10 +5,12 @@ import tkinter.messagebox as messagebox
 from PIL import Image, ImageTk
 import numpy as np
 
+'''
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
 with open("operations.py", "w", encoding="utf-8") as f:
   f.write(r.text)
+'''
 
 import operations as op
 

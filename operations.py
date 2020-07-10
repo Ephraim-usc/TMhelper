@@ -337,6 +337,7 @@ class order(entry):
     self.product = pdt.uid
     br.orders.append(self.uid)
     pdt.orders.append(self.uid)
+    pdt.set("num_tasks", pdt.get("num_tasks") - 1)
     self.set("rank", len(br.orders))
   
   def leave_review(self, rv):
@@ -495,7 +496,7 @@ def orderable_products(br):
   stores = [product.query(order.query(od).product).get("Store") for od in ordered]
   buffer = []
   for pd in pds:
-    if pd.get("Store") not in stores:
+    if pd.get("num_tasks") > 0 and pd.get("Store") not in stores:
       buffer.append(pd)
   if num in [2, 3]:
     buffer = [pd for pd in buffer if pd.get("num_daily_reviews") > 0]

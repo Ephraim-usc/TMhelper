@@ -254,6 +254,8 @@ class buyer(entry):
         return od
   
   def able_to_order(self): # store instead of uid; first 2 orders should be reviewable products
+    if self.get("alive") == False: return False
+    
     TIME_INTERVAL_1 = dt.timedelta(seconds = 60)
     TIME_INTERVAL_2 = dt.timedelta(seconds = 60)
     num = self.num_orders()

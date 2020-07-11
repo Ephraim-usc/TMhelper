@@ -23,7 +23,7 @@ class Report(tk.Frame):
   def refresh(self):
       start = self.start_text.get("1.0", "end-1c")
       end = self.end_text.get("1.0", "end-1c")
-      start = dt.datetime.strptime(start, "%Y-%m-%d")
+      start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
       print(start)
 
 reportframe = Report(root)

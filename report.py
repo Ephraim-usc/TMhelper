@@ -83,8 +83,11 @@ class Report(Frame):
     self.tree["columns"] = cols
     self.tree.column("#0", width=0)
     
+    widths = {"uid":50, "name":130, 'ASIN':90, 'Store':90, 'num_tasks':90, 
+              'orders'70:, 'reviews':70, 'reviews/orders':100, 'goal_reviews':100, 'reviews/goal_reviews':110}
+    
     for i in cols:
-      self.tree.column(i, width = 90, anchor = "w")
+      self.tree.column(i, width = width[i], anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

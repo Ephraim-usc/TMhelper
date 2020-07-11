@@ -112,7 +112,6 @@ class Menu(tk.Frame):
     self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews', 'Products']
     self.feed_combobox.current(0)
     self.feed_combobox.place(x = 720, y = 2, height = 40, width = 125)
-
     
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
     self.phone_combobox['values'] = ['Select Phone'] + next(os.walk('./phones'))[1]

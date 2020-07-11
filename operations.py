@@ -543,7 +543,7 @@ def product_report(start, end):
     for file in files:
       for od in entryList.load(file).values:
         if od.product == pd.uid:
-          if od.get("OrderTime") > start and od.get("OrderTime") < end):
+          if od.get("OrderTime") > start and od.get("OrderTime") < end:
             num_ods += 1
           if od.review != None and review.query(od.review).get("Time") > start and review.query(od.review).get("Time") < end:
             num_rvs += 1

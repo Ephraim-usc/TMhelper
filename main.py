@@ -154,7 +154,7 @@ class Menu(tk.Frame):
     self.parent.feedframe.place(x = 0, y = 30)
   
   def phone_write_event(self, var, indx, mode):
-    phone = self.feed.get()
+    phone = self.phone.get()
     if phone == "Select Phone":
       return None
     op.gmail.filename = "./phones/" + phone + "/gmails.p"

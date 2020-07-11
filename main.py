@@ -41,7 +41,9 @@ class TMhelper(tk.Tk):
   
   def refresh(self):
     other_frames = [w for w in self.winfo_children() if w.winfo_y() > 0]
-    for w in other_frames: w.place_forget()
+    for w in other_frames:
+      w.place_forget()
+    self.reportframe.place(x = 0, y = 30)
 
 class Frame(tk.Frame):
   def __init__(self, parent, *args, **kwargs):

@@ -285,14 +285,12 @@ class buyer(entry):
 
 class product(entry):
   filename = "products.p"
-  orders = []
   
   attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks', 'num_daily_reviews', "goal_reviews"]
   required = entry.required + ['ASIN', 'name', 'Store']
   
   def __init__(self, data):
     entry.__init__(self, data)
-    self.orders = []
     self.set("num_tasks", 0)
     self.set("num_daily_reviews", 2)
     self.set("goal_reviews", 0)
@@ -305,9 +303,6 @@ class product(entry):
   
   def str(self):
     buffer = entry.str(self)
-    buffer += '\norders\t['
-    buffer += ','.join([str(order.query(b).symbol()) for b in self.orders])
-    buffer += ']'
     return buffer
   
   def num_orders_today(self):
@@ -344,7 +339,6 @@ class order(entry):
     self.buyer = br.uid
     self.product = pdt.uid
     br.orders.append(self.uid)
-    pdt.orders.append(self.uid)
     pdt.set("num_tasks", pdt.get("num_tasks") - 1)
     self.set("rank", len(br.orders))
   

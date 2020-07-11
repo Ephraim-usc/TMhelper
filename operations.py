@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 import os
 import pickle
@@ -6,6 +5,7 @@ import datetime as dt
 import re
 import string
 import random
+import pandas
 
 TIME_INTERVAL_1 = dt.timedelta(days = 2)
 TIME_INTERVAL_2 = dt.timedelta(days = 3)
@@ -557,7 +557,7 @@ def commit(e, string):
 
 def product_report(start, end):
   pds = product.all().values
-  buffer = pd.DataFrame(columns=['uid', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
+  buffer = pandas.DataFrame(columns=['uid', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
   for pd in pds:
     ods = [od for od in pd.orders if (od.get("OrderTime") > start and od.get("OrderTime") < end)]

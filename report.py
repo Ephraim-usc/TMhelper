@@ -84,7 +84,7 @@ class Report(Frame):
     self.tree.column("#0", width=0)
     
     for i in cols:
-      self.tree.column(i, width = 100, anchor = "w")
+      self.tree.column(i, width = 90, anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

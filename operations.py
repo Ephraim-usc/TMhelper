@@ -125,16 +125,6 @@ class entryList():
     buffer = entryList(buffer)
     remaining = '\n'.join(remaining)
     return buffer, remaining
-  
-  @staticmethod
-  def merge(x, y):
-    buffer = entryList([])
-    buffer.datatype = x.datatype
-    for e in x.values:
-      buffer.append(e)
-    for e in y.values:
-      buffer.append(e)
-    return buffer
 
 class gmail(entry):
   filename = "gmails.p"
@@ -211,7 +201,7 @@ class buyer(entry):
   bankcard = None
   orders = []
   
-  attributes = entry.attributes + ['creation_time', 'prime_time', 'AmazonPassword']
+  attributes = entry.attributes + ['creation_time', 'PrimeTime', 'AmazonPassword']
   required = entry.required + ['AmazonPassword']
   
   def __init__(self, data):

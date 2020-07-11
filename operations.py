@@ -539,7 +539,7 @@ def product_report(start, end):
     ods_all = []
     for file in files:
       for od in entryList.load(file).values:
-        if od.product == pd.uid: ods_all.apend(od)
+        if od.product == pd.uid: ods_all.append(od)
     
     ods = [i for i in ods_all if 
            (order.query(i).get("OrderTime") > start and order.query(i).get("OrderTime") < end)]

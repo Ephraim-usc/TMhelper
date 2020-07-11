@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import datetime as dt
+import pickle
 
 root = tk.Tk()
 root.geometry("800x500")
@@ -71,5 +72,19 @@ class Report(Frame):
 reportframe = Report(root)
 reportframe.place(x = 0, y = 30)
 reportframe.init()
+
+
+
+
+###
+
+now = dt.datetime.now()
+now = now.replace(microsecond = 0)
+month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
+
+pds = pickle.load(open("products.p", "br")).values
+
+
+
 
 

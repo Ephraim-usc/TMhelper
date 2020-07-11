@@ -537,8 +537,8 @@ def product_report(start, end):
   for pd in pds:
     files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
     
-    num_ods = []
-    num_rvs = []
+    num_ods = 0
+    num_rvs = 0
     
     for file in files:
       for od in entryList.load(file).values:

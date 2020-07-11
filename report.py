@@ -73,7 +73,7 @@ class Report(Frame):
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
     data = op.product_report(start, end)
-    cols = data.columns
+    cols = list(data.columns)
     
     self.tree["columns"] = cols
     for i in cols:

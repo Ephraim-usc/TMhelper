@@ -11,13 +11,13 @@ class Report(tk.Frame):
     self.configure(width = 800, height = 470)
     self.place(x = 0, y = 30)
     
-    start_text = tk.Text(frame)
+    start_text = tk.Text(self)
     start_text.place(x = 50, y = 50, width = 200, height = 20)
     
-    end_text = tk.Text(frame)
+    end_text = tk.Text(self)
     end_text.place(x = 280, y = 50, width = 200, height = 20)
     
-    refresh_button = tk.Button(frame, text = "Refresh", command = self.refresh)
+    refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     refresh_button.place(x = 570, y = 50, width = 80, height = 20)
     
     def refresh(self):

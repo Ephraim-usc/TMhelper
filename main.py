@@ -169,10 +169,10 @@ class Report(Frame):
     Frame.__init__(self, *args, **kwargs)
     
     self.start_text = tk.Text(self)
-    self.start_text.place(x = 150, y = 50, width = 200, height = 20)
+    self.start_text.place(x = 130, y = 50, width = 200, height = 20)
     
     self.end_text = tk.Text(self)
-    self.end_text.place(x = 500, y = 50, width = 200, height = 20)
+    self.end_text.place(x = 470, y = 50, width = 200, height = 20)
     
     tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 100, height = 20)
     tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 400, y = 50, width = 100, height = 20)
@@ -257,7 +257,7 @@ class Admin(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.search_text = tk.Text(self)
-    self.search_text.place(x = 50, y = 50, width = 400, height = 25)
+    self.search_text.place(x = 50, y = 50, width = 500, height = 25)
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
@@ -271,10 +271,10 @@ class Admin(Frame):
     self.search_listbox.place(x = 50, y = 100, width = 600, height = 300)
     
     self.check_button = ttk.Button(self, text="Check", command = self.check)
-    self.check_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.check_button.place(x = 850, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def search(self):
     string_ = self.search_text.get("1.0","end-1c")
@@ -375,27 +375,27 @@ class Buyer(Frame):
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 330, width = 100, height = 20)
     
     self.password_text = tk.Text(self, state = "disabled"); 
-    self.password_text.place(x = 540, y = 50, width = 200, height = 20)
+    self.password_text.place(x = 540, y = 170, width = 200, height = 20)
     self.password_text.bind("<Button-1>", self.copy)
     
     self.uid_text = tk.Text(self, state = "disabled"); 
-    self.uid_text.place(x = 540, y = 90, width = 200, height = 20)
+    self.uid_text.place(x = 540, y = 210, width = 200, height = 20)
     self.uid_text.bind("<Button-1>", self.copy)
     
-    tk.Label(self, text = "Password", bg = "grey").place(x = 440, y = 50, width = 100, height = 20)
-    tk.Label(self, text = "UID", bg = "grey").place(x = 440, y = 90, width = 100, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 440, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "UID", bg = "grey").place(x = 440, y = 210, width = 100, height = 20)
     
     self.new_button = ttk.Button(self, text="New", command = self.new)
-    self.new_button.place(x = 650, y = 210, height = 30, width = 95)
+    self.new_button.place(x = 850, y = 210, height = 30, width = 95)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    self.submit_button.place(x = 850, y = 250, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
-    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.skip_button.place(x = 850, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def refresh(self):
     self.clear()

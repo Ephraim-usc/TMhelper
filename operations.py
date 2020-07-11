@@ -106,9 +106,12 @@ class entryList():
   
   @staticmethod
   def load(filename):
-    with open(filename, "rb") as f:
-      buffer = pickle.load(f)
-    return buffer
+    if os.path.isfile(filename):
+      with open(filename, "rb") as f:
+        buffer = pickle.load(f)
+      return buffer
+    else:
+      return entryList([])
   
   @staticmethod
   def from_string(datatype, string):
@@ -532,7 +535,7 @@ def product_report(start, end):
   buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
   for pd in pds:
-    files = ["./phones" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
+    files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
     ods_all = []
     for file in files:
       for od in entryList.load(file).values:

@@ -162,6 +162,7 @@ class Menu(tk.Frame):
     op.bankcard.filename = "./phones/" + phone + "/bankcards.p"
     op.buyer.filename = "./phones/" + phone + "/buyers.p"
     op.order.filename = "./phones/" + phone + "/orders.p"
+    self.parent.refresh()
 
 class Report(Frame):
   def __init__(self, *args, **kwargs):

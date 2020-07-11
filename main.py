@@ -27,6 +27,7 @@ class TMhelper(tk.Tk):
     self.menuframe.place(x = 0, y = 0)
     
     self.reportframe = Report(self)
+    self.reportframe.init()
     self.reportframe.place(x = 0, y = 30)
     
     self.feedframe = Feed(self)

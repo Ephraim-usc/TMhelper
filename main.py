@@ -113,8 +113,10 @@ class Menu(tk.Frame):
     self.feed_combobox.current(0)
     self.feed_combobox.place(x = 720, y = 2, height = 40, width = 125)
     
+    phones = next(os.walk('./phones'))
+    
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
-    self.phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
+    self.phone_combobox['values'] = phones
     self.phone_combobox.current(0)
     self.phone_combobox.place(x = 850, y = 2, height = 40, width = 125)
     
@@ -141,7 +143,7 @@ class Menu(tk.Frame):
     self.parent.refresh()
     self.parent.prereviewframe.refresh()
     self.parent.prereviewframe.place(x = 0, y = 30)
-    
+  
   def feed_write_event(self, var, indx, mode):
     self.parent.refresh()
     if self.feed.get() != "Import Data":
@@ -150,6 +152,14 @@ class Menu(tk.Frame):
       self.parent.feedframe.datatype = datatype
       self.parent.feedframe.refresh()
       self.parent.feedframe.place(x = 0, y = 30)
+  
+  def phone_write_event(self, var, indx, mode):
+    phone = self.feed.get()
+    op.gmail.filename = "./phones/" + phone + "/gmails.p"
+    op.address.filename = "./phones/" + phone + "/addresses.p"
+    op.bankcard.filename = "./phones/" + phone + "/bankcards.p"
+    op.buyer.filename = "./phones/" + phone + "/buyers.p"
+    op.order.filename = "./phones/" + phone + "/orders.p"
 
 class Report(Frame):
   def __init__(self, *args, **kwargs):
@@ -161,8 +171,8 @@ class Report(Frame):
     self.end_text = tk.Text(self)
     self.end_text.place(x = 500, y = 50, width = 200, height = 20)
     
-    tk.Label(self, text = "From", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
-    tk.Label(self, text = "To", bg = "grey").place(x = 400, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 400, y = 50, width = 100, height = 20)
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     self.refresh_button.place(x = 750, y = 50, width = 80, height = 20)
@@ -690,7 +700,7 @@ class Order(Frame):
   def submit(self):
     br = self.buyers[self.progressbar['value']]
     pd = self.products[self.product_combobox.current()]
-    ordernumber = self.ordernumber_entry.get()
+    ordernumber = self.ordernumber_entry.get() # other orders do not have ordernumber !!
     cost = self.cost_entry.get()
     
     if (self.ordernumber_entry.get() in ["", "Order Number"] or 

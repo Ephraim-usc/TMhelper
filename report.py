@@ -5,13 +5,13 @@ import pickle
 import operations as op
 
 root = tk.Tk()
-root.geometry("800x500")
+root.geometry("1000x500")
 
 class Frame(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.configure(width = 800, height = 470)
+    self.configure(width = 1000, height = 470)
     self['bg'] = 'grey'
   
   def copy(self, event):
@@ -84,7 +84,7 @@ class Report(Frame):
     self.tree.column("#0", width=0)
     
     for i in cols:
-      self.tree.column(i, width = 80, anchor = "w")
+      self.tree.column(i, width = 100, anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

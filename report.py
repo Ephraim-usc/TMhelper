@@ -41,11 +41,9 @@ class Frame(tk.Frame):
     self.place_forget()
 
 
-class Report(tk.Frame):
+class Report(Frame):
   def __init__(self, *args, **kwargs):
-    tk.Frame.__init__(self, *args, **kwargs)
-    self.configure(width = 800, height = 470)
-    self.place(x = 0, y = 30)
+    Frame.__init__(self, *args, **kwargs)
     
     self.start_text = tk.Text(self)
     self.start_text.place(x = 50, y = 50, width = 200, height = 20)
@@ -71,6 +69,7 @@ class Report(tk.Frame):
     print(start)
 
 reportframe = Report(root)
+reportframe.place(x = 0, y = 30)
 reportframe.init()
 
 

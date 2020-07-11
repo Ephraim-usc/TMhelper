@@ -736,21 +736,25 @@ class PreReview(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.listbox = tk.Listbox(self)
-    self.listbox.place(x = 470, y = 50, height = 300, width = 230)
+    self.listbox.place(x = 470, y = 50, height = 330, width = 230)
     
     self.tmp = tk.StringVar()
     self.combobox = ttk.Combobox(self, textvariable = self.tmp)
     self.combobox.place(x = 50, y = 50, width = 300)
     self.tmp.trace("w", self.max_num)
     
+    self.img = tk.PhotoImage()
+    self.image_label = tk.Label(self, image = self.img);
+    self.image_label.place(x = 50, y = 100, width = 150, height = 150)
+    
     self.scale = tk.Scale(self, length = 300, orient = "horizontal")
-    self.scale.place(x = 50, y = 100)
+    self.scale.place(x = 50, y = 300)
     
     self.max_label = tk.Label(self, text = "0", bg = "grey")
-    self.max_label.place(x = 360, y = 110, width = 60, height = 20)
+    self.max_label.place(x = 360, y = 310, width = 60, height = 20)
     
-    self.start_button = ttk.Button(self, text="Add", command = self.add)
-    self.start_button.place(x = 50, y = 150, height = 30, width = 95)
+    self.add_button = ttk.Button(self, text="Add", command = self.add)
+    self.add_button.place(x = 50, y = 350, height = 30, width = 95)
     
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
     self.start_button.place(x = 850, y = 280, height = 30, width = 95)
@@ -879,7 +883,7 @@ class Review(Frame):
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((140, 140)))
+      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((150, 150)))
       self.image_label.configure(image = self.img)
   
   def show_review(self):

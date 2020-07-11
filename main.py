@@ -96,7 +96,7 @@ class Menu(tk.Frame):
     self.feed = tk.StringVar()
     self.phone = tk.StringVar()
     
-    self.login_button = ttk.Button(self, text="Login")
+    self.login_button = ttk.Button(self, text="Login", command = self.login_event)
     self.login_button.place(x = 0, y = 0, height = 30, width = 95)
     
     self.admin_button = ttk.Button(self, text="Admin", command = self.admin_event)
@@ -177,7 +177,7 @@ class Login(Frame):
     self.password_text = tk.Text(self); 
     self.password_text.place(x = 200, y = 200, width = 300, height = 20)
     
-    self.login_button = tk.Button(self, text = "Log In", command = login)
+    self.login_button = tk.Button(self, text = "Log In", command = self.login)
     self.password_text.place(x = 400, y = 250, width = 100, height = 20)
   
   def login(self):

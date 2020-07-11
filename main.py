@@ -260,15 +260,15 @@ class Admin(Frame):
     self.search_text.place(x = 50, y = 50, width = 500, height = 25)
     
     self.search_combobox = ttk.Combobox(self)
-    self.search_combobox.place(x = 460, y = 50, width = 100, height = 30)
+    self.search_combobox.place(x = 560, y = 50, width = 100, height = 30)
     self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders', "Reviews"]
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
-    self.search_button.place(x = 570, y = 48, width = 100, height = 30)
+    self.search_button.place(x = 670, y = 48, width = 100, height = 30)
     
     self.search_listbox = tk.Listbox(self)
-    self.search_listbox.place(x = 50, y = 100, width = 600, height = 300)
+    self.search_listbox.place(x = 50, y = 100, width = 700, height = 300)
     
     self.check_button = ttk.Button(self, text="Check", command = self.check)
     self.check_button.place(x = 850, y = 290, height = 30, width = 95)
@@ -452,22 +452,22 @@ class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.scale1 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale1 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale1.place(x = 150, y = 50)
     
-    self.scale2 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale2 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale2.place(x = 150, y = 100)
     
-    self.scale3 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale3 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale3.place(x = 150, y = 150)
     
-    self.scale4 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale4 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale4.place(x = 150, y = 200)
     
-    self.scale5 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale5 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale5.place(x = 150, y = 250)
     
-    self.scale6 = tk.Scale(self, orient = "horizontal", length = 400)
+    self.scale6 = tk.Scale(self, orient = "horizontal", length = 500)
     self.scale6.place(x = 150, y = 300)
     
     tk.Label(self, text = "Other", bg = "grey").place(x = 50, y = 60, width = 100, height = 20)
@@ -478,28 +478,28 @@ class PreOrder(Frame):
     tk.Label(self, text = "PP04", bg = "grey").place(x = 50, y = 310, width = 100, height = 20)
     
     self.max1_label = tk.Label(self, text = "0", bg = "grey")
-    self.max1_label.place(x = 560, y = 60, width = 60, height = 20)
+    self.max1_label.place(x = 660, y = 60, width = 60, height = 20)
     
     self.max2_label = tk.Label(self, text = "0", bg = "grey")
-    self.max2_label.place(x = 560, y = 110, width = 60, height = 20)
+    self.max2_label.place(x = 660, y = 110, width = 60, height = 20)
     
     self.max3_label = tk.Label(self, text = "0", bg = "grey")
-    self.max3_label.place(x = 560, y = 160, width = 60, height = 20)
+    self.max3_label.place(x = 660, y = 160, width = 60, height = 20)
     
     self.max4_label = tk.Label(self, text = "0", bg = "grey")
-    self.max4_label.place(x = 560, y = 210, width = 60, height = 20)
+    self.max4_label.place(x = 660, y = 210, width = 60, height = 20)
     
     self.max5_label = tk.Label(self, text = "0", bg = "grey")
-    self.max5_label.place(x = 560, y = 260, width = 60, height = 20)
+    self.max5_label.place(x = 660, y = 260, width = 60, height = 20)
     
     self.max6_label = tk.Label(self, text = "0", bg = "grey")
-    self.max6_label.place(x = 560, y = 310, width = 60, height = 20)
+    self.max6_label.place(x = 660, y = 310, width = 60, height = 20)
    
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
-    self.start_button.place(x = 650, y = 280, height = 30, width = 95)
+    self.start_button.place(x = 850, y = 280, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def refresh(self):
     self.o1, self.o2, self.o3, self.o4, self.o5, self.o6 = op.orderable_buyers()
@@ -736,7 +736,7 @@ class PreReview(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.listbox = tk.Listbox(self)
-    self.listbox.place(x = 470, y = 50, height = 200, width = 230)
+    self.listbox.place(x = 470, y = 50, height = 300, width = 230)
     
     self.tmp = tk.StringVar()
     self.combobox = ttk.Combobox(self, textvariable = self.tmp)
@@ -753,10 +753,10 @@ class PreReview(Frame):
     self.start_button.place(x = 50, y = 150, height = 30, width = 95)
     
     self.start_button = ttk.Button(self, text="Start Working", command = self.start)
-    self.start_button.place(x = 650, y = 280, height = 30, width = 95)
+    self.start_button.place(x = 850, y = 280, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
     
     self.selection = {}
   

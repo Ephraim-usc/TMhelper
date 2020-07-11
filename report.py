@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import datetime as dt
 import pickle
+import operations as op
 
 root = tk.Tk()
 root.geometry("800x500")
@@ -54,6 +55,9 @@ class Report(Frame):
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
+    
+    self.tree = ttk.Treeview(self)
+    self.tree.place(x = 0, y = 0)
   
   def init(self):
     now = dt.datetime.now()
@@ -67,7 +71,17 @@ class Report(Frame):
     start = self.start_text.get("1.0", "end-1c")
     end = self.end_text.get("1.0", "end-1c")
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-    print(start)
+    data = op.product_report(start, end)
+    cols = data.columns
+    
+    tree["columns"] = cols
+    for i in cols:
+      tree.column(i, anchor="w")
+      tree.heading(i, text=i, anchor='w')
+    
+    for index, row in data.iterrows():
+      tree.insert("",0,text=index,values=list(row))
+    
 
 reportframe = Report(root)
 reportframe.place(x = 0, y = 30)
@@ -75,14 +89,6 @@ reportframe.init()
 
 
 
-
-###
-
-now = dt.datetime.now()
-now = now.replace(microsecond = 0)
-month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
-
-pds = pickle.load(open("products.p", "br")).values
 
 
 

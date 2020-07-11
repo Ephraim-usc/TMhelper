@@ -100,23 +100,23 @@ class Menu(tk.Frame):
     self.admin_button.place(x = 100, y = 0, height = 30, width = 95)
     
     self.buyer_button = ttk.Button(self, text="Open Buyer", command = self.buyer_event)
-    self.buyer_button.place(x = 200, y = 0, height = 30, width = 130)
+    self.buyer_button.place(x = 200, y = 0, height = 30, width = 120)
     
     self.order_button = ttk.Button(self, text="Place Order", command = self.pre_order_event)
-    self.order_button.place(x = 300, y = 0, height = 30, width = 130)
+    self.order_button.place(x = 325, y = 0, height = 30, width = 120)
     
     self.review_button = ttk.Button(self, text="Leave Review", command = self.pre_review_event)
-    self.review_button.place(x = 400, y = 0, height = 30, width = 130)
+    self.review_button.place(x = 450, y = 0, height = 30, width = 120)
     
     self.feed_combobox = ttk.Combobox(self, textvariable = self.feed)
     self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews', 'Products']
     self.feed_combobox.current(0)
-    self.feed_combobox.place(x = 700, y = 2, height = 40, width = 145)
+    self.feed_combobox.place(x = 720, y = 2, height = 40, width = 125)
     
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
     self.phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
     self.phone_combobox.current(0)
-    self.phone_combobox.place(x = 850, y = 2, height = 40, width = 145)
+    self.phone_combobox.place(x = 850, y = 2, height = 40, width = 125)
     
     self.feed.trace("w", self.feed_write_event)
   
@@ -156,13 +156,16 @@ class Report(Frame):
     Frame.__init__(self, *args, **kwargs)
     
     self.start_text = tk.Text(self)
-    self.start_text.place(x = 50, y = 50, width = 200, height = 20)
+    self.start_text.place(x = 150, y = 50, width = 200, height = 20)
     
     self.end_text = tk.Text(self)
-    self.end_text.place(x = 280, y = 50, width = 200, height = 20)
+    self.end_text.place(x = 500, y = 50, width = 200, height = 20)
+    
+    tk.Label(self, text = "From", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "To", bg = "grey").place(x = 400, y = 50, width = 100, height = 20)
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
-    self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
+    self.refresh_button.place(x = 750, y = 50, width = 80, height = 20)
     
     self.tree = ttk.Treeview(self)
     self.tree.place(x = 50, y = 100)

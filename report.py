@@ -87,7 +87,7 @@ class Report(Frame):
               'orders':70, 'reviews':70, 'reviews/orders':100, 'goal_reviews':100, 'reviews/goal_reviews':110}
     
     for i in cols:
-      self.tree.column(i, width = width[i], anchor = "w")
+      self.tree.column(i, width = widths[i], anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

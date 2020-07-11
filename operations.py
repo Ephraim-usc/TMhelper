@@ -349,7 +349,7 @@ class order(entry):
     self.set("rank", len(br.orders))
   
   def leave_review(self, rv):
-    self.review = rv
+    self.review = rv.uid
     rv.order = self.uid
     rv.set("Time", dt.datetime.now())
   

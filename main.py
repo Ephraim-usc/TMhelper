@@ -260,12 +260,12 @@ class Admin(Frame):
     self.search_text.place(x = 50, y = 50, width = 500, height = 25)
     
     self.search_combobox = ttk.Combobox(self)
-    self.search_combobox.place(x = 560, y = 50, width = 100, height = 30)
+    self.search_combobox.place(x = 560, y = 50, width = 100, height = 25)
     self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders', "Reviews"]
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
-    self.search_button.place(x = 670, y = 48, width = 100, height = 30)
+    self.search_button.place(x = 670, y = 50, width = 100, height = 25)
     
     self.search_listbox = tk.Listbox(self)
     self.search_listbox.place(x = 50, y = 100, width = 700, height = 300)

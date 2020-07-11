@@ -601,27 +601,27 @@ class Order(Frame):
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 320, width = 100, height = 20)
     
     self.keyword_text = tk.Text(self); 
-    self.keyword_text.place(x = 530, y = 80, width = 180, height = 20)
+    self.keyword_text.place(x = 530, y = 230, width = 180, height = 20)
     self.keyword_text.bind("<Button-1>", self.copy)
     
     self.store_text = tk.Text(self); 
-    self.store_text.place(x = 530, y = 110, width = 180, height = 20)
+    self.store_text.place(x = 530, y = 260, width = 180, height = 20)
     self.store_text.bind("<Button-1>", self.copy)
     
     self.product_name_text = tk.Text(self); 
-    self.product_name_text.place(x = 530, y = 140, width = 180, height = 20)
+    self.product_name_text.place(x = 530, y = 290, width = 180, height = 20)
     self.product_name_text.bind("<Button-1>", self.copy)
     
     self.asin_text = tk.Text(self); 
-    self.asin_text.place(x = 530, y = 170, width = 180, height = 20)
+    self.asin_text.place(x = 530, y = 320, width = 180, height = 20)
     self.asin_text.bind("<Button-1>", self.copy)
     
-    tk.Label(self, text = "Key Word", bg = "grey").place(x = 430, y = 80, width = 100, height = 20)
-    tk.Label(self, text = "Store", bg = "grey").place(x = 430, y = 110, width = 100, height = 20)
-    tk.Label(self, text = "Product", bg = "grey").place(x = 430, y = 140, width = 100, height = 20)
-    tk.Label(self, text = "ASIN", bg = "grey").place(x = 430, y = 170, width = 100, height = 20)
+    tk.Label(self, text = "Key Word", bg = "grey").place(x = 430, y = 230, width = 100, height = 20)
+    tk.Label(self, text = "Store", bg = "grey").place(x = 430, y = 260, width = 100, height = 20)
+    tk.Label(self, text = "Product", bg = "grey").place(x = 430, y = 290, width = 100, height = 20)
+    tk.Label(self, text = "ASIN", bg = "grey").place(x = 430, y = 320, width = 100, height = 20)
     
-    self.progressbar = ttk.Progressbar(self, length = 700)
+    self.progressbar = ttk.Progressbar(self, length = 900)
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
     self.progressbar.place(x = 50, y = 10)
     
@@ -640,16 +640,16 @@ class Order(Frame):
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 460, y = 200, width = 140, height = 140)
+    self.image_label.place(x = 500, y = 80, width = 140, height = 140)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 230, height = 30, width = 95)
+    self.submit_button.place(x = 850, y = 230, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
-    self.skip_button.place(x = 650, y = 270, height = 30, width = 95)
+    self.skip_button.place(x = 850, y = 270, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 310, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 310, height = 30, width = 95)
   
   def init(self):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -745,7 +745,7 @@ class PreReview(Frame):
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 50, y = 100, width = 150, height = 150)
+    self.image_label.place(x = 125, y = 110, width = 150, height = 150)
     
     self.scale = tk.Scale(self, length = 300, orient = "horizontal")
     self.scale.place(x = 50, y = 300)

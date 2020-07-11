@@ -57,8 +57,9 @@ class Report(tk.Frame):
     self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
   
   def init(self):
-    now = dt.datetime.now(); now = now - dt.timedelta(microseconds = now.microsecond)
-    month_ago = now - dt.timedelta(months = 1)
+    now = dt.datetime.now()
+    now = now.replace(microsecond = 0)
+    month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
     self.clear()
     self.display(self.start_text, str(month_ago))
     self.display(self.end_text, str(now))

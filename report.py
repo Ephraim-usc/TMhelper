@@ -70,6 +70,6 @@ class Report(tk.Frame):
     print(start)
 
 reportframe = Report(root)
-
+reportframe.init()
 
 

@@ -30,6 +30,9 @@ class TMhelper(tk.Tk):
     self.reportframe.init()
     self.reportframe.place(x = 0, y = 30)
     
+    self.loginframe = Login(self)
+    self.loginframe.place(x = 0, y = 30)
+    
     self.feedframe = Feed(self)
     self.adminframe = Admin(self)
     self.checkframe = Check(self)
@@ -163,6 +166,23 @@ class Menu(tk.Frame):
     op.buyer.filename = "./phones/" + phone + "/buyers.p"
     op.order.filename = "./phones/" + phone + "/orders.p"
     self.parent.refresh()
+
+class Login(Frame):
+  def __init__(self, parent, *args, **kwargs):
+    Frame.__init__(self, parent, *args, **kwargs)
+    
+    self.username_text = tk.Text(self); 
+    self.username_text.place(x = 200, y = 150, width = 300, height = 20)
+    
+    self.password_text = tk.Text(self); 
+    self.password_text.place(x = 200, y = 200, width = 300, height = 20)
+    
+    self.login_button = tk.Button(self, text = "Log In", command = login)
+    self.password_text.place(x = 400, y = 250, width = 100, height = 20)
+  
+  def login(self):
+    self.parent.refresh()
+
 
 class Report(Frame):
   def __init__(self, *args, **kwargs):

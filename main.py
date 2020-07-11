@@ -99,24 +99,24 @@ class Menu(tk.Frame):
     self.admin_button = ttk.Button(self, text="Admin", command = self.admin_event)
     self.admin_button.place(x = 100, y = 0, height = 30, width = 95)
     
-    self.buyer_button = ttk.Button(self, text="Buyer", command = self.buyer_event)
-    self.buyer_button.place(x = 200, y = 0, height = 30, width = 95)
+    self.buyer_button = ttk.Button(self, text="Open Buyer", command = self.buyer_event)
+    self.buyer_button.place(x = 200, y = 0, height = 30, width = 130)
     
-    self.order_button = ttk.Button(self, text="Order", command = self.pre_order_event)
-    self.order_button.place(x = 300, y = 0, height = 30, width = 95)
+    self.order_button = ttk.Button(self, text="Place Order", command = self.pre_order_event)
+    self.order_button.place(x = 300, y = 0, height = 30, width = 130)
     
-    self.review_button = ttk.Button(self, text="Review", command = self.pre_review_event)
-    self.review_button.place(x = 400, y = 0, height = 30, width = 95)
+    self.review_button = ttk.Button(self, text="Leave Review", command = self.pre_review_event)
+    self.review_button.place(x = 400, y = 0, height = 30, width = 130)
     
     self.feed_combobox = ttk.Combobox(self, textvariable = self.feed)
     self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews', 'Products']
     self.feed_combobox.current(0)
-    self.feed_combobox.place(x = 500, y = 2, height = 40, width = 145)
+    self.feed_combobox.place(x = 700, y = 2, height = 40, width = 145)
     
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
     self.phone_combobox['values'] = ['Select Phone', 'iphone1', 'iphone2', 'android']
     self.phone_combobox.current(0)
-    self.phone_combobox.place(x = 650, y = 2, height = 40, width = 145)
+    self.phone_combobox.place(x = 850, y = 2, height = 40, width = 145)
     
     self.feed.trace("w", self.feed_write_event)
   

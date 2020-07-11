@@ -75,13 +75,13 @@ class Report(Frame):
     data = op.product_report(start, end)
     cols = data.columns
     
-    tree["columns"] = cols
+    self.tree["columns"] = cols
     for i in cols:
-      tree.column(i, anchor="w")
-      tree.heading(i, text=i, anchor='w')
+      self.tree.column(i, anchor="w")
+      self.tree.heading(i, text=i, anchor='w')
     
     for index, row in data.iterrows():
-      tree.insert("",0,text=index,values=list(row))
+      self.tree.insert("",0,text=index,values=list(row))
     
 
 reportframe = Report(root)

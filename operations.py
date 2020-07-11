@@ -22,7 +22,7 @@ class entry():
   def __init__(self, data):
     self.dict = dict.fromkeys(self.attributes, None)
     if len(data) != len(self.required):
-      return
+      return None
     received = dict(zip(self.required, data))
     self.dict = {**self.dict, **received}
     self.dict['alive'] = True
@@ -74,7 +74,6 @@ class entry():
     all.delete(self.uid)
     all.append(self)
     all.write(self.filename)
-
 
 class entryList():
   datatype = entry

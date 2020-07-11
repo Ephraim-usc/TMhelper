@@ -173,8 +173,8 @@ class Login(Frame):
     self.username_text = tk.Text(self); 
     self.username_text.place(x = 350, y = 150, width = 300, height = 20)
     
-    self.password_text = tk.Text(self); 
-    self.password_text.place(x = 350, y = 200, width = 300, height = 20)
+    #self.password_text = tk.Text(self); 
+    #self.password_text.place(x = 350, y = 200, width = 300, height = 20)
     
     tk.Label(self, text = "Username", bg = "grey").place(x = 300, y = 150, width = 50, height = 20)
     tk.Label(self, text = "Password", bg = "grey").place(x = 300, y = 200, width = 50, height = 20)

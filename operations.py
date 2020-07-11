@@ -536,15 +536,17 @@ def product_report(start, end):
   
   for pd in pds:
     files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
-    ods_all = []
+    
+    num_ods = []
+    num_rvs = []
+    
     for file in files:
       for od in entryList.load(file).values:
-        if od.product == pd.uid: ods_all.append(od)
-    
-    ods = [i for i in ods_all if 
-           (order.query(i).get("OrderTime") > start and order.query(i).get("OrderTime") < end)]
-    rv_ods = [i for i in ods_all if 
-              (order.query(i).review != None and order.query(i).review.get("Time") > start and order.query(i).review.get("Time") < end)]
+        if od.product == pd.uid:
+          if od.get("OrderTime") > start and od.get("OrderTime") < end):
+            num_ods += 1
+          if od.review != None and review.query(od.review).get("Time") > start and review.query(od.review).get("Time") < end:
+            num_rvs += 1
     
     buffer_ = []
     buffer_.append(str(pd.uid))
@@ -552,16 +554,16 @@ def product_report(start, end):
     buffer_.append(str(pd.get("ASIN")))
     buffer_.append(str(pd.get("Store")))
     buffer_.append(str(pd.get("num_tasks")))
-    buffer_.append(str(len(ods)))
-    buffer_.append(str(len(rv_ods)))
-    if ods != []:
-      ratio = len(rv_ods)/len(ods)
+    buffer_.append(str(num_ods))
+    buffer_.append(str(num_rvs))
+    if num_ods != 0:
+      ratio = num_rvs/num_ods
       buffer_.append(str(round(ratio * 100, 2)) + "%")
     else:
       buffer_.append("NA")
     buffer_.append(str(pd.get("goal_reviews")))
     if pd.get("goal_reviews") not in [0, None]:
-      ratio = len(rv_ods)/pd.get("goal_reviews")
+      ratio = num_rvs/pd.get("goal_reviews")
       buffer_.append(str(round(ratio * 100, 2)) + "%")
     else:
       buffer_.append("NA")

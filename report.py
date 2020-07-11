@@ -56,7 +56,7 @@ class Report(Frame):
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
     
-    self.tree = ttk.Treeview(self)
+    self.tree = ttk.Treeview(self, width = 600, height = 400)
     self.tree.place(x = 50, y = 100)
   
   def init(self):
@@ -66,6 +66,7 @@ class Report(Frame):
     self.clear()
     self.display(self.start_text, str(month_ago))
     self.display(self.end_text, str(now))
+    self.refresh()
   
   def refresh(self):
     start = self.start_text.get("1.0", "end-1c")

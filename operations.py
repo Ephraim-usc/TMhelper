@@ -253,24 +253,23 @@ class buyer(entry):
     global TIME_INTERVAL_1
     global TIME_INTERVAL_2
     num = self.num_orders()
-    current = dt.datetime.now()
+    now = dt.datetime.now()
     buffer = False
     if num == 0:
-      if current > self.get("creation_time") + TIME_INTERVAL_1:
+      if now > self.get("creation_time") + TIME_INTERVAL_1:
         buffer = True
     elif num == 1:
       od = self.latest_order()
-      if current > self.latest_order_time() + TIME_INTERVAL_1:
+      if now > self.latest_order_time() + TIME_INTERVAL_1:
         buffer = True
-      if od.get("EstimatedDeliveryTime") != None and current > od.get("EstimatedDeliveryTime"):
+      if od.get("EstimatedDeliveryTime") != None and now > od.get("EstimatedDeliveryTime"):
         buffer = True
       if od.get("DeliveryTime") != None:
         buffer = True
     elif num in [2,3,4,5]:
-      if current > self.latest_order_time() + TIME_INTERVAL_2:
+      if now > self.latest_order_time() + TIME_INTERVAL_2:
         buffer = True
     return buffer
-      
 
 class product(entry):
   filename = "products.p"
@@ -355,15 +354,15 @@ class order(entry):
     
     br = buyer.query(self.buyer)
     num = br.num_orders()
-    current = dt.datetime.now()
+    now = dt.datetime.now()
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])
-      if current > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
+      if now > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
         return True
     if self.get("rank") == 3:
       secondorder = order.query(br.orders[1])
       sr = secondorder.review
-      if sr != None and current > sr.get("Time") + TIME_INTERVAL_4:
+      if sr != None and now > sr.get("Time") + TIME_INTERVAL_4:
         return True
     return False
 
@@ -508,10 +507,10 @@ def suitable_reviews(pd):
   
   return buffer
 
-def submit_review(pd, rv, string_):
+def submit_review(od, rv, string_):
   commit(rv, string_)
-  pd.leave_review(rv)
-  pd.submit()
+  od.leave_review(rv)
+  od.submit()
   rv.submit()
 
 def commit(e, string):
@@ -533,9 +532,15 @@ def product_report(start, end):
   buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
   for pd in pds:
-    ods = [i for i in pd.orders if 
+    files = ["./phones" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
+    ods_all = []
+    for file in files:
+      for od in entryList.load(file).values:
+        if od.product == pd.uid: ods_all.apend(od)
+    
+    ods = [i for i in ods_all if 
            (order.query(i).get("OrderTime") > start and order.query(i).get("OrderTime") < end)]
-    rv_ods = [i for i in pd.orders if 
+    rv_ods = [i for i in ods_all if 
               (order.query(i).review != None and order.query(i).review.get("Time") > start and order.query(i).review.get("Time") < end)]
     
     buffer_ = []
@@ -561,7 +566,6 @@ def product_report(start, end):
     buffer.loc[buffer.shape[0]] = buffer_
   
   return buffer
-  
 
     
 

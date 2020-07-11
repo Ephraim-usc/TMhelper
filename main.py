@@ -174,8 +174,8 @@ class Report(Frame):
     self.end_text = tk.Text(self)
     self.end_text.place(x = 470, y = 50, width = 200, height = 20)
     
-    tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 100, height = 20)
-    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 400, y = 50, width = 100, height = 20)
+    tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 50, height = 20)
+    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 400, y = 50, width = 50, height = 20)
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     self.refresh_button.place(x = 750, y = 50, width = 80, height = 20)
@@ -640,7 +640,7 @@ class Order(Frame):
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 500, y = 80, width = 140, height = 140)
+    self.image_label.place(x = 530, y = 80, width = 140, height = 140)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 850, y = 230, height = 30, width = 95)
@@ -847,13 +847,13 @@ class Review(Frame):
     tk.Label(self, text = "Title", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
     tk.Label(self, text = "Content", bg = "grey").place(x = 50, y = 280, width = 100, height = 20)
     
-    self.progressbar = ttk.Progressbar(self, length = 510)
+    self.progressbar = ttk.Progressbar(self, length = 560)
     self.progressbar.configure(maximum = 100, value = 0)
     self.progressbar.place(x = 50, y = 50)
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 600, y = 50, width = 150, height = 150)
+    self.image_label.place(x = 460, y = 100, width = 150, height = 150)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
     self.submit_button.place(x = 650, y = 250, height = 30, width = 95)

@@ -557,7 +557,7 @@ def commit(e, string):
 
 def product_report(start, end):
   pds = product.all().values
-  buffer = pandas.DataFrame(columns=['uid', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
+  buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
   for pd in pds:
     ods = [i for i in pd.orders if 
@@ -567,6 +567,7 @@ def product_report(start, end):
     
     buffer_ = []
     buffer_.append(str(pd.uid))
+    buffer_.append(str(pd.get("name")))
     buffer_.append(str(pd.get("ASIN")))
     buffer_.append(str(pd.get("Store")))
     buffer_.append(str(pd.get("num_tasks")))

@@ -573,12 +573,14 @@ def product_report(start, end):
     buffer_.append(str(len(ods)))
     buffer_.append(str(len(rv_ods)))
     if ods != []:
-      buffer_.append(str(len(rv_ods)/len(ods)))
+      ratio = len(rv_ods)/len(ods)
+      buffer_.append(str(round(ratio * 100, 2)) + "%")
     else:
       buffer_.append("NA")
     buffer_.append(str(pd.get("goal_reviews")))
     if pd.get("goal_reviews") not in [0, None]:
-      buffer_.append(str(len(rv_ods)/pd.get("goal_reviews")))
+      ratio = len(rv_ods)/pd.get("goal_reviews")
+      buffer_.append(str(round(ratio * 100, 2)) + "%")
     else:
       buffer_.append("NA")
     

@@ -28,7 +28,6 @@ class TMhelper(tk.Tk):
     
     self.reportframe = Report(self)
     self.reportframe.init()
-    self.reportframe.place(x = 0, y = 30)
     
     self.loginframe = Login(self)
     self.loginframe.place(x = 0, y = 30)

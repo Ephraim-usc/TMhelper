@@ -305,14 +305,6 @@ class product(entry):
     buffer = entry.str(self)
     return buffer
   
-  def num_orders_today(self):
-    today = dt.datetime.combine(dt.date.today(), dt.datetime.min.time())
-    buffer = 0
-    for i in self.orders:
-      if order.query(i).get("OrderTime") > today:
-        buffer += 1
-    return buffer
-  
   @classmethod
   def query(cls, uid):
     if uid == -1:
@@ -344,7 +336,6 @@ class order(entry):
   
   def leave_review(self, rv):
     self.review = rv.uid
-    rv.order = self.uid
     rv.set("Time", dt.datetime.now())
   
   def symbol(self):
@@ -389,7 +380,6 @@ class order(entry):
 
 class review(entry):
   filename = "reviews.p"
-  order = None
   
   attributes = entry.attributes + ['ASIN', 'Title', 'Content', 'Time']
   required = entry.required + ['ASIN', 'Title', 'Content']
@@ -522,7 +512,7 @@ def suitable_reviews(pd):
   asin = pd.get("ASIN")
   buffer = []
   for rv in rvs:
-    if rv.order != None:
+    if rv.get("Time") != None:
       continue
     if rv.get("ASIN") == asin:
       buffer.append(rv)

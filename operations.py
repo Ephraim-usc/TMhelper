@@ -560,8 +560,10 @@ def product_report(start, end):
   buffer = pandas.DataFrame(columns=['uid', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
   for pd in pds:
-    ods = [od for od in pd.orders if (od.get("OrderTime") > start and od.get("OrderTime") < end)]
-    rv_ods = [od for od in pd.orders if (od.review != None and od.review.get("Time") > start and od.review.get("Time") < end)]
+    ods = [i for i in pd.orders if 
+           (order.query(i).get("OrderTime") > start and order.query(i).get("OrderTime") < end)]
+    rv_ods = [i for i in pd.orders if 
+              (order.query(i).review != None and order.query(i).review.get("Time") > start and order.query(i).review.get("Time") < end)]
     
     buffer_ = []
     buffer_.append(str(pd.uid))

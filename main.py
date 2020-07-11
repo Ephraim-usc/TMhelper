@@ -731,6 +731,7 @@ class PreReview(Frame):
   orders_ = {}
   selection = {}
   tmp = None
+  img = None
   
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
@@ -778,6 +779,11 @@ class PreReview(Frame):
     pd = self.products[self.combobox.current()]
     self.scale.configure(to = min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid])))
     self.max_label.configure(text = str(min(pd.get("num_daily_reviews"), len(self.orders_[pd.uid]))))
+    
+    self.image_label.configure(image = tk.PhotoImage())
+    if pd.get("image") != None:
+      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((140, 140)))
+      self.image_label.configure(image = self.img)
   
   def show_selection(self):
     self.listbox.delete("0", "end")

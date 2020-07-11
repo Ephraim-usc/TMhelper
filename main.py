@@ -171,20 +171,28 @@ class Login(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.username_text = tk.Text(self); 
-    self.username_text.place(x = 350, y = 150, width = 300, height = 20)
+    self.username_text.place(x = 320, y = 150, width = 300, height = 20)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 350, y = 200, width = 300, height = 20)
+    self.password_text.place(x = 320, y = 200, width = 300, height = 20)
     
     tk.Label(self, text = "Username", bg = "grey").place(x = 300, y = 150, width = 50, height = 20)
     tk.Label(self, text = "Password", bg = "grey").place(x = 300, y = 200, width = 50, height = 20)
     
     self.login_button = tk.Button(self, text = "Log In", command = self.login)
     self.login_button.place(x = 550, y = 250, width = 100, height = 20)
+    
+    self.register_button = tk.Button(self, text = "Register", command = self.register)
+    self.register_button.place(x = 550, y = 300, width = 100, height = 20)
   
   def login(self):
     self.parent.refresh()
-
+  
+  def register(self):
+    username = self.username_text.get("1.0", "end-1c")
+    password = self.password_text.get("1.0", "end-1c")
+    op.register(username, password)
+    self.login()
 
 class Report(Frame):
   def __init__(self, *args, **kwargs):
@@ -283,7 +291,7 @@ class Admin(Frame):
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 560, y = 50, width = 100, height = 25)
-    self.search_combobox['values'] = ['Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders', "Reviews"]
+    self.search_combobox['values'] = ['Accounts', 'Gmails', 'Addresses', 'BankCards', 'Buyers', 'Products', 'Orders', "Reviews"]
     self.search_combobox.current(0)
     
     self.search_button = ttk.Button(self, text = "Search", command = self.search)
@@ -301,7 +309,7 @@ class Admin(Frame):
   def search(self):
     string_ = self.search_text.get("1.0","end-1c")
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Reviews":op.review, 
-                "Buyers":op.buyer, "Products":op.product, "Orders":op.order}[self.search_combobox.get()]
+                "Buyers":op.buyer, "Products":op.product, "Orders":op.order, "Accounts":op.account}[self.search_combobox.get()]
     self.results = op.search(datatype, string_)
     self.search_listbox.delete(0, "end")
     for e, key in self.results:

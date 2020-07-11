@@ -115,7 +115,7 @@ class Menu(tk.Frame):
 
     
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
-    self.phone_combobox['values'] = next(os.walk('./phones'))[1]
+    self.phone_combobox['values'] = ['Select Phone'] + next(os.walk('./phones'))[1]
     self.phone_combobox.current(0)
     self.phone_combobox.place(x = 850, y = 2, height = 40, width = 125)
     
@@ -146,15 +146,18 @@ class Menu(tk.Frame):
   
   def feed_write_event(self, var, indx, mode):
     self.parent.refresh()
-    if self.feed.get() != "Import Data":
-      datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
-                  "BankCards":op.bankcard, "Products":op.product}[self.feed.get()]
-      self.parent.feedframe.datatype = datatype
-      self.parent.feedframe.refresh()
-      self.parent.feedframe.place(x = 0, y = 30)
+    if self.feed.get() == "Import Data":
+      return None
+    datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
+                "BankCards":op.bankcard, "Products":op.product}[self.feed.get()]
+    self.parent.feedframe.datatype = datatype
+    self.parent.feedframe.refresh()
+    self.parent.feedframe.place(x = 0, y = 30)
   
   def phone_write_event(self, var, indx, mode):
     phone = self.feed.get()
+    if phone == "Select Phone":
+      return None
     op.gmail.filename = "./phones/" + phone + "/gmails.p"
     op.address.filename = "./phones/" + phone + "/addresses.p"
     op.bankcard.filename = "./phones/" + phone + "/bankcards.p"

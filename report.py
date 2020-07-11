@@ -76,6 +76,10 @@ class Report(Frame):
     data = op.product_report(start, end)
     cols = list(data.columns)
     
+    self.tree.place_forget()
+    self.tree = ttk.Treeview(self)
+    self.tree.place(x = 50, y = 100)
+    
     self.tree["columns"] = cols
     self.tree.column("#0", width=0)
     

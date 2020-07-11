@@ -77,14 +77,14 @@ class Report(Frame):
     cols = list(data.columns)
     
     self.tree.place_forget()
-    self.tree = ttk.Treeview(self)
+    self.tree = ttk.Treeview(self, height = 15)
     self.tree.place(x = 50, y = 100)
     
     self.tree["columns"] = cols
     self.tree.column("#0", width=0)
     
     for i in cols:
-      self.tree.column(i, width = 70, anchor = "w")
+      self.tree.column(i, width = 80, anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

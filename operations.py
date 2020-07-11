@@ -129,6 +129,19 @@ class entryList():
     remaining = '\n'.join(remaining)
     return buffer, remaining
 
+class account(entry):
+  filename = "accounts.p"
+  attributes = entry.attributes + ['username', 'password', 'creation_time']
+  required = entry.required + ['username', 'password']
+  
+  def __init__(self, data):
+    entry.__init__(self, data)
+    self.set("creation_time", dt.datetime.now())
+  
+  def symbol(self):
+    buffer = "<" + str(self.get("username")) + "|" + str(self.uid) + ">"
+    return buffer
+
 class gmail(entry):
   filename = "gmails.p"
   buyers = []
@@ -379,6 +392,10 @@ class review(entry):
     return "<" + str(self.get("Content")) + "|" + str(self.uid) + ">"
 
 ### special functionalities
+
+def register(username, password):
+  act = account([username, password])
+  act.submit()
 
 def feed(datatype, string):
   el, remaining = entryList.from_string(datatype, string)

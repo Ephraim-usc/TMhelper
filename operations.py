@@ -365,7 +365,7 @@ class order(entry):
     if self.get("rank") == 3:
       secondorder = order.query(br.orders[1])
       sr = secondorder.review
-      if sr != None and now > sr.get("Time") + TIME_INTERVAL_4:
+      if sr != None and now > review.query(sr).get("Time") + TIME_INTERVAL_4:
         return True
     return False
 

@@ -32,7 +32,7 @@ class entry():
     return buffer
   
   def get(self, attribute):
-    buffer = self.dict[attribute]
+    buffer = self.dict.get(attribute, None)
     return buffer
   
   def set(self, attribute, new):
@@ -282,7 +282,7 @@ class product(entry):
   filename = "products.p"
   orders = []
   
-  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks', 'num_daily_reviews']
+  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks', 'num_daily_reviews', "goal_reviews"]
   required = entry.required + ['ASIN', 'name', 'Store']
   
   def __init__(self, data):
@@ -290,6 +290,7 @@ class product(entry):
     self.orders = []
     self.set("num_tasks", 0)
     self.set("num_daily_reviews", 2)
+    self.set("goal_reviews", 0)
     if self.get("ASIN") != None:
       self.set("image", self.get("ASIN") + ".jpg")
   

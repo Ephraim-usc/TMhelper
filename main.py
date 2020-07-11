@@ -112,15 +112,15 @@ class Menu(tk.Frame):
     self.feed_combobox['values'] = ['Import Data', 'Gmails', 'Addresses', 'BankCards', 'Reviews', 'Products']
     self.feed_combobox.current(0)
     self.feed_combobox.place(x = 720, y = 2, height = 40, width = 125)
-    
-    phones = next(os.walk('./phones'))[1]
+
     
     self.phone_combobox = ttk.Combobox(self, textvariable = self.phone)
-    self.phone_combobox['values'] = phones
+    self.phone_combobox['values'] = next(os.walk('./phones'))[1]
     self.phone_combobox.current(0)
     self.phone_combobox.place(x = 850, y = 2, height = 40, width = 125)
     
     self.feed.trace("w", self.feed_write_event)
+    self.phone.trace("w", self.phone_write_event)
   
   def login_event(self):
     self.parent.refresh()

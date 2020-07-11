@@ -7,6 +7,11 @@ import re
 import string
 import random
 
+TIME_INTERVAL_1 = dt.timedelta(days = 2)
+TIME_INTERVAL_2 = dt.timedelta(days = 3)
+TIME_INTERVAL_3 = dt.timedelta(days = 3)
+TIME_INTERVAL_4 = dt.timedelta(days = 7)
+
 class entry():
   uid = None
   filename = None
@@ -256,8 +261,8 @@ class buyer(entry):
   def able_to_order(self): # store instead of uid; first 2 orders should be reviewable products
     if self.get("alive") == False: return False
     
-    TIME_INTERVAL_1 = dt.timedelta(days = 2)
-    TIME_INTERVAL_2 = dt.timedelta(days = 3)
+    global TIME_INTERVAL_1
+    global TIME_INTERVAL_2
     num = self.num_orders()
     current = dt.datetime.now()
     buffer = False
@@ -371,8 +376,8 @@ class order(entry):
     if self.review != None:
       return False
     
-    TIME_INTERVAL_3 = dt.timedelta(days = 3)
-    TIME_INTERVAL_4 = dt.timedelta(days = 7)
+    global TIME_INTERVAL_3
+    global TIME_INTERVAL_4
     
     br = buyer.query(self.buyer)
     num = br.num_orders()
@@ -549,4 +554,41 @@ def commit(e, string):
       value = None
     e.set(key, value)
   e.submit()
+
+def product_report(start, end):
+  pds = product.all().values
+  buffer = pd.DataFrame(columns=['uid', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
+  
+  for pd in pds:
+    ods = [od for od in pd.orders if (od.get("OrderTime") > start and od.get("OrderTime") < end)]
+    rv_ods = [od for od in pd.orders if (od.review != None and od.review.get("Time") > start and od.review.get("Time") < end)]
+    
+    buffer_ = []
+    buffer_.append(str(pd.uid))
+    buffer_.append(str(pd.get("ASIN")))
+    buffer_.append(str(pd.get("Store")))
+    buffer_.append(str(pd.get("num_tasks")))
+    buffer_.append(str(len(ods)))
+    buffer_.append(str(len(rv_ods)))
+    if ods != []:
+      buffer_.append(str(len(rv_ods)/len(ods)))
+    else:
+      buffer_.append("NA")
+    buffer_.append(str(pd.get("goal_reviews")))
+    if pd.get("goal_reviews") not in [0, None]:
+      buffer_.append(str(len(rv_ods)/pd.get("goal_reviews")))
+    else:
+      buffer_.append("NA")
+    
+    buffer.loc[buffer.shape[0]] = buffer_
+  
+  return buffer
+  
+
+    
+
+
+
+
+
 

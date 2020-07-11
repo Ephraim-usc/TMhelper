@@ -20,7 +20,7 @@ class Report(tk.Frame):
     refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
     refresh_button.place(x = 570, y = 50, width = 80, height = 20)
     
-    def refresh(self):
+  def refresh(self):
       start = self.start_text.get("1.0", "end-1c")
       start = dt.datetime.strptime(start, "%Y-%m-%d")
       print(start)

@@ -49,7 +49,7 @@ class Frame(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.configure(width = 800, height = 470)
+    self.configure(width = 1000, height = 470)
     self['bg'] = 'grey'
   
   def copy(self, event):
@@ -87,7 +87,7 @@ class Menu(tk.Frame):
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
     self.parent = parent
-    self.configure(width = 800, height = 30)
+    self.configure(width = 1000, height = 30)
     self['bg'] = 'grey'
     
     self.feed = tk.StringVar()

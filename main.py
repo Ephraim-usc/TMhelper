@@ -20,10 +20,13 @@ class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
     self.title('TMhelper')
-    self.geometry("800x500")
+    self.geometry("1000x500")
     
     self.menuframe = Menu(self)
     self.menuframe.place(x = 0, y = 0)
+    
+    self.reportframe = Report(self)
+    self.reportframe.place(x = 0, y = 30)
     
     self.feedframe = Feed(self)
     self.adminframe = Admin(self)
@@ -143,6 +146,56 @@ class Menu(tk.Frame):
       self.parent.feedframe.datatype = datatype
       self.parent.feedframe.refresh()
       self.parent.feedframe.place(x = 0, y = 30)
+
+class Report(Frame):
+  def __init__(self, *args, **kwargs):
+    Frame.__init__(self, *args, **kwargs)
+    
+    self.start_text = tk.Text(self)
+    self.start_text.place(x = 50, y = 50, width = 200, height = 20)
+    
+    self.end_text = tk.Text(self)
+    self.end_text.place(x = 280, y = 50, width = 200, height = 20)
+    
+    self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
+    self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
+    
+    self.tree = ttk.Treeview(self)
+    self.tree.place(x = 50, y = 100)
+  
+  def init(self):
+    now = dt.datetime.now()
+    now = now.replace(microsecond = 0)
+    month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
+    self.clear()
+    self.display(self.start_text, str(month_ago))
+    self.display(self.end_text, str(now))
+    self.refresh()
+  
+  def refresh(self):
+    start = self.start_text.get("1.0", "end-1c")
+    end = self.end_text.get("1.0", "end-1c")
+    start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+    data = op.product_report(start, end)
+    cols = list(data.columns)
+    
+    self.tree.place_forget()
+    self.tree = ttk.Treeview(self, height = 15)
+    self.tree.place(x = 50, y = 100)
+    
+    self.tree["columns"] = cols
+    self.tree.column("#0", width=0)
+    
+    widths = {"uid":50, "name":130, 'ASIN':90, 'Store':90, 'num_tasks':90, 
+              'orders':70, 'reviews':70, 'reviews/orders':100, 'goal_reviews':100, 'reviews/goal_reviews':110}
+    
+    for i in cols:
+      self.tree.column(i, width = widths[i], anchor = "w")
+      self.tree.heading(i, text = i, anchor = 'w')
+    
+    for index, row in data.iterrows():
+      self.tree.insert("",0,text=index,values=list(row))
 
 class Feed(Frame):
   datatype = None

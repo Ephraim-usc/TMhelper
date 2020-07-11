@@ -541,6 +541,7 @@ def product_report(start, end):
     num_rvs = 0
     
     for file in files:
+      print(pd.symbol())
       print(file)
       for od in entryList.load(file).values:
         if od.product == pd.uid:

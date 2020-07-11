@@ -57,7 +57,7 @@ class Report(Frame):
     self.refresh_button.place(x = 570, y = 50, width = 80, height = 20)
     
     self.tree = ttk.Treeview(self)
-    self.tree.place(x = 0, y = 0)
+    self.tree.place(x = 50, y = 100)
   
   def init(self):
     now = dt.datetime.now()
@@ -71,6 +71,7 @@ class Report(Frame):
     start = self.start_text.get("1.0", "end-1c")
     end = self.end_text.get("1.0", "end-1c")
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
     data = op.product_report(start, end)
     cols = data.columns
     

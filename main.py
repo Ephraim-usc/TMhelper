@@ -172,13 +172,16 @@ class Login(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.username_text = tk.Text(self); 
-    self.username_text.place(x = 200, y = 150, width = 300, height = 20)
+    self.username_text.place(x = 350, y = 150, width = 300, height = 20)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 200, y = 200, width = 300, height = 20)
+    self.password_text.place(x = 350, y = 200, width = 300, height = 20)
+    
+    tk.Label(self, text = "Username", bg = "grey").place(x = 300, y = 150, width = 50, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 300, y = 200, width = 50, height = 20)
     
     self.login_button = tk.Button(self, text = "Log In", command = self.login)
-    self.password_text.place(x = 400, y = 250, width = 100, height = 20)
+    self.password_text.place(x = 550, y = 250, width = 100, height = 20)
   
   def login(self):
     self.parent.refresh()

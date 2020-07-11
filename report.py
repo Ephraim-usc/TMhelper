@@ -76,9 +76,11 @@ class Report(Frame):
     cols = list(data.columns)
     
     self.tree["columns"] = cols
+    self.tree.column("#0", width=0)
+    
     for i in cols:
-      self.tree.column(i, anchor="w")
-      self.tree.heading(i, text=i, anchor='w')
+      self.tree.column(i, width = 50, anchor = "w")
+      self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():
       self.tree.insert("",0,text=index,values=list(row))

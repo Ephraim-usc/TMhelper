@@ -405,6 +405,7 @@ class Buyer(Frame):
     self.gm, self.ad, self.bc, self.br = op.open_buyer()
     if self.br == None:
       messagebox.showinfo(title= "Error", message= "No available gmail/address/bankcard.")
+      return None
     
     self.display(self.gmail_text, self.gm.get("Gmail"))
     self.display(self.gmail_password_text, self.gm.get("Password"))

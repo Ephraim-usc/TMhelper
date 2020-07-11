@@ -847,22 +847,22 @@ class Review(Frame):
     tk.Label(self, text = "Title", bg = "grey").place(x = 50, y = 250, width = 100, height = 20)
     tk.Label(self, text = "Content", bg = "grey").place(x = 50, y = 280, width = 100, height = 20)
     
-    self.progressbar = ttk.Progressbar(self, length = 560)
+    self.progressbar = ttk.Progressbar(self, length = 660)
     self.progressbar.configure(maximum = 100, value = 0)
     self.progressbar.place(x = 50, y = 50)
     
     self.img = tk.PhotoImage()
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 460, y = 100, width = 150, height = 150)
+    self.image_label.place(x = 500, y = 100, width = 210, height = 210)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    self.submit_button.place(x = 850, y = 250, height = 30, width = 95)
     
     self.skip_button = ttk.Button(self, text="Skip", command = self.skip)
-    self.skip_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.skip_button.place(x = 850, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def init(self):
     self.progressbar.configure(maximum = len(self.orders), value = 0)
@@ -883,7 +883,7 @@ class Review(Frame):
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
-      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((150, 150)))
+      self.img = ImageTk.PhotoImage(Image.open("images/" + pd.get("image")).resize((210, 210)))
       self.image_label.configure(image = self.img)
   
   def show_review(self):

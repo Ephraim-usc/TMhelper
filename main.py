@@ -173,23 +173,29 @@ class Menu(tk.Frame):
     self.parent.refresh()
 
 class Login(Frame):
+  image = None
+  
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
+    self.img = ImageTk.PhotoImage(Image.open("images/cover.jpg")).resize((200, 300)))
+    self.image_label = tk.Label(self, image = self.img);
+    self.image_label.place(x = 100, y = 100, width = 200, height = 300)
+    
     self.username_text = tk.Text(self); 
-    self.username_text.place(x = 350, y = 150, width = 300, height = 20)
+    self.username_text.place(x = 550, y = 150, width = 300, height = 20)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 350, y = 200, width = 300, height = 20)
+    self.password_text.place(x = 550, y = 200, width = 300, height = 20)
     
-    tk.Label(self, text = "Username", bg = "grey").place(x = 260, y = 150, width = 70, height = 20)
-    tk.Label(self, text = "Password", bg = "grey").place(x = 260, y = 200, width = 70, height = 20)
+    tk.Label(self, text = "Username", bg = "grey").place(x = 460, y = 150, width = 70, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 460, y = 200, width = 70, height = 20)
     
     self.login_button = tk.Button(self, text = "Log In", command = self.login)
-    self.login_button.place(x = 550, y = 250, width = 100, height = 20)
+    self.login_button.place(x = 750, y = 250, width = 100, height = 20)
     
     self.register_button = tk.Button(self, text = "Register", command = self.register)
-    self.register_button.place(x = 550, y = 300, width = 100, height = 20)
+    self.register_button.place(x = 750, y = 300, width = 100, height = 20)
   
   def login(self):
     username = self.username_text.get("1.0", "end-1c")

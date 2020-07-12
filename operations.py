@@ -217,7 +217,7 @@ class buyer(entry):
   bankcard = None
   orders = []
   
-  attributes = entry.attributes + ['creation_time', 'PrimeTime', 'AmazonPassword']
+  attributes = entry.attributes + ['account', 'creation_time', 'PrimeTime', 'AmazonPassword']
   required = entry.required + ['AmazonPassword']
   
   def __init__(self, data):
@@ -324,7 +324,7 @@ class order(entry):
   product = None
   review = None
   
-  attributes = entry.attributes + ['rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
+  attributes = entry.attributes + ['account', 'rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data):
@@ -448,12 +448,13 @@ def open_buyer():
   
   return gm, ad, bc, br
 
-def open_buyer_confirm(gm, ad, bc, br):
+def open_buyer_confirm(gm, ad, bc, br, account = "public"):
   br.bind(gm, ad, bc)
   gm.set("working", False); gm.submit()
   ad.set("working", False); ad.submit()
   bc.set("working", False); bc.submit()
   br.set("alive", True)
+  br.set("account", account)
   br.submit()
 
 def open_buyer_abort(gm, ad, bc, br):
@@ -462,12 +463,13 @@ def open_buyer_abort(gm, ad, bc, br):
   bc.set("working", False); bc.submit()
   buyer.delete(br.uid)
 
-def buy(br, pdt, order_id, cost):
+def buy(br, pdt, order_id, cost, account = "public"):
   od = order([order_id, cost])
   od.submit()
   od.place(br, pdt)
   br.submit()
   pdt.submit()
+  od.set("account", account)
   od.submit()
   
 def orderable_buyers():

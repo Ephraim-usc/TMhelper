@@ -172,13 +172,13 @@ class Login(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.username_text = tk.Text(self); 
-    self.username_text.place(x = 320, y = 150, width = 300, height = 20)
+    self.username_text.place(x = 350, y = 150, width = 300, height = 20)
     
     self.password_text = tk.Text(self); 
-    self.password_text.place(x = 320, y = 200, width = 300, height = 20)
+    self.password_text.place(x = 350, y = 200, width = 300, height = 20)
     
-    tk.Label(self, text = "Username", bg = "grey").place(x = 300, y = 150, width = 50, height = 20)
-    tk.Label(self, text = "Password", bg = "grey").place(x = 300, y = 200, width = 50, height = 20)
+    tk.Label(self, text = "Username", bg = "grey").place(x = 270, y = 150, width = 50, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 270, y = 200, width = 50, height = 20)
     
     self.login_button = tk.Button(self, text = "Log In", command = self.login)
     self.login_button.place(x = 550, y = 250, width = 100, height = 20)
@@ -189,8 +189,15 @@ class Login(Frame):
   def login(self):
     username = self.username_text.get("1.0", "end-1c")
     password = self.password_text.get("1.0", "end-1c")
+    
+    if username == "":
+      messagebox.showinfo(title= "Error", message= "Username cannot be empty.")
+    if password == "":
+      messagebox.showinfo(title= "Error", message= "Password cannot be empty.")
+    
     if op.login(username, password) != True:
       messagebox.showinfo(title= "Error", message= "Username/Password incorrect.")
+      return None
     
     global ACCOUNT
     ACCOUNT = username
@@ -199,8 +206,15 @@ class Login(Frame):
   def register(self):
     username = self.username_text.get("1.0", "end-1c")
     password = self.password_text.get("1.0", "end-1c")
+    
+    if username == "":
+      messagebox.showinfo(title= "Error", message= "Username cannot be empty.")
+    if password == "":
+      messagebox.showinfo(title= "Error", message= "Password cannot be empty.")
+    
     if op.register(username, password) == False:
       messagebox.showinfo(title= "Error", message= "Username exists.")
+      return None
     
     self.login()
 

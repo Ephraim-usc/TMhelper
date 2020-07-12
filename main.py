@@ -495,7 +495,8 @@ class Buyer(Frame):
     new_name = self.name_text.get("1.0", "end-1c")
     op.commit(self.ad, "RecipientName\t" + new_name)
     
-    op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br)
+    global ACCOUNT
+    op.open_buyer_confirm(self.gm, self.ad, self.bc, self.br, ACCOUNT)
     self.gm = None
     self.ad = None
     self.bc = None
@@ -779,7 +780,8 @@ class Order(Frame):
       messagebox.showinfo(title= "Error", message= "Make sure Cost is typed in.")
       return None
     
-    op.buy(br, pd, ordernumber, cost)
+    global ACCOUNT
+    op.buy(br, pd, ordernumber, cost, ACCOUNT)
     self.skip()
   
   def skip(self):

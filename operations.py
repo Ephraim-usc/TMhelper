@@ -436,15 +436,26 @@ def open_buyer():
   available_addresses = [e for e in address.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   available_bankcards = [e for e in bankcard.all().values if e.get("alive") and e.get("working")==False and e.buyers==[] ]
   
-  if (available_gmails == [] or available_addresses == [] or available_bankcards == []):
-    return None, None, None, None
+  if available_gmails == []:
+    gm = None
+  else:
+    gm = np.random.choice(available_gmails); gm.set("working", True)
   
-  gm = np.random.choice(available_gmails); gm.set("working", True)
-  ad = np.random.choice(available_addresses); ad.set("working", True)
-  bc = np.random.choice(available_bankcards); bc.set("working", True)
+  if available_addresses == []:
+    ad = None
+  else:
+    ad = np.random.choice(available_addresses); ad.set("working", True)
   
-  pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
-  br = buyer([pwd]); br.set("alive", False); br.submit()
+  if available_bankcards == []:
+    bc = None
+  else:
+    bc = np.random.choice(available_bankcards); bc.set("working", True)
+  
+  if None in [gm, ad, bc]:
+    br = None
+  else:
+    pwd = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8))
+    br = buyer([pwd]); br.set("alive", False); br.submit()
   
   return gm, ad, bc, br
 

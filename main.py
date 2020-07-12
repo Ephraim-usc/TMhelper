@@ -7,6 +7,8 @@ import numpy as np
 import os
 import datetime as dt
 
+import operations as op
+
 '''
 import requests
 r = requests.get("https://raw.github.com/Ephraim-usc/TMhelper/master/operations.py")
@@ -14,8 +16,7 @@ with open("operations.py", "w", encoding="utf-8") as f:
   f.write(r.text)
 '''
 
-import operations as op
-
+ACCOUNT = None
 
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):
@@ -186,6 +187,13 @@ class Login(Frame):
     self.register_button.place(x = 550, y = 300, width = 100, height = 20)
   
   def login(self):
+    username = self.username_text.get("1.0", "end-1c")
+    password = self.password_text.get("1.0", "end-1c")
+    if op.login(username, password) != True:
+      messagebox.showinfo(title= "Error", message= "Username/Password incorrect.")
+    
+    global ACCOUNT
+    ACCOUNT = username
     self.parent.refresh()
   
   def register(self):

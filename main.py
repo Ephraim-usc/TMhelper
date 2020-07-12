@@ -16,7 +16,7 @@ with open("operations.py", "w", encoding="utf-8") as f:
   f.write(r.text)
 '''
 
-ACCOUNT = None
+ACCOUNT = "public"
 
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):

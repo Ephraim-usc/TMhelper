@@ -363,7 +363,7 @@ class Check(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.info_text = tk.Text(self); 
-    self.info_text.place(x = 50, y = 50, width = 600, height = 300)
+    self.info_text.place(x = 50, y = 50, width = 650, height = 310)
     self.info_text.configure(tabs = "6c")
     
     self.commit_button = ttk.Button(self, text="Commit Change", command = self.commit)

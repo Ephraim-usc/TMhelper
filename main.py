@@ -155,6 +155,9 @@ class Menu(tk.Frame):
     self.parent.refresh()
     if self.feed.get() == "Import Data":
       return None
+    if self.write.get() == "Select Phone" and self.feed.get() in ["Gmails", "Addresses", "BankCards"]:
+      messagebox.showinfo(title= "Error", message= "You have to select a phone.")
+      return None
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "Reviews":op.review,
                 "BankCards":op.bankcard, "Products":op.product}[self.feed.get()]
     self.parent.feedframe.datatype = datatype

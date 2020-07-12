@@ -199,7 +199,9 @@ class Login(Frame):
   def register(self):
     username = self.username_text.get("1.0", "end-1c")
     password = self.password_text.get("1.0", "end-1c")
-    op.register(username, password)
+    if op.register(username, password) == False:
+      messagebox.showinfo(title= "Error", message= "Username exists.")
+    
     self.login()
 
 class Report(Frame):

@@ -483,8 +483,14 @@ class Buyer(Frame):
     if self.br != None: return None
     
     self.gm, self.ad, self.bc, self.br = op.open_buyer()
-    if self.br == None:
-      messagebox.showinfo(title= "Error", message= "No available gmail/address/bankcard.")
+    if self.gm == None:
+      messagebox.showinfo(title= "Error", message= "No available gmail.")
+      return None
+    if self.ad == None:
+      messagebox.showinfo(title= "Error", message= "No available address.")
+      return None
+    if self.bc == None:
+      messagebox.showinfo(title= "Error", message= "No available bankcard.")
       return None
     
     self.display(self.gmail_text, self.gm.get("Gmail"))

@@ -238,16 +238,20 @@ class Report(Frame):
     Frame.__init__(self, *args, **kwargs)
     
     self.start_text = tk.Text(self)
-    self.start_text.place(x = 130, y = 50, width = 200, height = 20)
+    self.start_text.place(x = 110, y = 50, width = 200, height = 20)
     
     self.end_text = tk.Text(self)
-    self.end_text.place(x = 470, y = 50, width = 200, height = 20)
+    self.end_text.place(x = 410, y = 50, width = 200, height = 20)
+    
+    self.account_text = tk.Text(self)
+    self.end_text.place(x = 710, y = 50, width = 150, height = 20)
     
     tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 50, height = 20)
-    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 400, y = 50, width = 50, height = 20)
+    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 350, y = 50, width = 50, height = 20)
+    tk.Label(self, text = "account", bg = "grey", anchor = "w").place(x = 650, y = 50, width = 50, height = 20)
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
-    self.refresh_button.place(x = 750, y = 50, width = 80, height = 20)
+    self.refresh_button.place(x = 800, y = 50, width = 80, height = 20)
     
     self.tree = ttk.Treeview(self)
     self.tree.place(x = 50, y = 100)
@@ -266,7 +270,8 @@ class Report(Frame):
     end = self.end_text.get("1.0", "end-1c")
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-    data = op.product_report(start, end)
+    account = self.account_text.get("1.0", "end-1c")
+    data = op.product_report(start, end, account)
     cols = list(data.columns)
     
     self.tree.place_forget()

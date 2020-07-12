@@ -397,6 +397,12 @@ def register(username, password):
   act = account([username, password])
   act.submit()
 
+def login(username, password):
+  all = account.all().values
+  for act in all:
+    if act.get("username") == username and act.get("password") == password:
+      return True
+
 def feed(datatype, string):
   el, remaining = entryList.from_string(datatype, string)
   for e in el.values:

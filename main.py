@@ -244,7 +244,7 @@ class Report(Frame):
     self.end_text.place(x = 410, y = 50, width = 200, height = 20)
     
     self.account_text = tk.Text(self)
-    self.end_text.place(x = 710, y = 50, width = 150, height = 20)
+    self.account_text.place(x = 710, y = 50, width = 150, height = 20)
     
     tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 50, height = 20)
     tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 350, y = 50, width = 50, height = 20)

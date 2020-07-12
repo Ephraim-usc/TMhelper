@@ -560,16 +560,18 @@ def commit(e, string):
     e.set(key, value)
   e.submit()
 
-def _orders_of_the_product(pd):
+def _orders_of_the_product(pd, account = ""):
   files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
   buffer = []
   for file in files:
     for od in entryList.load(file).values:
+      if account != "" and od.get("account") != account:
+        continue
       if od.product == pd.uid:
         buffer.append(od)
   return buffer
 
-def product_report(start, end):
+def product_report(start, end, account = ""):
   pds = product.all().values
   buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
   
@@ -579,7 +581,7 @@ def product_report(start, end):
     num_ods = 0
     num_rvs = 0
     
-    for od in _orders_of_the_product(pd):
+    for od in _orders_of_the_product(pd, account = ""):
       if od.get("OrderTime") > start and od.get("OrderTime") < end:
         num_ods += 1
       if od.review != None and review.query(od.review).get("Time") > start and review.query(od.review).get("Time") < end:

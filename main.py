@@ -129,6 +129,11 @@ class Menu(tk.Frame):
     self.parent.loginframe.place(x = 0, y = 30)
   
   def admin_event(self):
+    global ACCOUNT
+    if ACCOUNT != "admin":
+      messagebox.showinfo(title= "Error", message= "Accessible to admin only.")
+      return None
+    
     self.parent.refresh()
     self.parent.adminframe.place(x = 0, y = 30)
   
@@ -177,8 +182,8 @@ class Login(Frame):
     self.password_text = tk.Text(self); 
     self.password_text.place(x = 350, y = 200, width = 300, height = 20)
     
-    tk.Label(self, text = "Username", bg = "grey").place(x = 270, y = 150, width = 50, height = 20)
-    tk.Label(self, text = "Password", bg = "grey").place(x = 270, y = 200, width = 50, height = 20)
+    tk.Label(self, text = "Username", bg = "grey").place(x = 260, y = 150, width = 70, height = 20)
+    tk.Label(self, text = "Password", bg = "grey").place(x = 260, y = 200, width = 70, height = 20)
     
     self.login_button = tk.Button(self, text = "Log In", command = self.login)
     self.login_button.place(x = 550, y = 250, width = 100, height = 20)
@@ -192,8 +197,10 @@ class Login(Frame):
     
     if username == "":
       messagebox.showinfo(title= "Error", message= "Username cannot be empty.")
+      return None
     if password == "":
       messagebox.showinfo(title= "Error", message= "Password cannot be empty.")
+      return None
     
     if op.login(username, password) != True:
       messagebox.showinfo(title= "Error", message= "Username/Password incorrect.")
@@ -209,8 +216,10 @@ class Login(Frame):
     
     if username == "":
       messagebox.showinfo(title= "Error", message= "Username cannot be empty.")
+      return None
     if password == "":
       messagebox.showinfo(title= "Error", message= "Password cannot be empty.")
+      return None
     
     if op.register(username, password) == False:
       messagebox.showinfo(title= "Error", message= "Username exists.")
@@ -354,14 +363,14 @@ class Check(Frame):
     Frame.__init__(self, parent, *args, **kwargs)
     
     self.info_text = tk.Text(self); 
-    self.info_text.place(x = 50, y = 50, width = 500, height = 300)
-    self.info_text.configure(tabs = "5c")
+    self.info_text.place(x = 50, y = 50, width = 600, height = 300)
+    self.info_text.configure(tabs = "6c")
     
     self.commit_button = ttk.Button(self, text="Commit Change", command = self.commit)
-    self.commit_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.commit_button.place(x = 850, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def refresh(self):
     self.display(self.info_text, self.entry.str())

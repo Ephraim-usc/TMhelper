@@ -373,10 +373,10 @@ class Check(Frame):
     self.info_text.configure(tabs = "6c")
     
     self.commit_button = ttk.Button(self, text="Commit Change", command = self.commit)
-    self.commit_button.place(x = 850, y = 290, height = 30, width = 95)
+    self.commit_button.place(x = 840, y = 290, height = 30, width = 105)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 840, y = 330, height = 30, width = 105)
   
   def refresh(self):
     self.display(self.info_text, self.entry.str())

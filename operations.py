@@ -394,6 +394,11 @@ class review(entry):
 ### special functionalities
 
 def register(username, password):
+  all = account.all().values
+  for act in all:
+    if act.get("username") == username:
+      return False
+  
   act = account([username, password])
   act.submit()
 

@@ -178,7 +178,7 @@ class Login(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.img = ImageTk.PhotoImage(Image.open("images/cover.jpg")).resize(200, 300)
+    self.img = ImageTk.PhotoImage(Image.open("images/cover.jpg").resize(200, 300))
     self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 100, y = 100, width = 200, height = 300)
     

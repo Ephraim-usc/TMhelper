@@ -302,20 +302,20 @@ class Feed(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.comment_label = tk.Label(self, text = "Gmail", bg = "grey", anchor = "w")
-    self.comment_label.place(x = 30, y = 30, width = 600, height = 20)
+    self.comment_label = tk.Label(self, text = "", bg = "grey", anchor = "w")
+    self.comment_label.place(x = 30, y = 30, width = 700, height = 20)
     
     self.input_text = tk.Text(self)
-    self.input_text.place(x = 30, y = 60, width = 600, height = 370)
+    self.input_text.place(x = 30, y = 60, width = 700, height = 370)
     
     self.submit_button = ttk.Button(self, text="Submit", command = self.submit)
-    self.submit_button.place(x = 650, y = 250, height = 30, width = 95)
+    self.submit_button.place(x = 850, y = 250, height = 30, width = 95)
     
     self.clear_button = ttk.Button(self, text="Clear", command = self.clear)
-    self.clear_button.place(x = 650, y = 290, height = 30, width = 95)
+    self.clear_button.place(x = 850, y = 290, height = 30, width = 95)
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
-    self.quit_button.place(x = 650, y = 330, height = 30, width = 95)
+    self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def refresh(self):
     self.clear()

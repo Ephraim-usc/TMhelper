@@ -581,7 +581,7 @@ def product_report(start, end, account = ""):
     num_ods = 0
     num_rvs = 0
     
-    for od in _orders_of_the_product(pd, account = ""):
+    for od in _orders_of_the_product(pd, account = account):
       if od.get("OrderTime") > start and od.get("OrderTime") < end:
         num_ods += 1
       if od.review != None and review.query(od.review).get("Time") > start and review.query(od.review).get("Time") < end:

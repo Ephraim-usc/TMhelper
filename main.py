@@ -240,23 +240,23 @@ class Report(Frame):
   def __init__(self, *args, **kwargs):
     Frame.__init__(self, *args, **kwargs)
     
-    tk.Label(self, text = "Homepage - Work Summary", bg = "grey", anchor = "w").place(x = 50, y = 50, width = 200, height = 20)
+    tk.Label(self, text = "Homepage - Work Summary", bg = "grey", anchor = "w").place(x = 50, y = 40, width = 200, height = 20)
     
     self.start_text = tk.Text(self)
-    self.start_text.place(x = 110, y = 80, width = 200, height = 20)
+    self.start_text.place(x = 110, y = 70, width = 200, height = 20)
     
     self.end_text = tk.Text(self)
-    self.end_text.place(x = 410, y = 80, width = 200, height = 20)
+    self.end_text.place(x = 410, y = 70, width = 200, height = 20)
     
     self.account_text = tk.Text(self)
-    self.account_text.place(x = 710, y = 80, width = 130, height = 20)
+    self.account_text.place(x = 710, y = 70, width = 130, height = 20)
     
-    tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 80, width = 50, height = 20)
-    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 350, y = 80, width = 50, height = 20)
-    tk.Label(self, text = "account", bg = "grey", anchor = "w").place(x = 650, y = 80, width = 50, height = 20)
+    tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 70, width = 50, height = 20)
+    tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 350, y = 70, width = 50, height = 20)
+    tk.Label(self, text = "account", bg = "grey", anchor = "w").place(x = 650, y = 70, width = 50, height = 20)
     
     self.refresh_button = tk.Button(self, text = "Refresh", command = self.refresh)
-    self.refresh_button.place(x = 870, y = 80, width = 80, height = 20)
+    self.refresh_button.place(x = 870, y = 70, width = 80, height = 20)
     
     self.tree = ttk.Treeview(self)
     self.tree.place(x = 50, y = 100)

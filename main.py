@@ -180,7 +180,7 @@ class Login(Frame):
     
     self.img = ImageTk.PhotoImage(Image.open("images/cover.jpg").resize((300, 200)))
     self.image_label = tk.Label(self, image = self.img);
-    self.image_label.place(x = 100, y = 100, width = 300, height = 200)
+    self.image_label.place(x = 100, y = 120, width = 300, height = 200)
     
     self.username_text = tk.Text(self); 
     self.username_text.place(x = 550, y = 150, width = 300, height = 20)

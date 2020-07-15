@@ -357,6 +357,9 @@ class order(entry):
     return buffer
   
   def able_to_review(self):
+    if self.get("alive") == False:
+      return False
+    
     pd = product.query(self.product)
     if pd.uid == -1:
       return False

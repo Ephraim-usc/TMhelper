@@ -563,7 +563,7 @@ def commit(e, string):
     if not key in e.attributes:
       continue
     if re.search("^True$|^False$", value) is not None:
-      value = bool(value)
+      value = {"True":True, "False":False }[value]
     elif re.search('^[0-9]+\.*[0-9]*$', value) is not None:  # dt.time!!!
       value = float(value)
     elif re.search('^None$', value) is not None:

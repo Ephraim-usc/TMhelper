@@ -304,8 +304,11 @@ class Report(Frame):
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
     
-    v = tk.IntVar()
-    tk.Checkbutton(self.top, text = "Python", padx = 20, variable = v).pack(anchor = tk.W)
+    columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews']
+    cv = {column:tk.IntVar() for column in columns}
+    
+    for column, v in cv:
+      tk.Checkbutton(self.top, text = column, padx = 20, variable = v).pack(anchor = tk.W)
     
     tk.Button(self.top, text = "Confirm").pack(anchor = tk.W)
 

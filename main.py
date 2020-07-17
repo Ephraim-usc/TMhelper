@@ -282,21 +282,20 @@ class Report(Frame):
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
     account = self.account_text.get("1.0", "end-1c")
-    self.data = op.product_report(start, end, account)[self.columns]
-    cols = list(self.data.columns)
+    self.data = op.product_report(start, end, account)
     
     self.tree.place_forget()
     self.tree = ttk.Treeview(self, height = 15)
     self.tree.place(x = 50, y = 100)
     
-    self.tree["columns"] = cols
+    self.tree["columns"] = self.columns
     self.tree.column("#0", width=0)
     
-    for i in cols:
+    for i in self.columns:
       self.tree.column(i, width = 900/len(self.columns), anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
-    for index, row in self.data.iterrows():
+    for index, row in self.data[self.columns].iterrows():
       self.tree.insert("",0,text=index,values=list(row))
     
   def customize(self):

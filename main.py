@@ -301,7 +301,7 @@ class Report(Frame):
     
   def customize(self):
     self.top = tk.Toplevel(self)
-    x = self.winfo_x(); y = self.winfo_y()
+    x = self.parent.winfo_x(); y = self.parent.winfo_y()
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
     
     v = tk.IntVar()

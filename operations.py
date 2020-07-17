@@ -11,6 +11,7 @@ TIME_INTERVAL_1 = dt.timedelta(days = 2)
 TIME_INTERVAL_2 = dt.timedelta(days = 3)
 TIME_INTERVAL_3 = dt.timedelta(days = 3)
 TIME_INTERVAL_4 = dt.timedelta(days = 7)
+TIME_INTERVAL_5 = dt.timedelta(days = 4)
 
 class entry():
   uid = None
@@ -324,7 +325,7 @@ class order(entry):
   product = None
   review = None
   
-  attributes = entry.attributes + ['account', 'rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
+  attributes = entry.attributes + ['account', 'rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime', 'green_light']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data):
@@ -370,10 +371,13 @@ class order(entry):
     
     global TIME_INTERVAL_3
     global TIME_INTERVAL_4
+    global TIME_INTERVAL_5
     
     br = buyer.query(self.buyer)
     num = br.num_orders()
     now = dt.datetime.now()
+    if self.get("green_light") == True and now > self.get("OrderTime") +  TIME_INTERVAL_5:
+      return True
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])
       if now > fourthorder.get("OrderTime") + TIME_INTERVAL_3:

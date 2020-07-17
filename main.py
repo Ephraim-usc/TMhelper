@@ -570,15 +570,21 @@ class Buyer(Frame):
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
-    self.top.title("Select Columns")
+    self.top.title("There's something wrong?")
     
     v = tk.IntVar()
     tk.Radiobutton(self.top, text = "Gmail not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
-    tk.Radiobutton(self.top, text = "Address not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
-    tk.Radiobutton(self.top, text = "Bankcard not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Radiobutton(self.top, text = "Address not working", padx = 20, variable = v, value = 2).pack(anchor = tk.W)
+    tk.Radiobutton(self.top, text = "Bankcard not working", padx = 20, variable = v, value = 3).pack(anchor = tk.W)
     
     def confirm():
-      pass
+      if v.get() == 1:
+        op.submit(self.gm, "alive\tFalse")
+      if v.get() == 2:
+        op.submit(self.ad, "alive\tFalse")
+      if v.get() == 3:
+        op.submit(self.bc, "alive\tFalse")
+      self.skip()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
 

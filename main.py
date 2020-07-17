@@ -238,6 +238,7 @@ class Login(Frame):
 
 class Report(Frame):
   columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
+  data = None
   
   def __init__(self, *args, **kwargs):
     Frame.__init__(self, *args, **kwargs)
@@ -281,8 +282,8 @@ class Report(Frame):
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
     account = self.account_text.get("1.0", "end-1c")
-    data = op.product_report(start, end, account)[self.columns]
-    cols = list(data.columns)
+    self.data = op.product_report(start, end, account)[self.columns]
+    cols = list(self.data.columns)
     
     self.tree.place_forget()
     self.tree = ttk.Treeview(self, height = 15)
@@ -295,7 +296,7 @@ class Report(Frame):
       self.tree.column(i, width = 900/len(self.columns), anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
-    for index, row in data.iterrows():
+    for index, row in self.data.iterrows():
       self.tree.insert("",0,text=index,values=list(row))
     
   def customize(self):

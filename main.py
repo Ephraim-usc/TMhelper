@@ -265,7 +265,10 @@ class Report(Frame):
     self.tree.place(x = 50, y = 100)
     
     self.customize_button = tk.Button(self, text = "Customize Columns", command = self.customize)
-    self.customize_button.place(x = 830, y = 435, width = 120, height = 25)
+    self.customize_button.place(x = 680, y = 435, width = 120, height = 25)
+    
+    self.export_button = tk.Button(self, text = "Export to Excel", command = self.export)
+    self.export_button.place(x = 830, y = 435, width = 120, height = 25)
   
   def init(self):
     now = dt.datetime.now()
@@ -315,6 +318,9 @@ class Report(Frame):
       self.refresh()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
+  
+  def export(self):
+    self.data.to_csv("report.csv", sep = ",")
 
 class Feed(Frame):
   datatype = None

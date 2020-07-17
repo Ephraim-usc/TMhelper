@@ -261,12 +261,8 @@ class Report(Frame):
     self.tree = ttk.Treeview(self)
     self.tree.place(x = 50, y = 100)
     
-    self.customize_combobox = ttk.Combobox(self)
-    self.customize_combobox.place(x = 830, y = 50, width = 120, height = 25)
-    self.customize_combobox['values'] = ['Customize columns']
-    self.customize_combobox.current(0)
-    
-    self.customize_toplevel = tk.Toplevel(self)
+    self.customize_menubutton = tk.Menubutton(self, text = "Customize columns", length = 10)
+    self.customize_menubutton.place(x = 830, y = 350, width = 120, height = 25)
   
   def init(self):
     now = dt.datetime.now()
@@ -302,12 +298,6 @@ class Report(Frame):
     
     for index, row in data.iterrows():
       self.tree.insert("",0,text=index,values=list(row))
-  
-  def customize(self):
-    if self.customize_toplevel.winfo_ismapped():
-      self.customize_toplevel.place_forget()
-    else:
-      self.customize_toplevel.place(x = 830, y = 75, width = 120, height = 100)
 
 class Feed(Frame):
   datatype = None

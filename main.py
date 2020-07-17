@@ -603,13 +603,13 @@ class Buyer(Frame):
     if self.gm == None: return None
     mode = self.gmail_label['text']
     if mode == 'Gmail':
-      self.gmail_label['text'] == 'Support Gmail'
-      self.gmail_password_label['text'] == 'Support Password'
+      self.gmail_label['text'] = 'Support Gmail'
+      self.gmail_password_label['text'] = 'Support Password'
       self.display(self.gmail_text, self.gm.get("SupportGmail"))
       self.display(self.gmail_password_text, self.gm.get("SupportGmailPassword"))
     if mode == 'Support Gmail':
-      self.gmail_label['text'] == 'Gmail'
-      self.gmail_password_label['text'] == 'Gmail Password'
+      self.gmail_label['text'] = 'Gmail'
+      self.gmail_password_label['text'] = 'Gmail Password'
       self.display(self.gmail_text, self.gm.get("Gmail"))
       self.display(self.gmail_password_text, self.gm.get("GmailPassword"))
 

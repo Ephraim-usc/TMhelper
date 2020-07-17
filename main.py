@@ -261,8 +261,8 @@ class Report(Frame):
     self.tree = ttk.Treeview(self)
     self.tree.place(x = 50, y = 100)
     
-    self.customize_menubutton = tk.Menubutton(self, text = "Customize columns", length = 10)
-    self.customize_menubutton.place(x = 830, y = 350, width = 120, height = 25)
+    self.customize_button = tk.Menubutton(self, text = "Customize Columns", command = self.customize)
+    self.customize_button.place(x = 830, y = 350, width = 120, height = 25)
   
   def init(self):
     now = dt.datetime.now()
@@ -298,6 +298,16 @@ class Report(Frame):
     
     for index, row in data.iterrows():
       self.tree.insert("",0,text=index,values=list(row))
+    
+  def customize(self):
+    self.top = tk.Toplevel(self)
+    x = self.winfo_x(); y = self.winfo_y()
+    self.top.geometry("+%d+%d" % (x + 400, y + 100))
+    
+    v = tk.IntVar()
+    tk.Checkbutton(self.top, text = "Python", padx = 20, variable = v).pack(anchor = tk.W)
+    
+    tk.Button(self.top, text = "Confirm").pack(anchor = tk.W)
 
 class Feed(Frame):
   datatype = None

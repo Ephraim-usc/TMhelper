@@ -793,6 +793,9 @@ class Order(Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 850, y = 310, height = 30, width = 95)
+    
+    self.wrong_button = tk.Button(self, text = "There's something wrong", command = self.wrong)
+    self.wrong_button.place(x = 530, y = 370, width = 180, height = 25)
   
   def init(self):
     self.progressbar.configure(maximum = len(self.buyers), value = 0)
@@ -869,6 +872,26 @@ class Order(Frame):
       self.quit()
     else:
       self.show_buyer()
+  
+  def wrong(self):
+    br = self.buyers[self.progressbar['value']]
+    
+    self.top = tk.Toplevel(self)
+    x = self.parent.winfo_x(); y = self.parent.winfo_y()
+    self.top.geometry("+%d+%d" % (x + 400, y + 100))
+    self.top.title("There's something wrong?")
+    
+    v = tk.IntVar()
+    tk.Radiobutton(self.top, text = "Buyer locked", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    
+    def confirm():
+      if v.get() == 1:
+        op.commit(br, "alive\tFalse")
+      if v.get() != 0:
+        self.skip()
+        self.top.withdraw()
+    
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
 
 class PreReview(Frame):
   products = []

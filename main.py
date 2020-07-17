@@ -586,7 +586,8 @@ class Buyer(Frame):
         op.commit(self.ad, "alive\tFalse")
       if v.get() == 3:
         op.commit(self.bc, "alive\tFalse")
-      self.skip()
+      if v.get() != 0:
+        self.skip()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
 

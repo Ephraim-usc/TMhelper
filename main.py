@@ -504,6 +504,9 @@ class Buyer(Frame):
     
     self.quit_button = ttk.Button(self, text="Quit", command = self.quit)
     self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
+    
+    self.wrong_button = tk.Button(self, text = "There's something wrong", command = self.wrong)
+    self.wrong_button.place(x = 50, y = 370, width = 180, height = 25)
   
   def refresh(self):
     self.clear()
@@ -562,6 +565,22 @@ class Buyer(Frame):
     self.bc = None
     self.br = None
     self.clear()
+  
+  def wrong(self):
+    self.top = tk.Toplevel(self)
+    x = self.parent.winfo_x(); y = self.parent.winfo_y()
+    self.top.geometry("+%d+%d" % (x + 400, y + 100))
+    self.top.title("Select Columns")
+    
+    v = tk.IntVar()
+    tk.Ratiobutton(top, text = "Gmail not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Ratiobutton(top, text = "Address not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Ratiobutton(top, text = "Bankcard not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    
+    def confirm():
+      pass
+    
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
 
 class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):

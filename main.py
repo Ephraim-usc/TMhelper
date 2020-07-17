@@ -506,7 +506,7 @@ class Buyer(Frame):
     self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
     
     self.wrong_button = tk.Button(self, text = "There's something wrong", command = self.wrong)
-    self.wrong_button.place(x = 50, y = 370, width = 180, height = 25)
+    self.wrong_button.place(x = 220, y = 370, width = 180, height = 25)
   
   def refresh(self):
     self.clear()
@@ -567,6 +567,8 @@ class Buyer(Frame):
     self.clear()
   
   def wrong(self):
+    if self.br == None: return None
+    
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
@@ -579,11 +581,11 @@ class Buyer(Frame):
     
     def confirm():
       if v.get() == 1:
-        op.submit(self.gm, "alive\tFalse")
+        op.commit(self.gm, "alive\tFalse")
       if v.get() == 2:
-        op.submit(self.ad, "alive\tFalse")
+        op.commit(self.ad, "alive\tFalse")
       if v.get() == 3:
-        op.submit(self.bc, "alive\tFalse")
+        op.commit(self.bc, "alive\tFalse")
       self.skip()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)

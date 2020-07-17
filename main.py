@@ -571,7 +571,7 @@ class Buyer(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%d%d+%d+%d" % (200, 120, x + 400, y + 100))
+    self.top.geometry("%dx%d+%d+%d" % (200, 120, x + 400, y + 100))
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()
@@ -878,7 +878,7 @@ class Order(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%d%d+%d+%d" % (200, 120, x + 400, y + 100))
+    self.top.geometry("%dx%d+%d+%d" % (200, 120, x + 400, y + 100))
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()

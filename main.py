@@ -304,7 +304,7 @@ class Report(Frame):
   def customize(self):
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (200, 500, x + 400, y + 100))
+    self.top.geometry("%dx%d+%d+%d" % (300, 400, x + 400, y + 100))
     self.top.title("Select Columns")
     
     columns = list(self.data.columns)
@@ -320,7 +320,7 @@ class Report(Frame):
       self.columns = [column for column, v in cv.items() if v.get() == 1]
       self.refresh()
     
-    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
   
   def export(self):
     self.data.to_csv("report.csv", sep = ",")
@@ -571,7 +571,7 @@ class Buyer(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (200, 120, x + 400, y + 100))
+    self.top.geometry("%dx%d+%d+%d" % (400, 120, x + 400, y + 100))
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()
@@ -589,7 +589,7 @@ class Buyer(Frame):
       if v.get() != 0:
         self.skip()
     
-    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
 
 class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):
@@ -878,7 +878,7 @@ class Order(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (200, 120, x + 400, y + 100))
+    self.top.geometry("%dx%d+%d+%d" % (400, 120, x + 400, y + 100))
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()
@@ -891,7 +891,7 @@ class Order(Frame):
         self.skip()
         self.top.withdraw()
     
-    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
 
 class PreReview(Frame):
   products = []

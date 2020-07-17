@@ -304,7 +304,8 @@ class Report(Frame):
   def customize(self):
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (300, 400, x + 400, y + 100))
+    self.top.geometry("+%d+%d" % (x + 400, y + 100))
+    self.top.minsize(300, 100)
     self.top.title("Select Columns")
     
     columns = list(self.data.columns)
@@ -571,7 +572,8 @@ class Buyer(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (400, 120, x + 400, y + 100))
+    self.top.geometry("+%d+%d" % (400, 120, x + 400, y + 100))
+    self.top.minsize(400, 50)
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()
@@ -878,7 +880,8 @@ class Order(Frame):
     
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
-    self.top.geometry("%dx%d+%d+%d" % (400, 120, x + 400, y + 100))
+    self.top.geometry("+%d+%d" % (400, 120, x + 400, y + 100))
+    self.top.minsize(400, 50)
     self.top.title("There's something wrong?")
     
     v = tk.IntVar()

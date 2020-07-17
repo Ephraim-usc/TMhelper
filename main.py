@@ -292,7 +292,7 @@ class Report(Frame):
     self.tree.column("#0", width=0)
     
     for i in self.columns:
-      self.tree.column(i, width = 900/len(self.columns), anchor = "w")
+      self.tree.column(i, width = int(900/len(self.columns)), anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in self.data[self.columns].iterrows():

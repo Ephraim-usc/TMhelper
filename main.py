@@ -262,7 +262,7 @@ class Report(Frame):
     self.tree.place(x = 50, y = 100)
     
     self.customize_button = tk.Button(self, text = "Customize Columns", command = self.customize)
-    self.customize_button.place(x = 830, y = 350, width = 120, height = 25)
+    self.customize_button.place(x = 830, y = 435, width = 120, height = 25)
   
   def init(self):
     now = dt.datetime.now()

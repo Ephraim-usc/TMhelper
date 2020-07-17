@@ -311,9 +311,10 @@ class Report(Frame):
     cv = {column:tk.IntVar() for column in columns}
     
     for column, v in cv.items():
-      tk.Checkbutton(self.top, text = column, padx = 20, variable = v).pack(anchor = tk.W)
+      tmp = tk.Checkbutton(self.top, text = column, padx = 20, variable = v)
+      tmp.pack(anchor = tk.W)
       if column in self.columns:
-        v.set(1)
+        tmp.select()
     
     def confirm():
       self.columns = [column for column, v in cv.items() if v.get() == 1]

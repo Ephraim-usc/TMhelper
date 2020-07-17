@@ -756,8 +756,14 @@ class Order(Frame):
     
     tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
     tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 80, width = 100, height = 20)
-    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 110, width = 100, height = 20)
-    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 140, width = 100, height = 20)
+    
+    self.gmail_label = tk.Label(self, text = "Gmail", bg = "grey")
+    self.gmail_label.place(x = 50, y = 110, width = 100, height = 20)
+    self.gmail_label.bind("<Button-1>", self.switch)
+    
+    self.gmail_password_label = tk.Label(self, text = "Gmail Password", bg = "grey")
+    self.gmail_password_label.place(x = 50, y = 140, width = 100, height = 20)
+    
     tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
     tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 200, width = 100, height = 20)
     tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 230, width = 100, height = 20)
@@ -915,6 +921,21 @@ class Order(Frame):
         self.top.withdraw()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
+  
+  def switch(self, event):
+    if self.gm == None: return None
+    br = self.buyers[self.progressbar['value']]
+    mode = self.gmail_label['text']
+    if mode == 'Gmail':
+      self.gmail_label['text'] = 'Support Gmail'
+      self.gmail_password_label['text'] = 'Support Password'
+      self.display(self.gmail_text, op.gmail.query(br.gmail).get("SupportGmail"))
+      self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("SupportGmailPassword"))
+    if mode == 'Support Gmail':
+      self.gmail_label['text'] = 'Gmail'
+      self.gmail_password_label['text'] = 'Gmail Password'
+      self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
+      self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("GmailPassword"))
 
 class PreReview(Frame):
   products = []

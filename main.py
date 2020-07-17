@@ -237,7 +237,7 @@ class Login(Frame):
     self.login()
 
 class Report(Frame):
-  columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews']
+  columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
   
   def __init__(self, *args, **kwargs):
     Frame.__init__(self, *args, **kwargs)
@@ -291,11 +291,8 @@ class Report(Frame):
     self.tree["columns"] = cols
     self.tree.column("#0", width=0)
     
-    widths = {"uid":50, "name":130, 'ASIN':90, 'Store':90, 'num_tasks':90, 
-              'orders':70, 'reviews':70, 'reviews/orders':100, 'goal_reviews':100, 'reviews/goal_reviews':110}
-    
     for i in cols:
-      self.tree.column(i, width = widths[i], anchor = "w")
+      self.tree.column(i, width = 900/len(self.columns), anchor = "w")
       self.tree.heading(i, text = i, anchor = 'w')
     
     for index, row in data.iterrows():

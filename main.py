@@ -307,7 +307,7 @@ class Report(Frame):
     columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews']
     cv = {column:tk.IntVar() for column in columns}
     
-    for column, v in cv:
+    for column, v in cv.items():
       tk.Checkbutton(self.top, text = column, padx = 20, variable = v).pack(anchor = tk.W)
     
     tk.Button(self.top, text = "Confirm").pack(anchor = tk.W)

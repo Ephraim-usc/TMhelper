@@ -304,7 +304,7 @@ class Report(Frame):
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
     self.top.title("Select Columns")
     
-    columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews']
+    columns = list(self.data.columns)
     cv = {column:tk.IntVar() for column in columns}
     
     for column, v in cv.items():

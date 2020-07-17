@@ -600,7 +600,6 @@ class Buyer(Frame):
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
   
   def switch(self, event):
-    if self.gm == None: return None
     mode = self.gmail_label['text']
     if mode == 'Gmail':
       self.gmail_label['text'] = 'Support Gmail'

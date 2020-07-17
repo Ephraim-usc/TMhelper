@@ -237,6 +237,8 @@ class Login(Frame):
     self.login()
 
 class Report(Frame):
+  columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews']
+  
   def __init__(self, *args, **kwargs):
     Frame.__init__(self, *args, **kwargs)
     
@@ -279,7 +281,7 @@ class Report(Frame):
     start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
     account = self.account_text.get("1.0", "end-1c")
-    data = op.product_report(start, end, account)
+    data = op.product_report(start, end, account)[self.columns]
     cols = list(data.columns)
     
     self.tree.place_forget()
@@ -303,6 +305,7 @@ class Report(Frame):
     self.top = tk.Toplevel(self)
     x = self.parent.winfo_x(); y = self.parent.winfo_y()
     self.top.geometry("+%d+%d" % (x + 400, y + 100))
+    self.top.title("Select Columns")
     
     columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews']
     cv = {column:tk.IntVar() for column in columns}
@@ -310,7 +313,11 @@ class Report(Frame):
     for column, v in cv.items():
       tk.Checkbutton(self.top, text = column, padx = 20, variable = v).pack(anchor = tk.W)
     
-    tk.Button(self.top, text = "Confirm").pack(anchor = tk.W)
+    def confirm():
+      self.columns = [column for column, v in cv.items() if v.get() == 1]
+      self.refresh()
+    
+    tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.E)
 
 class Feed(Frame):
   datatype = None

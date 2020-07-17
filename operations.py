@@ -587,7 +587,9 @@ def _orders_of_the_product(pd, account = ""):
 
 def product_report(start, end, account = ""):
   pds = product.all().values
-  buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews'])
+  buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks',
+                                     'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews',
+                                     'backup_reviews', 'green_light'])
   
   for pd in pds:
     files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
@@ -620,6 +622,8 @@ def product_report(start, end, account = ""):
       buffer_.append(str(round(ratio * 100, 2)) + "%")
     else:
       buffer_.append("NA")
+    buffer_.append(str(len(suitable_reviews(pd))))
+    buffer_.append(str(False))
     
     buffer.loc[buffer.shape[0]] = buffer_
   

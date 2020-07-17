@@ -474,8 +474,13 @@ class Buyer(Frame):
     self.expiration_text.place(x = 150, y = 330, width = 250, height = 20)
     self.expiration_text.bind("<Button-1>", self.copy)
     
-    tk.Label(self, text = "Gmail", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
-    tk.Label(self, text = "Gmail Password", bg = "grey").place(x = 50, y = 90, width = 100, height = 20)
+    self.gmail_label = tk.Label(self, text = "Gmail", bg = "grey")
+    self.gmail_label.place(x = 50, y = 50, width = 100, height = 20)
+    self.gmail_label.bind("<Button-1>", self.switch)
+    
+    self.gmail_password_label = tk.Label(self, text = "Gmail Password", bg = "grey")
+    self.gmail_password_label.place(x = 50, y = 90, width = 100, height = 20)
+    
     tk.Label(self, text = "Name", bg = "grey").place(x = 50, y = 130, width = 100, height = 20)
     tk.Label(self, text = "Address", bg = "grey").place(x = 50, y = 170, width = 100, height = 20)
     tk.Label(self, text = "City / State", bg = "grey").place(x = 50, y = 210, width = 100, height = 20)
@@ -545,7 +550,8 @@ class Buyer(Frame):
     if self.br == None: return None
     
     new_password = self.gmail_password_text.get("1.0", "end-1c")
-    op.commit(self.gm, "Password\t" + new_password)
+    if self.gmail_label['text'] == "Gmail":
+      op.commit(self.gm, "Password\t" + new_password)
     
     new_name = self.name_text.get("1.0", "end-1c")
     op.commit(self.ad, "RecipientName\t" + new_name)
@@ -592,6 +598,20 @@ class Buyer(Frame):
         self.skip()
     
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
+  
+  def switch(self, event):
+    if self.gm == None: return None
+    mode = self.gmail_label['text']
+    if mode == 'Gmail':
+      self.gmail_label['text'] == 'Support Gmail'
+      self.gmail_password_label['text'] == 'Support Password'
+      self.display(self.gmail_text, self.gm.get("SupportGmail"))
+      self.display(self.gmail_password_text, self.gm.get("SupportGmailPassword"))
+    if mode == 'Support Gmail':
+      self.gmail_label['text'] == 'Gmail'
+      self.gmail_password_label['text'] == 'Gmail Password'
+      self.display(self.gmail_text, self.gm.get("Gmail"))
+      self.display(self.gmail_password_text, self.gm.get("GmailPassword"))
 
 class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):

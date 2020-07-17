@@ -573,9 +573,9 @@ class Buyer(Frame):
     self.top.title("Select Columns")
     
     v = tk.IntVar()
-    tk.Radiobutton(top, text = "Gmail not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
-    tk.Radiobutton(top, text = "Address not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
-    tk.Radiobutton(top, text = "Bankcard not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Radiobutton(self.top, text = "Gmail not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Radiobutton(self.top, text = "Address not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
+    tk.Radiobutton(self.top, text = "Bankcard not working", padx = 20, variable = v, value = 1).pack(anchor = tk.W)
     
     def confirm():
       pass

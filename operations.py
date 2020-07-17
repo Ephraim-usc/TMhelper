@@ -291,7 +291,8 @@ class buyer(entry):
 class product(entry):
   filename = "products.p"
   
-  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price', 'link', 'image', 'num_tasks', 'num_daily_reviews', "goal_reviews"]
+  attributes = entry.attributes + ['ASIN', 'name', 'Store', 'Brand', 'keyword', 'Price',
+                                   'link', 'image', 'num_tasks', 'num_daily_reviews', "goal_reviews", "green_light"]
   required = entry.required + ['ASIN', 'name', 'Store']
   
   def __init__(self, data):
@@ -325,7 +326,7 @@ class order(entry):
   product = None
   review = None
   
-  attributes = entry.attributes + ['account', 'rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime', 'green_light']
+  attributes = entry.attributes + ['account', 'rank', 'OrderID', 'OrderTime', 'Cost', 'EstimatedDeliveryTime', 'DeliveryTime']
   required = entry.required + ['OrderID', 'Cost']
   
   def __init__(self, data):
@@ -376,7 +377,7 @@ class order(entry):
     br = buyer.query(self.buyer)
     num = br.num_orders()
     now = dt.datetime.now()
-    if self.get("green_light") == True and now > self.get("OrderTime") +  TIME_INTERVAL_5:
+    if product.query(self.product).get("green_light") == True and now > self.get("OrderTime") +  TIME_INTERVAL_5:
       return True
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])

@@ -628,7 +628,7 @@ def product_report(start, end, account = ""):
     else:
       buffer_.append("NA")
     buffer_.append(str(len(suitable_reviews(pd))))
-    buffer_.append(str(False))
+    buffer_.append(str(pd.get("green_light")))
     
     buffer.loc[buffer.shape[0]] = buffer_
   

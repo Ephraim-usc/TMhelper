@@ -639,8 +639,10 @@ def phone_report():
   files = ["./phones/" + x + "/buyers.p" for x in next(os.walk('./phones'))[1] ]
   
   for file in files:
+    print(file)
     buffer_ = [file.split('/')[2], 0, 0, 0, 0, 0, 0]
     for br in entryList.load(file).values:
+      print(br.symbol())
       if br.able_to_order():
         buffer_[br.num_orders() + 1] += 1
     buffer.loc[buffer.shape[0]] = buffer_

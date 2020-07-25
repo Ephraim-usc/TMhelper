@@ -137,6 +137,9 @@ class Menu(tk.Frame):
     self.parent.loginframe.place(x = 0, y = 30)
   
   def admin_event(self):
+    global ACCOUNT
+    if ACCOUNT != 'admin' and require_access(2, "You do not have access to this.") == 0:
+      return None
     
     self.parent.refresh()
     self.parent.adminframe.place(x = 0, y = 30)

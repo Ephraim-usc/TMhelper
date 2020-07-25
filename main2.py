@@ -337,9 +337,17 @@ class Report(Frame):
     if mode == 'Homepage - Product Summary':
       self.homepage_label['text'] = 'Homepage - Phone Summary'
       self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
+      self.display(self.start_text, '--')
+      self.display(self.end_text, '--')
+      self.display(self.account_text, '--')
     if mode == 'Homepage - Phone Summary':
       self.homepage_label['text'] = 'Homepage - Product Summary'
       self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
+      now = dt.datetime.now(); now = now.replace(microsecond = 0)
+      month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
+      self.display(self.start_text, str(month_ago))
+      self.display(self.end_text, str(now))
+      self.display(self.account_text, '')
     self.refresh()
 
 class Feed(Frame):

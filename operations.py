@@ -634,19 +634,22 @@ def product_report(start, end, account = ""):
 
 
 def phone_report():
+  backup = [gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename]
+  
   buffer = pandas.DataFrame(columns=['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04'])
+  phones = next(os.walk('./phones'))[1]
   
-  files = ["./phones/" + x + "/buyers.p" for x in next(os.walk('./phones'))[1] ]
-  
-  for file in files:
-    print(file)
-    buffer_ = [file.split('/')[2], 0, 0, 0, 0, 0, 0]
-    for br in entryList.load(file).values:
-      print(br.symbol())
-      if br.able_to_order():
-        buffer_[br.num_orders() + 1] += 1
+  for phone in phones:
+    op.gmail.filename = "./phones/" + phone + "/gmails.p"
+    op.address.filename = "./phones/" + phone + "/addresses.p"
+    op.bankcard.filename = "./phones/" + phone + "/bankcards.p"
+    op.buyer.filename = "./phones/" + phone + "/buyers.p"
+    op.order.filename = "./phones/" + phone + "/orders.p"
+    
+    buffer_ = [file.split('/')[2]] + [len(x) for x in orderable_buyers()]
     buffer.loc[buffer.shape[0]] = buffer_
   
+  gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename = backup
   return buffer
 
 

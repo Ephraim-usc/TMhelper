@@ -646,7 +646,7 @@ def phone_report():
     buyer.filename = "./phones/" + phone + "/buyers.p"
     order.filename = "./phones/" + phone + "/orders.p"
     
-    buffer_ = [file.split('/')[2]] + [len(x) for x in orderable_buyers()]
+    buffer_ = [phone] + [len(x) for x in orderable_buyers()]
     buffer.loc[buffer.shape[0]] = buffer_
   
   gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename = backup

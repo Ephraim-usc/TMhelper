@@ -132,12 +132,13 @@ class entryList():
 
 class account(entry):
   filename = "accounts.p"
-  attributes = entry.attributes + ['username', 'password', 'creation_time']
+  attributes = entry.attributes + ['username', 'password', 'creation_time', 'level']
   required = entry.required + ['username', 'password']
   
   def __init__(self, data):
     entry.__init__(self, data)
     self.set("creation_time", dt.datetime.now())
+    self.set("level", 1)
   
   def symbol(self):
     buffer = "<" + str(self.get("username")) + "|" + str(self.uid) + ">"

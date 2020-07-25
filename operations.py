@@ -417,6 +417,12 @@ def login(username, password):
     if act.get("username") == username and act.get("password") == password:
       return True
 
+def get_level(username):
+  all = account.all().values
+  for act in all:
+    if act.get("username") == username:
+      return act.get("level")
+
 def feed(datatype, string):
   el, remaining = entryList.from_string(datatype, string)
   for e in el.values:

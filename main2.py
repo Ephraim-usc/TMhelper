@@ -338,7 +338,7 @@ class Report(Frame):
       self.homepage_label['text'] = 'Homepage - Phone Summary'
       self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
     if mode == 'Homepage - Phone Summary':
-      self.gmail_label['text'] = 'Homepage - Product Summary'
+      self.homepage_label['text'] = 'Homepage - Product Summary'
       self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
     self.refresh()
 

@@ -880,7 +880,10 @@ class Order(Frame):
     self.display(self.state_text, op.address.query(br.address).get("State"))
     self.display(self.zip_text, op.address.query(br.address).get("Zip"))
     self.display(self.phone_text, op.address.query(br.address).get("PhoneNumber"))
-    self.display(self.bankcard_text, op.bankcard.query(br.bankcard).get("BankCard"))
+    if require_access(2, '') == 1:
+      self.display(self.bankcard_text, op.bankcard.query(br.bankcard).get("BankCard"))
+    else:
+      self.display(self.bankcard_text, "--")
     self.display(self.expiration_text, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
     
     self.products = op.orderable_products(br)

@@ -597,8 +597,6 @@ def product_report(start, end, account = ""):
                                      'backup_reviews', 'green_light'])
   
   for pd in pds:
-    files = ["./phones/" + x + "/orders.p" for x in next(os.walk('./phones'))[1] ]
-    
     num_ods = 0
     num_rvs = 0
     
@@ -634,8 +632,20 @@ def product_report(start, end, account = ""):
   
   return buffer
 
-    
 
+def phone_report():
+  buffer = pandas.DataFrame(columns=['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04'])
+  
+  files = ["./phones/" + x + "/buyers.p" for x in next(os.walk('./phones'))[1] ]
+  
+  for file in files:
+    buffer_ = [file.split('/')[2], 0, 0, 0, 0, 0, 0]
+    for br in entryList.load(file).values:
+      if br.able_to_order():
+        buffer_[br.num_orders() + 1] += 1
+    buffer.loc[buffer.shape[0]] = buffer_
+  
+  return buffer
 
 
 

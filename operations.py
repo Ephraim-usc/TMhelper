@@ -640,11 +640,11 @@ def phone_report():
   phones = next(os.walk('./phones'))[1]
   
   for phone in phones:
-    op.gmail.filename = "./phones/" + phone + "/gmails.p"
-    op.address.filename = "./phones/" + phone + "/addresses.p"
-    op.bankcard.filename = "./phones/" + phone + "/bankcards.p"
-    op.buyer.filename = "./phones/" + phone + "/buyers.p"
-    op.order.filename = "./phones/" + phone + "/orders.p"
+    gmail.filename = "./phones/" + phone + "/gmails.p"
+    address.filename = "./phones/" + phone + "/addresses.p"
+    bankcard.filename = "./phones/" + phone + "/bankcards.p"
+    buyer.filename = "./phones/" + phone + "/buyers.p"
+    order.filename = "./phones/" + phone + "/orders.p"
     
     buffer_ = [file.split('/')[2]] + [len(x) for x in orderable_buyers()]
     buffer.loc[buffer.shape[0]] = buffer_

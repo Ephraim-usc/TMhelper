@@ -243,7 +243,9 @@ class Report(Frame):
   def __init__(self, *args, **kwargs):
     Frame.__init__(self, *args, **kwargs)
     
-    tk.Label(self, text = "Homepage - Work Summary", bg = "grey", anchor = "w").place(x = 50, y = 30, width = 200, height = 20)
+    self.homepage_label = tk.Label(self, text = "Homepage - Product Summary", bg = "grey", anchor = "w")
+    self.homepage_label.place(x = 50, y = 30, width = 200, height = 20)
+    self.homepage_label.bind("<Button-1>", self.switch)
     
     self.start_text = tk.Text(self)
     self.start_text.place(x = 110, y = 60, width = 200, height = 20)
@@ -280,12 +282,16 @@ class Report(Frame):
     self.refresh()
   
   def refresh(self):
-    start = self.start_text.get("1.0", "end-1c")
-    end = self.end_text.get("1.0", "end-1c")
-    start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-    end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-    account = self.account_text.get("1.0", "end-1c")
-    self.data = op.product_report(start, end, account)
+    mode = self.homepage_label['text']
+    if mode == 'Homepage - Product Summary':
+      start = self.start_text.get("1.0", "end-1c")
+      end = self.end_text.get("1.0", "end-1c")
+      start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+      end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+      account = self.account_text.get("1.0", "end-1c")
+      self.data = op.product_report(start, end, account)
+    if mode == 'Homepage - Phone Summary':
+      self.data = op.phone_report()
     
     self.tree.place_forget()
     self.tree = ttk.Treeview(self, height = 15)
@@ -325,6 +331,17 @@ class Report(Frame):
   
   def export(self):
     self.data.to_csv("report.csv", sep = ",")
+  
+  def switch(self, event):
+    if self.gm == None: return None
+    mode = self.homepage_label['text']
+    if mode == 'Homepage - Product Summary':
+      self.homepage_label['text'] = 'Homepage - Phone Summary'
+      self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
+    if mode == 'Homepage - Phone Summary':
+      self.gmail_label['text'] = 'Homepage - Product Summary'
+      self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
+    self.refresh()
 
 class Feed(Frame):
   datatype = None

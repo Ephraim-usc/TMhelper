@@ -18,6 +18,14 @@ with open("operations.py", "w", encoding="utf-8") as f:
 
 ACCOUNT = "public"
 
+def require_access(level, message):
+  global ACCOUNT
+  level_ = op.get_level(ACCOUNT)
+  if level_ == None or level < 2:
+    messagebox.showinfo(title= "Error", message= message)
+    return 0
+  return 1
+
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)
@@ -129,15 +137,14 @@ class Menu(tk.Frame):
     self.parent.loginframe.place(x = 0, y = 30)
   
   def admin_event(self):
-    global ACCOUNT
-    if ACCOUNT != "admin":
-      messagebox.showinfo(title= "Error", message= "Accessible to admin only.")
-      return None
     
     self.parent.refresh()
     self.parent.adminframe.place(x = 0, y = 30)
   
   def buyer_event(self):
+    if require_access(2, "You do not have access to this.") == 0:
+      return None
+    
     self.parent.refresh()
     self.parent.buyerframe.place(x = 0, y = 30)
   
@@ -147,6 +154,9 @@ class Menu(tk.Frame):
     self.parent.preorderframe.place(x = 0, y = 30)
   
   def pre_review_event(self):
+    if require_access(2, "You do not have access to this.") == 0:
+      return None
+    
     self.parent.refresh()
     self.parent.prereviewframe.refresh()
     self.parent.prereviewframe.place(x = 0, y = 30)

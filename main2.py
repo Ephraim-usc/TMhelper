@@ -333,7 +333,6 @@ class Report(Frame):
     self.data.to_csv("report.csv", sep = ",")
   
   def switch(self, event):
-    if self.gm == None: return None
     mode = self.homepage_label['text']
     if mode == 'Homepage - Product Summary':
       self.homepage_label['text'] = 'Homepage - Phone Summary'

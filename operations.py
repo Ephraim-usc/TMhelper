@@ -599,11 +599,14 @@ def _orders_of_the_product(pd, account = ""):
 
 def product_report(start, end, account = ""):
   pds = product.all().values
-  buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks',
+  buffer = pandas.DataFrame(columns=['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'num_daily_reviews',
                                      'orders', 'reviews', 'reviews/orders', 'goal_reviews', 'reviews/goal_reviews',
                                      'backup_reviews', 'green_light'])
   
   for pd in pds:
+    if pd.get("alive") == False:
+      continue
+    
     num_ods = 0
     num_rvs = 0
     
@@ -619,6 +622,7 @@ def product_report(start, end, account = ""):
     buffer_.append(str(pd.get("ASIN")))
     buffer_.append(str(pd.get("Store")))
     buffer_.append(str(pd.get("num_tasks")))
+    buffer_.append(str(pd.get("num_daily_reviews")))
     buffer_.append(str(num_ods))
     buffer_.append(str(num_rvs))
     if num_ods != 0:

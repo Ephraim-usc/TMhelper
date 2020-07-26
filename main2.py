@@ -70,14 +70,9 @@ class Frame(tk.Frame):
   
   def clear(self):
     children = self.winfo_children()
-    children_text = [w for w in children if type(w) == tk.Text]
+    children_text = [w for w in children if type(w) in [tk.Text, tk.Entry]]
     for w in children_text:
-      if w['state'] == 'normal':
-        w.delete("1.0", "end")
-      if w['state'] == 'disabled':
-        w.configure(state = 'normal')
-        w.delete("1.0", "end")
-        w.configure(state = 'disabled')
+      self.display(w, "")
   
   def display(self, widget, string):
     backup = widget['state']
@@ -299,11 +294,9 @@ class Report(Frame):
   def refresh(self):
     mode = self.homepage_label['text']
     if mode == 'Homepage - Product Summary':
-      start = self.start_text.get("1.0", "end-1c")
-      end = self.end_text.get("1.0", "end-1c")
-      start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-      end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-      account = self.account_text.get("1.0", "end-1c")
+      start = self.start_entry.get(); start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+      end = self.end_entry.get(); end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+      account = self.account_entry.get()
       self.data = op.product_report(start, end, account)
     if mode == 'Homepage - Phone Summary':
       self.data = op.phone_report()

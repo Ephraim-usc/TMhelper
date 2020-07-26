@@ -80,14 +80,24 @@ class Frame(tk.Frame):
         w.configure(state = 'disabled')
   
   def display(self, widget, string):
-    if widget['state'] == 'normal':
-      widget.delete("1.0", "end")
-      widget.insert("1.0", str(string))
-    if widget['state'] == 'disabled':
-      widget.configure(state = "normal")
-      widget.delete("1.0", "end")
-      widget.insert("1.0", str(string))
-      widget.configure(state = "disabled")
+    if isinstance(widget, Tkinter.Entry):
+      if widget['state'] == 'normal':
+        widget.delete(0, "end")
+        widget.insert(0, str(string))
+      if widget['state'] == 'disabled':
+        widget.configure(state = "normal")
+        widget.delete(0, "end")
+        widget.insert(0, str(string))
+        widget.configure(state = "disabled")
+    if isinstance(widget, Tkinter.Text):
+      if widget['state'] == 'normal':
+        widget.delete("1.0", "end")
+        widget.insert("1.0", str(string))
+      if widget['state'] == 'disabled':
+        widget.configure(state = "normal")
+        widget.delete("1.0", "end")
+        widget.insert("1.0", str(string))
+        widget.configure(state = "disabled")
   
   def quit(self):
     self.place_forget()
@@ -261,14 +271,14 @@ class Report(Frame):
     self.homepage_label.place(x = 50, y = 30, width = 200, height = 20)
     self.homepage_label.bind("<Button-1>", self.switch)
     
-    self.start_text = tk.Text(self)
-    self.start_text.place(x = 110, y = 60, width = 200, height = 20)
+    self.start_entry = tk.Entry(self)
+    self.start_entry.place(x = 110, y = 60, width = 200, height = 20)
     
-    self.end_text = tk.Text(self)
-    self.end_text.place(x = 410, y = 60, width = 200, height = 20)
+    self.end_entry = tk.Entry(self)
+    self.end_entry.place(x = 410, y = 60, width = 200, height = 20)
     
-    self.account_text = tk.Text(self)
-    self.account_text.place(x = 710, y = 60, width = 130, height = 20)
+    self.account_entry = tk.Entry(self)
+    self.account_entry.place(x = 710, y = 60, width = 130, height = 20)
     
     tk.Label(self, text = "From", bg = "grey", anchor = "w").place(x = 50, y = 60, width = 50, height = 20)
     tk.Label(self, text = "To", bg = "grey", anchor = "w").place(x = 350, y = 60, width = 50, height = 20)
@@ -291,8 +301,8 @@ class Report(Frame):
     now = now.replace(microsecond = 0)
     month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
     self.clear()
-    self.display(self.start_text, str(month_ago))
-    self.display(self.end_text, str(now))
+    self.display(self.start_entry, str(month_ago))
+    self.display(self.end_entry, str(now))
     self.refresh()
   
   def refresh(self):
@@ -351,17 +361,17 @@ class Report(Frame):
     if mode == 'Homepage - Product Summary':
       self.homepage_label['text'] = 'Homepage - Phone Summary'
       self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
-      self.display(self.start_text, '--')
-      self.display(self.end_text, '--')
-      self.display(self.account_text, '--')
+      self.display(self.start_entry, '--')
+      self.display(self.end_entry, '--')
+      self.display(self.account_entry, '--')
     if mode == 'Homepage - Phone Summary':
       self.homepage_label['text'] = 'Homepage - Product Summary'
       self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
       now = dt.datetime.now(); now = now.replace(microsecond = 0)
       month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
-      self.display(self.start_text, str(month_ago))
-      self.display(self.end_text, str(now))
-      self.display(self.account_text, '')
+      self.display(self.start_entry, str(month_ago))
+      self.display(self.end_entry, str(now))
+      self.display(self.account_entry, '')
     self.refresh()
 
 class Feed(Frame):

@@ -80,24 +80,15 @@ class Frame(tk.Frame):
         w.configure(state = 'disabled')
   
   def display(self, widget, string):
+    backup = widget['state']
+    widget['state'] = 'normal'
     if isinstance(widget, tk.Entry):
-      if widget['state'] == 'normal':
-        widget.delete(0, "end")
-        widget.insert(0, str(string))
-      if widget['state'] == 'disabled':
-        widget.configure(state = "normal")
-        widget.delete(0, "end")
-        widget.insert(0, str(string))
-        widget.configure(state = "disabled")
+      widget.delete(0, "end")
+      widget.insert(0, str(string))
     if isinstance(widget, tk.Text):
-      if widget['state'] == 'normal':
-        widget.delete("1.0", "end")
-        widget.insert("1.0", str(string))
-      if widget['state'] == 'disabled':
-        widget.configure(state = "normal")
-        widget.delete("1.0", "end")
-        widget.insert("1.0", str(string))
-        widget.configure(state = "disabled")
+      widget.delete("1.0", "end")
+      widget.insert("1.0", str(string))
+    widget['state'] = backup
   
   def quit(self):
     self.place_forget()

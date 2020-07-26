@@ -397,8 +397,8 @@ class Admin(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.search_text = tk.Text(self)
-    self.search_text.place(x = 50, y = 50, width = 500, height = 25)
+    self.search_entry = tk.Entry(self)
+    self.search_entry.place(x = 50, y = 50, width = 500, height = 25)
     
     self.search_combobox = ttk.Combobox(self)
     self.search_combobox.place(x = 560, y = 50, width = 100, height = 25)
@@ -418,7 +418,7 @@ class Admin(Frame):
     self.quit_button.place(x = 850, y = 330, height = 30, width = 95)
   
   def search(self):
-    string_ = self.search_text.get("1.0","end-1c")
+    string_ = self.search_entry.get()
     datatype = {"Gmails":op.gmail, "Addresses":op.address, "BankCards":op.bankcard, "Reviews":op.review, 
                 "Buyers":op.buyer, "Products":op.product, "Orders":op.order, "Accounts":op.account}[self.search_combobox.get()]
     self.results = op.search(datatype, string_)
@@ -466,45 +466,45 @@ class Buyer(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.gmail_text = tk.Text(self, state = "disabled"); 
-    self.gmail_text.place(x = 150, y = 50, width = 250, height = 20)
-    self.gmail_text.bind("<Button-1>", self.copy)
+    self.gmail_entry = tk.Entry(self, state = "disabled"); 
+    self.gmail_entry.place(x = 150, y = 50, width = 250, height = 20)
+    self.gmail_entry.bind("<Button-1>", self.copy)
     
-    self.gmail_password_text = tk.Text(self); 
-    self.gmail_password_text.place(x = 150, y = 90, width = 250, height = 20)
-    self.gmail_password_text.bind("<Button-1>", self.copy)
+    self.gmail_password_entry = tk.Entry(self); 
+    self.gmail_password_entry.place(x = 150, y = 90, width = 250, height = 20)
+    self.gmail_password_entry.bind("<Button-1>", self.copy)
     
-    self.name_text = tk.Text(self); 
-    self.name_text.place(x = 150, y = 130, width = 250, height = 20)
-    self.name_text.bind("<Button-1>", self.copy)
+    self.name_entry = tk.Entry(self); 
+    self.name_entry.place(x = 150, y = 130, width = 250, height = 20)
+    self.name_entry.bind("<Button-1>", self.copy)
     
-    self.address_text = tk.Text(self, state = "disabled"); 
-    self.address_text.place(x = 150, y = 170, width = 250, height = 20)
-    self.address_text.bind("<Button-1>", self.copy)
+    self.address_entry = tk.Entry(self, state = "disabled"); 
+    self.address_entry.place(x = 150, y = 170, width = 250, height = 20)
+    self.address_entry.bind("<Button-1>", self.copy)
     
-    self.city_text = tk.Text(self, state = "disabled"); 
-    self.city_text.place(x = 150, y = 210, width = 100, height = 20)
-    self.city_text.bind("<Button-1>", self.copy)
+    self.city_entry = tk.Entry(self, state = "disabled"); 
+    self.city_entry.place(x = 150, y = 210, width = 100, height = 20)
+    self.city_entry.bind("<Button-1>", self.copy)
     
-    self.state_text = tk.Text(self, state = "disabled"); 
-    self.state_text.place(x = 300, y = 210, width = 100, height = 20)
-    self.state_text.bind("<Button-1>", self.copy)
+    self.state_entry = tk.Entry(self, state = "disabled"); 
+    self.state_entry.place(x = 300, y = 210, width = 100, height = 20)
+    self.state_entry.bind("<Button-1>", self.copy)
     
-    self.zip_text = tk.Text(self, state = "disabled"); 
-    self.zip_text.place(x = 150, y = 250, width = 100, height = 20)
-    self.zip_text.bind("<Button-1>", self.copy)
+    self.zip_entry = tk.Entry(self, state = "disabled"); 
+    self.zip_entry.place(x = 150, y = 250, width = 100, height = 20)
+    self.zip_entry.bind("<Button-1>", self.copy)
     
-    self.phone_text = tk.Text(self, state = "disabled"); 
-    self.phone_text.place(x = 300, y = 250, width = 100, height = 20)
-    self.phone_text.bind("<Button-1>", self.copy)
+    self.phone_entry = tk.Entry(self, state = "disabled"); 
+    self.phone_entry.place(x = 300, y = 250, width = 100, height = 20)
+    self.phone_entry.bind("<Button-1>", self.copy)
     
-    self.bankcard_text = tk.Text(self, state = "disabled"); 
-    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
-    self.bankcard_text.bind("<Button-1>", self.copy)
+    self.bankcard_entry = tk.Entry(self, state = "disabled"); 
+    self.bankcard_entry.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_entry.bind("<Button-1>", self.copy)
     
-    self.expiration_text = tk.Text(self, state = "disabled"); 
-    self.expiration_text.place(x = 150, y = 330, width = 250, height = 20)
-    self.expiration_text.bind("<Button-1>", self.copy)
+    self.expiration_entry = tk.Entry(self, state = "disabled"); 
+    self.expiration_entry.place(x = 150, y = 330, width = 250, height = 20)
+    self.expiration_entry.bind("<Button-1>", self.copy)
     
     self.gmail_label = tk.Label(self, text = "Gmail", bg = "grey")
     self.gmail_label.place(x = 50, y = 50, width = 100, height = 20)
@@ -520,13 +520,13 @@ class Buyer(Frame):
     tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 330, width = 100, height = 20)
     
-    self.password_text = tk.Text(self, state = "disabled"); 
-    self.password_text.place(x = 540, y = 170, width = 200, height = 20)
-    self.password_text.bind("<Button-1>", self.copy)
+    self.password_entry = tk.Entry(self, state = "disabled"); 
+    self.password_entry.place(x = 540, y = 170, width = 200, height = 20)
+    self.password_entry.bind("<Button-1>", self.copy)
     
-    self.uid_text = tk.Text(self, state = "disabled"); 
-    self.uid_text.place(x = 540, y = 210, width = 200, height = 20)
-    self.uid_text.bind("<Button-1>", self.copy)
+    self.uid_entry = tk.Entry(self, state = "disabled"); 
+    self.uid_entry.place(x = 540, y = 210, width = 200, height = 20)
+    self.uid_entry.bind("<Button-1>", self.copy)
     
     tk.Label(self, text = "Password", bg = "grey").place(x = 440, y = 170, width = 100, height = 20)
     tk.Label(self, text = "UID", bg = "grey").place(x = 440, y = 210, width = 100, height = 20)
@@ -563,29 +563,29 @@ class Buyer(Frame):
       messagebox.showinfo(title= "Error", message= "No available bankcard.")
       return None
     
-    self.display(self.gmail_text, self.gm.get("Gmail"))
-    self.display(self.gmail_password_text, self.gm.get("Password"))
-    self.display(self.name_text, self.ad.get("RecipientName"))
-    self.display(self.address_text, self.ad.get("Address1"))
-    self.display(self.city_text, self.ad.get("City"))
-    self.display(self.state_text, self.ad.get("State"))
-    self.display(self.zip_text, self.ad.get("Zip"))
-    self.display(self.phone_text, self.ad.get("PhoneNumber"))
-    self.display(self.bankcard_text, self.bc.get("BankCard"))
-    self.display(self.expiration_text, self.bc.get("BankCardExpirationDate"))
+    self.display(self.gmail_entry, self.gm.get("Gmail"))
+    self.display(self.gmail_password_entry, self.gm.get("Password"))
+    self.display(self.name_entry, self.ad.get("RecipientName"))
+    self.display(self.address_entry, self.ad.get("Address1"))
+    self.display(self.city_entry, self.ad.get("City"))
+    self.display(self.state_entry, self.ad.get("State"))
+    self.display(self.zip_entry, self.ad.get("Zip"))
+    self.display(self.phone_entry, self.ad.get("PhoneNumber"))
+    self.display(self.bankcard_entry, self.bc.get("BankCard"))
+    self.display(self.expiration_entry, self.bc.get("BankCardExpirationDate"))
     
     pwd = self.br.get("AmazonPassword")
-    self.display(self.password_text, pwd)
+    self.display(self.password_entry, pwd)
     self.display(self.uid_text, "B" + str(self.br.uid))
   
   def submit(self):
     if self.br == None: return None
     
-    new_password = self.gmail_password_text.get("1.0", "end-1c")
+    new_password = self.gmail_password_entry.get()
     if self.gmail_label['text'] == "Gmail":
       op.commit(self.gm, "Password\t" + new_password)
     
-    new_name = self.name_text.get("1.0", "end-1c")
+    new_name = self.name_entry.get("1.0", "end-1c")
     op.commit(self.ad, "RecipientName\t" + new_name)
     
     global ACCOUNT
@@ -637,13 +637,13 @@ class Buyer(Frame):
     if mode == 'Gmail':
       self.gmail_label['text'] = 'Support Gmail'
       self.gmail_password_label['text'] = 'Support Password'
-      self.display(self.gmail_text, self.gm.get("SupportGmail"))
-      self.display(self.gmail_password_text, self.gm.get("SupportGmailPassword"))
+      self.display(self.gmail_entry, self.gm.get("SupportGmail"))
+      self.display(self.gmail_password_entry, self.gm.get("SupportGmailPassword"))
     if mode == 'Support Gmail':
       self.gmail_label['text'] = 'Gmail'
       self.gmail_password_label['text'] = 'Gmail Password'
-      self.display(self.gmail_text, self.gm.get("Gmail"))
-      self.display(self.gmail_password_text, self.gm.get("GmailPassword"))
+      self.display(self.gmail_entry, self.gm.get("Gmail"))
+      self.display(self.gmail_password_entry, self.gm.get("GmailPassword"))
 
 class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):

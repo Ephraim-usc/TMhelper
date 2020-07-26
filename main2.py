@@ -199,11 +199,11 @@ class Login(Frame):
     self.image_label = tk.Label(self, image = self.img);
     self.image_label.place(x = 100, y = 120, width = 300, height = 200)
     
-    self.username_text = tk.Text(self); 
-    self.username_text.place(x = 550, y = 150, width = 300, height = 20)
+    self.username_entry = tk.Entry(self); 
+    self.username_entry.place(x = 550, y = 150, width = 300, height = 20)
     
-    self.password_text = tk.Text(self); 
-    self.password_text.place(x = 550, y = 200, width = 300, height = 20)
+    self.password_entry = tk.Entry(self); 
+    self.password_entry.place(x = 550, y = 200, width = 300, height = 20)
     
     tk.Label(self, text = "Username", bg = "grey").place(x = 460, y = 150, width = 70, height = 20)
     tk.Label(self, text = "Password", bg = "grey").place(x = 460, y = 200, width = 70, height = 20)
@@ -215,8 +215,8 @@ class Login(Frame):
     self.register_button.place(x = 750, y = 300, width = 100, height = 20)
   
   def login(self):
-    username = self.username_text.get("1.0", "end-1c")
-    password = self.password_text.get("1.0", "end-1c")
+    username = self.username_entry.get()
+    password = self.password_entry.get()
     
     if username == "":
       messagebox.showinfo(title= "Error", message= "Username cannot be empty.")
@@ -234,8 +234,8 @@ class Login(Frame):
     self.parent.refresh()
   
   def register(self):
-    username = self.username_text.get("1.0", "end-1c")
-    password = self.password_text.get("1.0", "end-1c")
+    username = self.username_entry.get()
+    password = self.password_entry.get()
     
     if username == "":
       messagebox.showinfo(title= "Error", message= "Username cannot be empty.")

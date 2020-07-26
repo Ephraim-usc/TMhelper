@@ -80,7 +80,7 @@ class Frame(tk.Frame):
         w.configure(state = 'disabled')
   
   def display(self, widget, string):
-    if isinstance(widget, Tkinter.Entry):
+    if isinstance(widget, tk.Entry):
       if widget['state'] == 'normal':
         widget.delete(0, "end")
         widget.insert(0, str(string))
@@ -89,7 +89,7 @@ class Frame(tk.Frame):
         widget.delete(0, "end")
         widget.insert(0, str(string))
         widget.configure(state = "disabled")
-    if isinstance(widget, Tkinter.Text):
+    if isinstance(widget, tk.Text):
       if widget['state'] == 'normal':
         widget.delete("1.0", "end")
         widget.insert("1.0", str(string))

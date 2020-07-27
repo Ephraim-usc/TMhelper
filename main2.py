@@ -351,6 +351,9 @@ class Report(Frame):
       self.display(self.start_entry, '--')
       self.display(self.end_entry, '--')
       self.display(self.account_entry, '--')
+      self.start_entry.configure(state = "disabled")
+      self.end_entry.configure(state = "disabled")
+      self.account_entry.configure(state = "disabled")
     if mode == 'Homepage - Phone Summary':
       self.homepage_label['text'] = 'Homepage - Product Summary'
       self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
@@ -359,6 +362,9 @@ class Report(Frame):
       self.display(self.start_entry, str(month_ago))
       self.display(self.end_entry, str(now))
       self.display(self.account_entry, '')
+      self.start_entry.configure(state = "normal")
+      self.end_entry.configure(state = "normal")
+      self.account_entry.configure(state = "normal")
     self.refresh()
 
 class Feed(Frame):
@@ -647,7 +653,7 @@ class Buyer(Frame):
       self.gmail_label['text'] = 'Gmail'
       self.gmail_password_label['text'] = 'Gmail Password'
       self.display(self.gmail_entry, self.gm.get("Gmail"))
-      self.display(self.gmail_password_entry, self.gm.get("GmailPassword"))
+      self.display(self.gmail_password_entry, self.gm.get("Password"))
       self.gmail_password_entry.configure(state = "normal")
 
 class PreOrder(Frame):
@@ -746,51 +752,51 @@ class Order(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.uid_entry = tk.Entry(self); 
+    self.uid_entry = tk.Entry(self, state = "disabled"); 
     self.uid_entry.place(x = 150, y = 50, width = 250, height = 20)
     self.uid_entry.bind("<Button-1>", self.copy)
     
-    self.password_entry = tk.Entry(self); 
+    self.password_entry = tk.Entry(self, state = "disabled"); 
     self.password_entry.place(x = 150, y = 80, width = 250, height = 20)
     self.password_entry.bind("<Button-1>", self.copy)
     
-    self.gmail_entry = tk.Entry(self); 
+    self.gmail_entry = tk.Entry(self, state = "disabled"); 
     self.gmail_entry.place(x = 150, y = 110, width = 250, height = 20)
     self.gmail_entry.bind("<Button-1>", self.copy)
     
-    self.gmail_password_entry = tk.Entry(self); 
+    self.gmail_password_entry = tk.Entry(self, state = "disabled"); 
     self.gmail_password_entry.place(x = 150, y = 140, width = 250, height = 20)
     self.gmail_password_entry.bind("<Button-1>", self.copy)
     
-    self.name_entry = tk.Entry(self); 
+    self.name_entry = tk.Entry(self, state = "disabled"); 
     self.name_entry.place(x = 150, y = 170, width = 250, height = 20)
     self.name_entry.bind("<Button-1>", self.copy)
     
-    self.address_entry = tk.Entry(self); 
+    self.address_entry = tk.Entry(self, state = "disabled"); 
     self.address_entry.place(x = 150, y = 200, width = 250, height = 20)
     self.address_entry.bind("<Button-1>", self.copy)
     
-    self.city_entry = tk.Entry(self); 
+    self.city_entry = tk.Entry(self, state = "disabled"); 
     self.city_entry.place(x = 150, y = 230, width = 100, height = 20)
     self.city_entry.bind("<Button-1>", self.copy)
     
-    self.state_entry = tk.Entry(self); 
+    self.state_entry = tk.Entry(self, state = "disabled"); 
     self.state_entry.place(x = 300, y = 230, width = 100, height = 20)
     self.state_entry.bind("<Button-1>", self.copy)
     
-    self.zip_entry = tk.Entry(self); 
+    self.zip_entry = tk.Entry(self, state = "disabled"); 
     self.zip_entry.place(x = 150, y = 260, width = 100, height = 20)
     self.zip_entry.bind("<Button-1>", self.copy)
     
-    self.phone_entry = tk.Entry(self); 
+    self.phone_entry = tk.Entry(self, state = "disabled"); 
     self.phone_entry.place(x = 300, y = 260, width = 100, height = 20)
     self.phone_entry.bind("<Button-1>", self.copy)
     
-    self.bankcard_entry = tk.Entry(self); 
+    self.bankcard_entry = tk.Entry(self, state = "disabled"); 
     self.bankcard_entry.place(x = 150, y = 290, width = 250, height = 20)
     self.bankcard_entry.bind("<Button-1>", self.copy)
     
-    self.expiration_entry = tk.Entry(self); 
+    self.expiration_entry = tk.Entry(self, state = "disabled"); 
     self.expiration_entry.place(x = 150, y = 320, width = 250, height = 20)
     self.expiration_entry.bind("<Button-1>", self.copy)
     
@@ -811,19 +817,19 @@ class Order(Frame):
     tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 320, width = 100, height = 20)
     
-    self.keyword_entry = tk.Entry(self); 
+    self.keyword_entry = tk.Entry(self, state = "disabled"); 
     self.keyword_entry.place(x = 530, y = 230, width = 180, height = 20)
     self.keyword_entry.bind("<Button-1>", self.copy)
     
-    self.store_entry = tk.Entry(self); 
+    self.store_entry = tk.Entry(self, state = "disabled"); 
     self.store_entry.place(x = 530, y = 260, width = 180, height = 20)
     self.store_entry.bind("<Button-1>", self.copy)
     
-    self.product_name_entry = tk.Entry(self); 
+    self.product_name_entry = tk.Entry(self, state = "disabled"); 
     self.product_name_entry.place(x = 530, y = 290, width = 180, height = 20)
     self.product_name_entry.bind("<Button-1>", self.copy)
     
-    self.asin_entry = tk.Entry(self); 
+    self.asin_entry = tk.Entry(self, state = "disabled"); 
     self.asin_entry.place(x = 530, y = 320, width = 180, height = 20)
     self.asin_entry.bind("<Button-1>", self.copy)
     
@@ -841,11 +847,11 @@ class Order(Frame):
     self.product_combobox.place(x = 430, y = 50, width = 280)
     self.tmp.trace("w", self.show_product)
     
-    self.ordernumber_entry = tk.Entry(self); 
+    self.ordernumber_entry = tk.Entry(self, state = "disabled"); 
     self.ordernumber_entry.place(x = 50, y = 370, width = 300)
     self.ordernumber_entry.bind("<Button-1>", self.input)
     
-    self.cost_entry = tk.Entry(self); 
+    self.cost_entry = tk.Entry(self, state = "disabled"); 
     self.cost_entry.place(x = 360, y = 370, width = 100)
     self.cost_entry.bind("<Button-1>", self.input)
     

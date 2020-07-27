@@ -641,7 +641,7 @@ class Buyer(Frame):
     if self.gmail_label['text'] == "Gmail":
       op.commit(self.gm, "Password\t" + new_password)
     
-    new_name = self.name_entry.get("1.0", "end-1c")
+    new_name = self.name_entry.get()
     op.commit(self.ad, "RecipientName\t" + new_name)
     
     global ACCOUNT

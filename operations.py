@@ -664,7 +664,7 @@ def phone_report():
   return buffer
 
 
-def phone_report():
+def buyer_report():
   backup = [gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename]
   
   buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword',

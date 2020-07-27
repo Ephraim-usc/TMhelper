@@ -325,7 +325,7 @@ class Report(Frame):
     self.tree.place(x = 50, y = 100)
     
     treeScroll = ttk.Scrollbar(self, orient="vertical", command = self.tree.yview)
-    treeScroll.place(x = 952, y = 101, height = 323)
+    treeScroll.place(x = 952, y = 101, height = 324)
     self.tree.configure(yscrollcommand = treeScroll.set)
     
     self.tree["columns"] = self.columns

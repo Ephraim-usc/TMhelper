@@ -642,11 +642,13 @@ class Buyer(Frame):
       self.gmail_password_label['text'] = 'Support Password'
       self.display(self.gmail_entry, self.gm.get("SupportGmail"))
       self.display(self.gmail_password_entry, self.gm.get("SupportGmailPassword"))
+      self.gmail_password_entry.configure(state = "disabled")
     if mode == 'Support Gmail':
       self.gmail_label['text'] = 'Gmail'
       self.gmail_password_label['text'] = 'Gmail Password'
       self.display(self.gmail_entry, self.gm.get("Gmail"))
       self.display(self.gmail_password_entry, self.gm.get("GmailPassword"))
+      self.gmail_password_entry.configure(state = "normal")
 
 class PreOrder(Frame):
   def __init__(self, parent, *args, **kwargs):
@@ -727,6 +729,9 @@ class PreOrder(Frame):
     buyers += list(np.random.choice(self.o6, self.scale6.get(), replace = False))
     
     if buyers == []: return None
+    if require_access(2, "You don't have access to place Other orders.") == 0:
+      return None
+    
     self.parent.refresh()
     self.parent.orderframe.place(x = 0, y = 30)
     self.parent.orderframe.buyers = buyers
@@ -741,53 +746,53 @@ class Order(Frame):
   def __init__(self, parent, *args, **kwargs):
     Frame.__init__(self, parent, *args, **kwargs)
     
-    self.uid_text = tk.Text(self); 
-    self.uid_text.place(x = 150, y = 50, width = 250, height = 20)
-    self.uid_text.bind("<Button-1>", self.copy)
+    self.uid_entry = tk.Entry(self); 
+    self.uid_entry.place(x = 150, y = 50, width = 250, height = 20)
+    self.uid_entry.bind("<Button-1>", self.copy)
     
-    self.password_text = tk.Text(self); 
-    self.password_text.place(x = 150, y = 80, width = 250, height = 20)
-    self.password_text.bind("<Button-1>", self.copy)
+    self.password_entry = tk.Entry(self); 
+    self.password_entry.place(x = 150, y = 80, width = 250, height = 20)
+    self.password_entry.bind("<Button-1>", self.copy)
     
-    self.gmail_text = tk.Text(self); 
-    self.gmail_text.place(x = 150, y = 110, width = 250, height = 20)
-    self.gmail_text.bind("<Button-1>", self.copy)
+    self.gmail_entry = tk.Entry(self); 
+    self.gmail_entry.place(x = 150, y = 110, width = 250, height = 20)
+    self.gmail_entry.bind("<Button-1>", self.copy)
     
-    self.gmail_password_text = tk.Text(self); 
-    self.gmail_password_text.place(x = 150, y = 140, width = 250, height = 20)
-    self.gmail_password_text.bind("<Button-1>", self.copy)
+    self.gmail_password_entry = tk.Entry(self); 
+    self.gmail_password_entry.place(x = 150, y = 140, width = 250, height = 20)
+    self.gmail_password_entry.bind("<Button-1>", self.copy)
     
-    self.name_text = tk.Text(self); 
-    self.name_text.place(x = 150, y = 170, width = 250, height = 20)
-    self.name_text.bind("<Button-1>", self.copy)
+    self.name_entry = tk.Entry(self); 
+    self.name_entry.place(x = 150, y = 170, width = 250, height = 20)
+    self.name_entry.bind("<Button-1>", self.copy)
     
-    self.address_text = tk.Text(self); 
-    self.address_text.place(x = 150, y = 200, width = 250, height = 20)
-    self.address_text.bind("<Button-1>", self.copy)
+    self.address_entry = tk.Entry(self); 
+    self.address_entry.place(x = 150, y = 200, width = 250, height = 20)
+    self.address_entry.bind("<Button-1>", self.copy)
     
-    self.city_text = tk.Text(self); 
-    self.city_text.place(x = 150, y = 230, width = 100, height = 20)
-    self.city_text.bind("<Button-1>", self.copy)
+    self.city_entry = tk.Entry(self); 
+    self.city_entry.place(x = 150, y = 230, width = 100, height = 20)
+    self.city_entry.bind("<Button-1>", self.copy)
     
-    self.state_text = tk.Text(self); 
-    self.state_text.place(x = 300, y = 230, width = 100, height = 20)
-    self.state_text.bind("<Button-1>", self.copy)
+    self.state_entry = tk.Entry(self); 
+    self.state_entry.place(x = 300, y = 230, width = 100, height = 20)
+    self.state_entry.bind("<Button-1>", self.copy)
     
-    self.zip_text = tk.Text(self); 
-    self.zip_text.place(x = 150, y = 260, width = 100, height = 20)
-    self.zip_text.bind("<Button-1>", self.copy)
+    self.zip_entry = tk.Entry(self); 
+    self.zip_entry.place(x = 150, y = 260, width = 100, height = 20)
+    self.zip_entry.bind("<Button-1>", self.copy)
     
-    self.phone_text = tk.Text(self); 
-    self.phone_text.place(x = 300, y = 260, width = 100, height = 20)
-    self.phone_text.bind("<Button-1>", self.copy)
+    self.phone_entry = tk.Entry(self); 
+    self.phone_entry.place(x = 300, y = 260, width = 100, height = 20)
+    self.phone_entry.bind("<Button-1>", self.copy)
     
-    self.bankcard_text = tk.Text(self); 
-    self.bankcard_text.place(x = 150, y = 290, width = 250, height = 20)
-    self.bankcard_text.bind("<Button-1>", self.copy)
+    self.bankcard_entry = tk.Entry(self); 
+    self.bankcard_entry.place(x = 150, y = 290, width = 250, height = 20)
+    self.bankcard_entry.bind("<Button-1>", self.copy)
     
-    self.expiration_text = tk.Text(self); 
-    self.expiration_text.place(x = 150, y = 320, width = 250, height = 20)
-    self.expiration_text.bind("<Button-1>", self.copy)
+    self.expiration_entry = tk.Entry(self); 
+    self.expiration_entry.place(x = 150, y = 320, width = 250, height = 20)
+    self.expiration_entry.bind("<Button-1>", self.copy)
     
     tk.Label(self, text = "UID", bg = "grey").place(x = 50, y = 50, width = 100, height = 20)
     tk.Label(self, text = "Password", bg = "grey").place(x = 50, y = 80, width = 100, height = 20)
@@ -806,21 +811,21 @@ class Order(Frame):
     tk.Label(self, text = "Bank Card", bg = "grey").place(x = 50, y = 290, width = 100, height = 20)
     tk.Label(self, text = "Expiration", bg = "grey").place(x = 50, y = 320, width = 100, height = 20)
     
-    self.keyword_text = tk.Text(self); 
-    self.keyword_text.place(x = 530, y = 230, width = 180, height = 20)
-    self.keyword_text.bind("<Button-1>", self.copy)
+    self.keyword_entry = tk.Entry(self); 
+    self.keyword_entry.place(x = 530, y = 230, width = 180, height = 20)
+    self.keyword_entry.bind("<Button-1>", self.copy)
     
-    self.store_text = tk.Text(self); 
-    self.store_text.place(x = 530, y = 260, width = 180, height = 20)
-    self.store_text.bind("<Button-1>", self.copy)
+    self.store_entry = tk.Entry(self); 
+    self.store_entry.place(x = 530, y = 260, width = 180, height = 20)
+    self.store_entry.bind("<Button-1>", self.copy)
     
-    self.product_name_text = tk.Text(self); 
-    self.product_name_text.place(x = 530, y = 290, width = 180, height = 20)
-    self.product_name_text.bind("<Button-1>", self.copy)
+    self.product_name_entry = tk.Entry(self); 
+    self.product_name_entry.place(x = 530, y = 290, width = 180, height = 20)
+    self.product_name_entry.bind("<Button-1>", self.copy)
     
-    self.asin_text = tk.Text(self); 
-    self.asin_text.place(x = 530, y = 320, width = 180, height = 20)
-    self.asin_text.bind("<Button-1>", self.copy)
+    self.asin_entry = tk.Entry(self); 
+    self.asin_entry.place(x = 530, y = 320, width = 180, height = 20)
+    self.asin_entry.bind("<Button-1>", self.copy)
     
     tk.Label(self, text = "Key Word", bg = "grey").place(x = 430, y = 230, width = 100, height = 20)
     tk.Label(self, text = "Store", bg = "grey").place(x = 430, y = 260, width = 100, height = 20)
@@ -867,21 +872,21 @@ class Order(Frame):
   def show_buyer(self):
     br = self.buyers[self.progressbar['value']]
     
-    self.display(self.uid_text, "B" + str(br.uid))
-    self.display(self.password_text, br.get("AmazonPassword"))
-    self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
-    self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("Password"))
-    self.display(self.name_text, op.address.query(br.address).get("RecipientName"))
-    self.display(self.address_text, op.address.query(br.address).get("Address1"))
-    self.display(self.city_text, op.address.query(br.address).get("City"))
-    self.display(self.state_text, op.address.query(br.address).get("State"))
-    self.display(self.zip_text, op.address.query(br.address).get("Zip"))
-    self.display(self.phone_text, op.address.query(br.address).get("PhoneNumber"))
+    self.display(self.uid_entry, "B" + str(br.uid))
+    self.display(self.password_entry, br.get("AmazonPassword"))
+    self.display(self.gmail_entry, op.gmail.query(br.gmail).get("Gmail"))
+    self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("Password"))
+    self.display(self.name_entry, op.address.query(br.address).get("RecipientName"))
+    self.display(self.address_entry, op.address.query(br.address).get("Address1"))
+    self.display(self.city_entry, op.address.query(br.address).get("City"))
+    self.display(self.state_entry, op.address.query(br.address).get("State"))
+    self.display(self.zip_entry, op.address.query(br.address).get("Zip"))
+    self.display(self.phone_entry, op.address.query(br.address).get("PhoneNumber"))
     if require_access(2, '') == 1:
-      self.display(self.bankcard_text, op.bankcard.query(br.bankcard).get("BankCard"))
+      self.display(self.bankcard_entry, op.bankcard.query(br.bankcard).get("BankCard"))
     else:
-      self.display(self.bankcard_text, "--")
-    self.display(self.expiration_text, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
+      self.display(self.bankcard_entry, "--")
+    self.display(self.expiration_entry, op.bankcard.query(br.bankcard).get("BankCardExpirationDate"))
     
     self.products = op.orderable_products(br)
     self.product_combobox['values'] = [x.symbol() for x in self.products]
@@ -899,10 +904,10 @@ class Order(Frame):
   def show_product(self, var, indx, mode):
     pd = self.products[self.product_combobox.current()]
     
-    self.display(self.keyword_text, pd.get("keyword"))
-    self.display(self.store_text, pd.get("Store"))
-    self.display(self.product_name_text, pd.get("name"))
-    self.display(self.asin_text, pd.get("ASIN"))
+    self.display(self.keyword_entry, pd.get("keyword"))
+    self.display(self.store_entry, pd.get("Store"))
+    self.display(self.product_name_entry, pd.get("name"))
+    self.display(self.asin_entry, pd.get("ASIN"))
     
     self.image_label.configure(image = tk.PhotoImage())
     if pd.get("image") != None:
@@ -966,13 +971,15 @@ class Order(Frame):
     if mode == 'Gmail':
       self.gmail_label['text'] = 'Support Gmail'
       self.gmail_password_label['text'] = 'Support Password'
-      self.display(self.gmail_text, op.gmail.query(br.gmail).get("SupportGmail"))
-      self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("SupportGmailPassword"))
+      self.display(self.gmail_entry, op.gmail.query(br.gmail).get("SupportGmail"))
+      self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("SupportGmailPassword"))
+      self.gmail_password_entry.configure(state = "disabled")
     if mode == 'Support Gmail':
       self.gmail_label['text'] = 'Gmail'
       self.gmail_password_label['text'] = 'Gmail Password'
-      self.display(self.gmail_text, op.gmail.query(br.gmail).get("Gmail"))
-      self.display(self.gmail_password_text, op.gmail.query(br.gmail).get("GmailPassword"))
+      self.display(self.gmail_entry, op.gmail.query(br.gmail).get("Gmail"))
+      self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("GmailPassword"))
+      self.gmail_password_entry.configure(state = "normal")
 
 class PreReview(Frame):
   products = []

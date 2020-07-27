@@ -735,7 +735,7 @@ class PreOrder(Frame):
     buyers += list(np.random.choice(self.o6, self.scale6.get(), replace = False))
     
     if buyers == []: return None
-    if require_access(2, "You don't have access to place Other orders.") == 0:
+    if self.scale1.get() > 0 and require_access(2, "You don't have access to place Other orders.") == 0:
       return None
     
     self.parent.refresh()

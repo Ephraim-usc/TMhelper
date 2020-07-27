@@ -362,7 +362,7 @@ class Report(Frame):
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
   
   def export(self):
-    file = filedialog.asksaveasfilename(mode="w")
+    file = filedialog.asksaveasfilename()
     self.data.to_csv(file, sep = ",")
   
   def switch(self, event):

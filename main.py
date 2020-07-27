@@ -352,13 +352,13 @@ class Report(Frame):
     mode = self.homepage_label['text']
     if mode == 'Homepage - Product Summary':
       mode = 'Homepage - Phone Summary'
-    if mode == 'Homepage - Phone Summary':
+    elif mode == 'Homepage - Phone Summary':
       global ACCOUNT
       if op.get_level(ACCOUNT) == 3:
         mode = 'Homepage - Buyer Summary'
       else:
         mode = 'Homepage - Product Summary'
-    if mode == 'Homepage - Buyer Summary':
+    elif mode == 'Homepage - Buyer Summary':
       mode = 'Homepage - Product Summary'
     
     if mode == 'Homepage - Product Summary':

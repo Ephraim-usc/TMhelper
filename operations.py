@@ -680,6 +680,9 @@ def buyer_report():
     order.filename = "./phones/" + phone + "/orders.p"
     
     for br in buyer.all().values:
+      if br.get('alive') == False:
+        continue
+      
       buffer_ = [br.uid, phone]
       buffer_.append(br.get("account"))
       buffer_.append(br.get("creation_time"))

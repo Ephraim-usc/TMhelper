@@ -847,11 +847,11 @@ class Order(Frame):
     self.product_combobox.place(x = 430, y = 50, width = 280)
     self.tmp.trace("w", self.show_product)
     
-    self.ordernumber_entry = tk.Entry(self, state = "disabled"); 
+    self.ordernumber_entry = tk.Entry(self); 
     self.ordernumber_entry.place(x = 50, y = 370, width = 300)
     self.ordernumber_entry.bind("<Button-1>", self.input)
     
-    self.cost_entry = tk.Entry(self, state = "disabled"); 
+    self.cost_entry = tk.Entry(self); 
     self.cost_entry.place(x = 360, y = 370, width = 100)
     self.cost_entry.bind("<Button-1>", self.input)
     

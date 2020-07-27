@@ -979,13 +979,11 @@ class Order(Frame):
       self.gmail_password_label['text'] = 'Support Password'
       self.display(self.gmail_entry, op.gmail.query(br.gmail).get("SupportGmail"))
       self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("SupportGmailPassword"))
-      self.gmail_password_entry.configure(state = "disabled")
     if mode == 'Support Gmail':
       self.gmail_label['text'] = 'Gmail'
       self.gmail_password_label['text'] = 'Gmail Password'
       self.display(self.gmail_entry, op.gmail.query(br.gmail).get("Gmail"))
-      self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("GmailPassword"))
-      self.gmail_password_entry.configure(state = "normal")
+      self.display(self.gmail_password_entry, op.gmail.query(br.gmail).get("Password"))
 
 class PreReview(Frame):
   products = []

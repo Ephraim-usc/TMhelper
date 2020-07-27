@@ -664,6 +664,32 @@ def phone_report():
   return buffer
 
 
-
+def phone_report():
+  backup = [gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename]
+  
+  buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword',
+                                     'SupportGmail', 'SupportGmailPassword', 'RecipientName', 'Address1', 'Address2',
+                                     'City', 'Zip', 'State', 'PhoneNumber', 'num_orders'])
+  phones = next(os.walk('./phones'))[1]
+  
+  for phone in phones:
+    gmail.filename = "./phones/" + phone + "/gmails.p"
+    address.filename = "./phones/" + phone + "/addresses.p"
+    bankcard.filename = "./phones/" + phone + "/bankcards.p"
+    buyer.filename = "./phones/" + phone + "/buyers.p"
+    order.filename = "./phones/" + phone + "/orders.p"
+    
+    for br in buyer.all().values:
+      buffer_ = [br.uid, phone]
+      buffer_.append(br.get("account"))
+      buffer_.append(br.get("creation_time"))
+      buffer_.append(br.get("AmazonPassword"))
+      buffer_.append(gmail.query(br.gmail).get("Gmail"))
+      buffer_.append(gmail.query(br.gmail).get("Password"))
+      
+      buffer.loc[buffer.shape[0]] = buffer_
+  
+  gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename = backup
+  return buffer
 
 

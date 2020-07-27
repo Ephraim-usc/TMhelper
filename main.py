@@ -27,6 +27,15 @@ def require_access(level, message):
     return 0
   return 1
 
+def treeview_sort_column(tv, col, reverse):
+  l = [(tv.item(k)["text"], k) for k in tv.get_children()] #Display column #0 cannot be set
+  l.sort(key=lambda t: t[0], reverse=reverse)
+  
+  for index, (val, k) in enumerate(l):
+    tv.move(k, '', index)
+  
+  tv.heading(col, command=lambda: treeview_sort_column(tv, col, not reverse))
+
 class TMhelper(tk.Tk):
   def __init__(self, *args, **kwargs):
     tk.Tk.__init__(self, *args, **kwargs)

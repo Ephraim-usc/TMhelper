@@ -303,6 +303,11 @@ class Report(Frame):
       self.data = op.product_report(start, end, account)
     if mode == 'Homepage - Phone Summary':
       self.data = op.phone_report()
+    if mode == 'Homepage - Buyer Summary':
+      start = self.start_entry.get(); start = dt.datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+      end = self.end_entry.get(); end = dt.datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+      account = self.account_entry.get()
+      self.data = op.buyer_report(start, end, account)
     
     self.tree.place_forget()
     self.tree = ttk.Treeview(self, height = 15)
@@ -377,6 +382,16 @@ class Report(Frame):
       self.start_entry.configure(state = "disabled")
       self.end_entry.configure(state = "disabled")
       self.account_entry.configure(state = "disabled")
+    
+    if mode == 'Homepage - Buyer Summary':
+      self.homepage_label['text'] = 'Homepage - Buyer Summary'
+      self.columns = ['uid', 'phone', 'account', 'creation_time', 'Gmail', 'GmailPassword', 'RecipientName', 'BankCard', 'num_orders']
+      self.display(self.start_entry, str(month_ago))
+      self.display(self.end_entry, str(now))
+      self.display(self.account_entry, '')
+      self.start_entry.configure(state = "normal")
+      self.end_entry.configure(state = "normal")
+      self.account_entry.configure(state = "normal")
     
     self.refresh()
 

@@ -66,7 +66,10 @@ class Frame(tk.Frame):
   
   def copy(self, event):
     self.parent.clipboard_clear()
-    self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+    if type(event.widget) == tk.Text:
+      self.parent.clipboard_append(event.widget.get("1.0", "end-1c"))
+    if type(event.widget) == tk.Entry:
+      self.parent.clipboard_append(event.widget.get())
   
   def clear(self):
     children = self.winfo_children()
@@ -576,7 +579,7 @@ class Buyer(Frame):
     
     pwd = self.br.get("AmazonPassword")
     self.display(self.password_entry, pwd)
-    self.display(self.uid_text, "B" + str(self.br.uid))
+    self.display(self.uid_entry, "B" + str(self.br.uid))
   
   def submit(self):
     if self.br == None: return None

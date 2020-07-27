@@ -318,7 +318,7 @@ class Report(Frame):
     
     for i in self.columns:
       self.tree.column(i, width = int(900/len(self.columns)), anchor = "w")
-      self.tree.heading(i, text = i, anchor = 'w')
+      self.tree.heading(i, text = i, anchor = 'w', command=lambda : treeview_sort_column(self.tree, i, False))
     
     for index, row in self.data[self.columns].iterrows():
       self.tree.insert("",0,text=index,values=list(row))

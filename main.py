@@ -386,6 +386,8 @@ class Report(Frame):
     if mode == 'Homepage - Buyer Summary':
       self.homepage_label['text'] = 'Homepage - Buyer Summary'
       self.columns = ['uid', 'phone', 'account', 'creation_time', 'Gmail', 'GmailPassword', 'RecipientName', 'BankCard', 'num_orders']
+      now = dt.datetime.now(); now = now.replace(microsecond = 0)
+      month_ago = now.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
       self.display(self.start_entry, str(month_ago))
       self.display(self.end_entry, str(now))
       self.display(self.account_entry, '')

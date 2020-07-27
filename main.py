@@ -361,7 +361,8 @@ class Report(Frame):
     tk.Button(self.top, text = "Confirm", command = confirm).pack(anchor = tk.SE)
   
   def export(self):
-    self.data.to_csv("report.csv", sep = ",")
+    file = filedialog.asksaveasfile(mode="w")
+    self.data.to_csv(file, sep = ",")
   
   def switch(self, event):
     mode = self.homepage_label['text']

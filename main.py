@@ -321,7 +321,10 @@ class Report(Frame):
     self.tree.place_forget()
     self.tree = ttk.Treeview(self, height = 15)
     self.tree.place(x = 50, y = 100)
-    self.tree.configure(yscrollcommand = ttk.Scrollbar().set)
+    
+    treeScroll = ttk.Scrollbar()
+    treeScroll.configure(command = self.tree.yview)
+    self.tree.configure(yscrollcommand = treeScroll.set)
     
     self.tree["columns"] = self.columns
     self.tree.column("#0", width=0)

@@ -138,7 +138,7 @@ class Menu(tk.Frame):
   
   def admin_event(self):
     global ACCOUNT
-    if ACCOUNT != 'admin' and require_access(2, "You do not have access to this.") == 0:
+    if ACCOUNT != 'admin' and require_access(3, "You do not have access to this.") == 0:
       return None
     
     self.parent.refresh()
@@ -346,15 +346,17 @@ class Report(Frame):
   def switch(self, event):
     mode = self.homepage_label['text']
     if mode == 'Homepage - Product Summary':
-      self.homepage_label['text'] = 'Homepage - Phone Summary'
-      self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
-      self.display(self.start_entry, '--')
-      self.display(self.end_entry, '--')
-      self.display(self.account_entry, '--')
-      self.start_entry.configure(state = "disabled")
-      self.end_entry.configure(state = "disabled")
-      self.account_entry.configure(state = "disabled")
+      mode = 'Homepage - Phone Summary'
     if mode == 'Homepage - Phone Summary':
+      global ACCOUNT
+      if op.get_level(ACCOUNT) == 3:
+        mode = 'Homepage - Buyer Summary'
+      else:
+        mode = 'Homepage - Product Summary'
+    if mode == 'Homepage - Buyer Summary':
+      mode = 'Homepage - Product Summary'
+    
+    if mode == 'Homepage - Product Summary':
       self.homepage_label['text'] = 'Homepage - Product Summary'
       self.columns = ['uid', 'name', 'ASIN', 'Store', 'num_tasks', 'orders', 'reviews', 'goal_reviews']
       now = dt.datetime.now(); now = now.replace(microsecond = 0)
@@ -365,6 +367,17 @@ class Report(Frame):
       self.start_entry.configure(state = "normal")
       self.end_entry.configure(state = "normal")
       self.account_entry.configure(state = "normal")
+    
+    if mode == 'Homepage - Phone Summary':
+      self.homepage_label['text'] = 'Homepage - Phone Summary'
+      self.columns = ['phone', 'Other', 'PP01', 'PP02', 'PP03', 'Other2', 'PP04']
+      self.display(self.start_entry, '--')
+      self.display(self.end_entry, '--')
+      self.display(self.account_entry, '--')
+      self.start_entry.configure(state = "disabled")
+      self.end_entry.configure(state = "disabled")
+      self.account_entry.configure(state = "disabled")
+    
     self.refresh()
 
 class Feed(Frame):

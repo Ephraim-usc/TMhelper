@@ -2,6 +2,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox as messagebox
+from tkinter import filedialog
 from PIL import Image, ImageTk
 import numpy as np
 import os

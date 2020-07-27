@@ -664,7 +664,7 @@ def phone_report():
   return buffer
 
 
-def buyer_report():
+def buyer_report(start, end, account = ""):
   backup = [gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename]
   
   buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword',
@@ -682,6 +682,10 @@ def buyer_report():
     
     for br in buyer.all().values:
       if br.get('alive') == False:
+        continue
+      if br.get("creation_time") < start or br.get("creation_time") > end:
+        continue
+      if account != "" and br.get("account") != account:
         continue
       
       buffer_ = [br.uid, phone]

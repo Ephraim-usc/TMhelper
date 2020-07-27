@@ -667,9 +667,10 @@ def phone_report():
 def buyer_report():
   backup = [gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename]
   
-  buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword'])
-                                    # 'SupportGmail', 'SupportGmailPassword', 'RecipientName', 'Address1', 'Address2',
-                                     #'City', 'Zip', 'State', 'PhoneNumber', 'num_orders'])
+  buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword',
+                                     'SpportGmail', 'SupportGmailPassword', 'RecipientName', 'Address1', 'Address2',
+                                     'City', 'Zip', 'State', 'PhoneNumber',
+                                     'BankNumber', 'BankCard', 'BankCardExpirationDate', 'num_orders'])
   phones = next(os.walk('./phones'))[1]
   
   for phone in phones:
@@ -689,6 +690,19 @@ def buyer_report():
       buffer_.append(br.get("AmazonPassword"))
       buffer_.append(gmail.query(br.gmail).get("Gmail"))
       buffer_.append(gmail.query(br.gmail).get("Password"))
+      buffer_.append(gmail.query(br.gmail).get("SupportGmail"))
+      buffer_.append(gmail.query(br.gmail).get("SupportGmailPassword"))
+      buffer_.append(gmail.query(br.address).get("RecipientName"))
+      buffer_.append(gmail.query(br.address).get("Address1"))
+      buffer_.append(gmail.query(br.address).get("Address2"))
+      buffer_.append(gmail.query(br.address).get("City"))
+      buffer_.append(gmail.query(br.address).get("Zip"))
+      buffer_.append(gmail.query(br.address).get("State"))
+      buffer_.append(gmail.query(br.address).get("PhoneNumber"))
+      buffer_.append(gmail.query(br.bankcard).get("BankNumber"))
+      buffer_.append(gmail.query(br.bankcard).get("BankCard"))
+      buffer_.append(gmail.query(br.bankcard).get("BankCardExpirationDate"))
+      buffer_.append(len(br.orders))
       
       buffer.loc[buffer.shape[0]] = buffer_
   

@@ -535,6 +535,8 @@ def orderable_products(br):
   stores = [product.query(order.query(od).product).get("Store") for od in ordered]
   buffer = []
   for pd in pds:
+    if pd.get("alive") == False:
+      continue
     if pd.get("num_tasks") > 0 and pd.get("Store") not in stores:
       buffer.append(pd)
   if num in [2, 3]:

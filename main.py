@@ -22,7 +22,7 @@ ACCOUNT = "public"
 def require_access(level, message):
   global ACCOUNT
   level_ = op.get_level(ACCOUNT)
-  if level_ == None or level < 2:
+  if level_ == None or level_ < level:
     if message != '':
       messagebox.showinfo(title= "Error", message= message)
     return 0

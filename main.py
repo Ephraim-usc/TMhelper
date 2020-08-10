@@ -164,6 +164,8 @@ class Menu(tk.Frame):
     self.parent.buyerframe.place(x = 0, y = 30)
   
   def pre_order_event(self):
+    if require_access(1, "You do not have access to this.") == 0:
+      return None
     self.parent.refresh()
     self.parent.preorderframe.refresh()
     self.parent.preorderframe.place(x = 0, y = 30)

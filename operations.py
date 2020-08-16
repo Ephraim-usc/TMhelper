@@ -720,10 +720,10 @@ def buyer_report(start, end, account = ""):
       o3 = order.query(br.orders[3]) if N >= 4 else None
       o4 = order.query(br.orders[5]) if N >= 6 else None
       
-      ot_1, asin_1, oid_1 = o1.get("OrderTime"), o1.get("ASIN"), o1.get("OrderID") if o1 != None else None, None, None
-      ot_2, asin_2, oid_2 = o2.get("OrderTime"), o2.get("ASIN"), o2.get("OrderID") if o2 != None else None, None, None
-      ot_3, asin_3, oid_3 = o3.get("OrderTime"), o3.get("ASIN"), o3.get("OrderID") if o3 != None else None, None, None
-      ot_4, asin_4, oid_4 = o4.get("OrderTime"), o4.get("ASIN"), o4.get("OrderID") if o4 != None else None, None, None
+      (ot_1, asin_1, oid_1) = (o1.get("OrderTime"), o1.get("ASIN"), o1.get("OrderID")) if o1 != None else (None, None, None)
+      (ot_2, asin_2, oid_2) = (o2.get("OrderTime"), o2.get("ASIN"), o2.get("OrderID")) if o2 != None else (None, None, None)
+      (ot_3, asin_3, oid_3) = (o3.get("OrderTime"), o3.get("ASIN"), o3.get("OrderID")) if o3 != None else (None, None, None)
+      (ot_4, asin_4, oid_4) = (o4.get("OrderTime"), o4.get("ASIN"), o4.get("OrderID")) if o4 != None else (None, None, None)
       
       buffer_ += [ot_1, asin_1, oid_1, ot_2, asin_2, oid_2, ot_3, asin_3, oid_3, ot_4, asin_4, oid_4]
       

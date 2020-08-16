@@ -672,7 +672,11 @@ def buyer_report(start, end, account = ""):
   buffer = pandas.DataFrame(columns=['uid', 'phone', 'account', 'creation_time', 'AmazonPassword', 'Gmail', 'GmailPassword',
                                      'SpportGmail', 'SupportGmailPassword', 'RecipientName', 'Address1', 'Address2',
                                      'City', 'Zip', 'State', 'PhoneNumber',
-                                     'BankNumber', 'BankCard', 'BankCardExpirationDate', 'num_orders'])
+                                     'BankNumber', 'BankCard', 'BankCardExpirationDate', 'num_orders',
+                                     'OrderTime_1', 'ASIN_1', 'OrderNumber_1',
+                                     'OrderTime_2', 'ASIN_2', 'OrderNumber_2',
+                                     'OrderTime_3', 'ASIN_3', 'OrderNumber_3',
+                                     'OrderTime_4', 'ASIN_4', 'OrderNumber_4'])
   phones = next(os.walk('./phones'))[1]
   
   for phone in phones:
@@ -709,6 +713,19 @@ def buyer_report(start, end, account = ""):
       buffer_.append(bankcard.query(br.bankcard).get("BankCard"))
       buffer_.append(bankcard.query(br.bankcard).get("BankCardExpirationDate"))
       buffer_.append(len(br.orders))
+      
+      N = br.num_orders()
+      o1 = order.query(br.orders[1]) if N >= 2 else None
+      o2 = order.query(br.orders[2]) if N >= 3 else None
+      o3 = order.query(br.orders[3]) if N >= 4 else None
+      o4 = order.query(br.orders[5]) if N >= 6 else None
+      
+      ot_1, asin_1, oid_1 = o1.get("OrderTime"), o1.get("ASIN"), o1.get("OrderID") if o1 != None else None, None, None
+      ot_2, asin_2, oid_2 = o2.get("OrderTime"), o2.get("ASIN"), o2.get("OrderID") if o2 != None else None, None, None
+      ot_3, asin_3, oid_3 = o3.get("OrderTime"), o3.get("ASIN"), o3.get("OrderID") if o3 != None else None, None, None
+      ot_4, asin_4, oid_4 = o4.get("OrderTime"), o4.get("ASIN"), o4.get("OrderID") if o4 != None else None, None, None
+      
+      buffer_ += [ot_1, asin_1, oid_1, ot_2, asin_2, oid_2, ot_3, asin_3, oid_3, ot_4, asin_4, oid_4]
       
       buffer.loc[buffer.shape[0]] = buffer_
   

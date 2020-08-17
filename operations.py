@@ -585,6 +585,8 @@ def commit(e, string):
       value = float(value)
     elif re.search('^None$', value) is not None:
       value = None
+    elif re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]*)?$', value) is not None:
+      value = dt.datetime.strptime(value.split('.')[0], "%Y-%m-%d %H:%M:%S")
     e.set(key, value)
   e.submit()
 

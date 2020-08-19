@@ -365,7 +365,7 @@ class Report(Frame):
   
   def export(self):
     file = filedialog.asksaveasfilename(filetypes=( ("csv file", "*.csv"),))
-    self.data.to_csv(file + ".csv", sep = ",")
+    self.data.to_csv(file + ".csv", sep = ",", float_format='%f', date_format='%s')
   
   def switch(self, event):
     mode = self.homepage_label['text']

@@ -685,10 +685,10 @@ def buyer_report(start, end, account = ""):
                                      'SpportGmail', 'SupportGmailPassword', 'RecipientName', 'Address1', 'Address2',
                                      'City', 'Zip', 'State', 'PhoneNumber',
                                      'BankNumber', 'BankCard', 'BankCardExpirationDate', 'num_orders',
-                                     'OrderTime_1', 'ASIN_1', 'OrderNumber_1',
-                                     'OrderTime_2', 'ASIN_2', 'OrderNumber_2',
-                                     'OrderTime_3', 'ASIN_3', 'OrderNumber_3',
-                                     'OrderTime_4', 'ASIN_4', 'OrderNumber_4'])
+                                     'OrderTime_1', 'ASIN_1', 'OrderNumber_1', 'Reviewed_1',
+                                     'OrderTime_2', 'ASIN_2', 'OrderNumber_2', 'Reviewed_2',
+                                     'OrderTime_3', 'ASIN_3', 'OrderNumber_3', 'Reviewed_3',
+                                     'OrderTime_4', 'ASIN_4', 'OrderNumber_4', 'Reviewed_4'])
   phones = next(os.walk('./phones'))[1]
   
   for phone in phones:

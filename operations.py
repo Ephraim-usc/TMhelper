@@ -380,6 +380,11 @@ class order(entry):
     now = dt.datetime.now()
     if product.query(self.product).get("green_light") == True and now > self.get("OrderTime") +  TIME_INTERVAL_5:
       return True
+    
+    if self.get("rank") in [2,3,4,6]:
+      if now > self.get("OrderTime") +  TIME_INTERVAL_5:
+        return True
+    '''
     if self.get("rank") == 2 and num >= 4:
       fourthorder = order.query(br.orders[3])
       if now > fourthorder.get("OrderTime") + TIME_INTERVAL_3:
@@ -389,16 +394,7 @@ class order(entry):
       sr = secondorder.review
       if sr != None and now > review.query(sr).get("Time") + TIME_INTERVAL_4:
         return True
-    if self.get("rank") == 4:
-      thirdorder = order.query(br.orders[2])
-      tr = thirdorder.review
-      if tr != None and now > review.query(tr).get("Time") + TIME_INTERVAL_4:
-        return True
-    if self.get("rank") == 6:
-      fourthorder = order.query(br.orders[3])
-      fr = fourthorder.review
-      if fr != None and now > review.query(fr).get("Time") + TIME_INTERVAL_4:
-        return True
+    '''
     return False
 
 class review(entry):

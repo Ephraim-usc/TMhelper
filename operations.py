@@ -741,6 +741,7 @@ def buyer_report(start, end, account = ""):
       
       buffer.loc[buffer.shape[0]] = buffer_
   
+  buffer = buffer.astype({"BankCard": str})
   gmail.filename, address.filename, bankcard.filename, buyer.filename, order.filename = backup
   return buffer
 

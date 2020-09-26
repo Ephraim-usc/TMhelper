@@ -389,6 +389,16 @@ class order(entry):
       sr = secondorder.review
       if sr != None and now > review.query(sr).get("Time") + TIME_INTERVAL_4:
         return True
+    if self.get("rank") == 4:
+      thirdorder = order.query(br.orders[2])
+      tr = thirdorder.review
+      if tr != None and now > review.query(tr).get("Time") + TIME_INTERVAL_4:
+        return True
+    if self.get("rank") == 6:
+      fourthorder = order.query(br.orders[3])
+      fr = fourthorder.review
+      if fr != None and now > review.query(fr).get("Time") + TIME_INTERVAL_4:
+        return True
     return False
 
 class review(entry):
@@ -722,12 +732,12 @@ def buyer_report(start, end, account = ""):
       o3 = order.query(br.orders[3]) if N >= 4 else None
       o4 = order.query(br.orders[5]) if N >= 6 else None
       
-      (ot_1, asin_1, oid_1) = (o1.get("OrderTime"), product.query(o1.product).get("ASIN"), o1.get("OrderID")) if o1 != None else (None, None, None)
-      (ot_2, asin_2, oid_2) = (o2.get("OrderTime"), product.query(o2.product).get("ASIN"), o2.get("OrderID")) if o2 != None else (None, None, None)
-      (ot_3, asin_3, oid_3) = (o3.get("OrderTime"), product.query(o3.product).get("ASIN"), o3.get("OrderID")) if o3 != None else (None, None, None)
-      (ot_4, asin_4, oid_4) = (o4.get("OrderTime"), product.query(o4.product).get("ASIN"), o4.get("OrderID")) if o4 != None else (None, None, None)
+      (ot_1, asin_1, oid_1, rv_1) = (o1.get("OrderTime"), product.query(o1.product).get("ASIN"), o1.get("OrderID"), o1.review != None) if o1 != None else (None, None, None, None)
+      (ot_2, asin_2, oid_2, rv_2) = (o2.get("OrderTime"), product.query(o2.product).get("ASIN"), o2.get("OrderID"), o2.review != None) if o2 != None else (None, None, None, None)
+      (ot_3, asin_3, oid_3, rv_3) = (o3.get("OrderTime"), product.query(o3.product).get("ASIN"), o3.get("OrderID"), o3.review != None) if o3 != None else (None, None, None, None)
+      (ot_4, asin_4, oid_4, rv_4) = (o4.get("OrderTime"), product.query(o4.product).get("ASIN"), o4.get("OrderID"), o4.review != None) if o4 != None else (None, None, None, None)
       
-      buffer_ += [ot_1, asin_1, oid_1, ot_2, asin_2, oid_2, ot_3, asin_3, oid_3, ot_4, asin_4, oid_4]
+      buffer_ += [ot_1, asin_1, oid_1, rv_1, ot_2, asin_2, oid_2, rv_2, ot_3, asin_3, oid_3, rv_3, ot_4, asin_4, oid_4, rv_4]
       
       buffer.loc[buffer.shape[0]] = buffer_
   

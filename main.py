@@ -1204,17 +1204,25 @@ class Review(Frame):
     order = self.orders[self.progressbar['value']]
     pd = op.product.query(order.product)
     rvs = op.suitable_reviews(pd)
-    self.review = list(np.random.choice(rvs, 1))[0]
-    self.title_text.delete("1.0", "end")
-    self.content_text.delete("1.0", "end")
-    self.title_text.insert("end", self.review.get("Title"))
-    self.content_text.insert("end", self.review.get("Content"))
+    if len(rvs) > 0: 
+      self.review = list(np.random.choice(rvs, 1))[0]
+      self.title_text.delete("1.0", "end")
+      self.content_text.delete("1.0", "end")
+      self.title_text.insert("end", self.review.get("Title"))
+      self.content_text.insert("end", self.review.get("Content"))
+    else:
+      self.review = None
+      self.title_text.delete("1.0", "end")
+      self.content_text.delete("1.0", "end")
   
   def submit(self):
     title = self.title_text.get("1.0", "end-1c")
     content = self.content_text.get("1.0", "end-1c")
     string_ = "Title\t" + title + "\nContent\t" + content
     od = self.orders[self.progressbar['value']]
+    
+    if self.review == None:
+      self.review = op.review(od.get("ASIN", title, content))
     
     op.submit_review(od, self.review, string_)
     self.skip()
